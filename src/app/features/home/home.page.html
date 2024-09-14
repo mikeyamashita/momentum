@@ -1,0 +1,90 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Momentum
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Momentum</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-button (click)="loadPreviousDates()">Add Previous Month</ion-button>
+  <ion-button (click)="loadMoreDates()">Add Next Month</ion-button>
+
+  <div class="overflow-x-auto">
+    <div class="flex flex-row">
+
+      <div class="flex flex-col">
+
+        <!-- calendar row -->
+        <div class="flex flex-row">
+          <div class="flex flex-col w-[250px] p-2">-</div>
+          @for (date of dates; track date) {
+          <div class="flex flex-col">
+            @if (date.day === 1){
+            <div class="p-2 w-[250px] grid justify-items-end"><span>{{getMonthName(date)}}<span
+                  class="ml-7">{{date.day}}</span></span>
+            </div>
+            } @else {
+            <div class="p-2">{{date.day}}</div>
+            }
+
+          </div>
+          }
+        </div>
+
+        <!-- goal row -->
+        @for(goal of goaldocstore.goals(); track goal){
+        <div class="flex flex-row">
+          <div class="w-[150px]">{{goal.goal?.name}}</div>
+        </div>
+
+        <!-- habit row -->
+        @for(habit of goal.goal?.habits; track habit){
+        <div class="flex flex-row">
+          <div class="pl-3 w-[250px]">{{habit.name}}</div>
+
+          @for (date of dates; track date) {
+          <div class="flex flex-col">
+
+            @if (date.day === 1){
+            <div class="p-2 w-[250px] grid justify-items-end"><span>{{getMonthName(date)}}<span
+                  class="ml-7">{{date.day}}</span></span>
+            </div>
+            } @else {
+            <div class="p-2">{{date.day}}</div>
+            }
+
+          </div>
+          }
+
+        </div>
+        }
+        }
+      </div>
+
+      <!-- @for (date of dates; track date) {
+      <div class="flex flex-col">
+        @if (date.day === 1){
+        <div class="p-2 w-[250px] grid justify-items-end">{{getMonthName(date)}}</div>
+        } @else {
+        <div class="p-2">-</div>
+        }
+        @if (date.day === 1){
+        <div class="p-2 grid justify-items-end">{{date.day}}</div>
+        } @else {
+        <div class="p-2">{{date.day}}</div>
+        }
+      </div>
+      } -->
+    </div>
+
+  </div>
+
+
+</ion-content>
