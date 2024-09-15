@@ -13,25 +13,25 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-button (click)="loadPreviousDates()">Add Previous Month</ion-button>
-  <ion-button (click)="loadMoreDates()">Add Next Month</ion-button>
+  <!-- <ion-button (click)="loadPreviousDates()">Add Previous Month</ion-button>
+  <ion-button (click)="loadMoreDates()">Add Next Month</ion-button> -->
 
-  <div class="overflow-x-auto">
+  <div class="overflow-x-auto hidden">
     <div class="flex flex-row">
 
       <div class="flex flex-col">
 
         <!-- calendar row -->
         <div class="flex flex-row">
-          <div class="flex flex-col w-[250px] p-2">-</div>
+          <div class="flex flex-col w-[250px] p-1">-</div>
           @for (date of dates; track date) {
           <div class="flex flex-col">
             @if (date.day === 1){
-            <div class="p-2 w-[250px] grid justify-items-end"><span>{{getMonthName(date)}}<span
+            <div class="p-1 w-[250px] grid justify-items-end"><span>{{getMonthName(date)}}<span
                   class="ml-7">{{date.day}}</span></span>
             </div>
             } @else {
-            <div class="p-2">{{date.day}}</div>
+            <div class="p-1">{{date.day}}</div>
             }
 
           </div>
@@ -41,23 +41,25 @@
         <!-- goal row -->
         @for(goal of goaldocstore.goals(); track goal){
         <div class="flex flex-row">
-          <div class="w-[150px]">{{goal.goal?.name}}</div>
+          <div class="p-1 w-[250px]">{{goal.goal?.name}}</div>
         </div>
 
         <!-- habit row -->
         @for(habit of goal.goal?.habits; track habit){
         <div class="flex flex-row">
-          <div class="pl-3 w-[250px]">{{habit.name}}</div>
+          <div class="pl-10 p-1 w-[250px]">{{habit.name}}</div>
 
           @for (date of dates; track date) {
           <div class="flex flex-col">
 
             @if (date.day === 1){
-            <div class="p-2 w-[250px] grid justify-items-end"><span>{{getMonthName(date)}}<span
-                  class="ml-7">{{date.day}}</span></span>
+            <div class="p-1 w-[250px] grid justify-items-end">
+              <span><ion-checkbox></ion-checkbox> </span>
             </div>
             } @else {
-            <div class="p-2">{{date.day}}</div>
+            <div class="p-1">
+              <span><ion-checkbox></ion-checkbox> </span>
+            </div>
             }
 
           </div>
@@ -86,5 +88,20 @@
 
   </div>
 
+
+
+  <!-- calendar grid -->
+  <!-- <div class="flex flex-row p-10">
+    @for (date of dates; track date) {
+    @if((date.day + 6) % 7 === 0){
+    <div class="flex flex-col">
+      <div class="p-1">{{date.day}}</div>
+    </div>
+    }
+    }
+  </div> -->
+
+  <app-graph year="2024" colorLevel1="#c6e48b" colorLevel2="#7bc96f" colorLevel3="#196127"
+    [match]="matchdata"></app-graph>
 
 </ion-content>

@@ -1,13 +1,14 @@
 import { Component, inject } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonButton } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonButton, IonCheckbox } from '@ionic/angular/standalone';
 import { GoaldocStore } from '../goal/stores/goaldoc.store';
+import { GraphComponent } from '../graph/graph.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonButton, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol],
+  imports: [IonCheckbox, IonButton, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, GraphComponent],
 })
 export class HomePage {
   readonly goaldocstore = inject(GoaldocStore);
@@ -38,6 +39,13 @@ export class HomePage {
 
   year = new Date().getFullYear()
   month = this.visibleDate.getMonth() + 1
+
+  matchdata = [
+    ['01/21/2024', '1'],
+    ['06/20/2024', '2'],
+    ['12/25/2024', '3'],
+    ['11/05/2024', '3'],
+  ]
 
   loadCurrentMonth() {
     for (let day = 1; day <= this.getNumberOfDaysInMonth(this.month); day++) { // Assuming each month has at most 31 days, adjust as needed.
