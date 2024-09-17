@@ -109,9 +109,7 @@ export class HomePage {
       habit.datesCompleted?.push(this.goalService.format(new Date))
     }
 
-
     this.goaldocstore.saveGoaldoc(goaldoc)
-
   }
 
   isComplete(habit: Habit) {

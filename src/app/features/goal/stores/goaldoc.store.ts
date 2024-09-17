@@ -65,6 +65,7 @@ export const GoaldocStore = signalStore(
                     return goalService.getGoals().pipe(
                         tapResponse({
                             next: (goals: Array<Goaldoc>) => {
+                                // goals.sort((a, b) => a?.id - b?.id)
                                 patchState(store, { goals })
                                 patchState(store, { habitMatrix: goalService.getProgress(goals) })
                                 console.log(store.habitMatrix())
