@@ -112,9 +112,6 @@ export class HomePage {
 
     this.goaldocstore.saveGoaldoc(goaldoc)
 
-
-    console.log(this.goaldocstore.habitMatrix())
-
   }
 
   isComplete(habit: Habit) {

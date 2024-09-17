@@ -16,17 +16,17 @@ import { Goaldoc } from '../models/goaldoc';
 type GoalState = {
     id: number,
     goals: Array<Goaldoc>;
-    habitCount: number;
     habitMatrix: Array<any>;
     isLoading: boolean;
+    isSaving: boolean
 };
 
 const initialState: GoalState = {
     id: 0,
     goals: new Array<Goaldoc>(),
-    habitCount: 0,
     habitMatrix: new Array<any>(),
     isLoading: false,
+    isSaving: false
 };
 
 export const GoaldocStore = signalStore(
@@ -40,16 +40,32 @@ export const GoaldocStore = signalStore(
         setGoaldocId(goaldocid: number): void {
             patchState(store, { id: goaldocid });
         },
+        // initializeHabitMatrix(): void {
+        //     let matchdata = new Array<any>()
+        //     let start = new Date("01/01/" + '2024');
+        //     let end = new Date("12/31/" + '2024');
+
+        //     let loop = new Date(start);
+        //     while (loop <= end) {
+        //       let stringData = goalService.format(loop)
+
+        //       matchdata.push([stringData, 0])
+
+        //       var newDate = loop.setDate(loop.getDate() + 1);
+        //       loop = new Date(newDate);
+        //     }
+        //     // console.log(this.matchdata)
+        //     patchState(store, { habitMatrix: matchdata })
+        // },
         getGoals: rxMethod<void>(
             pipe(
                 distinctUntilChanged(),
                 tap(() => patchState(store, { isLoading: true })),
-                switchMap(() => {
+                concatMap(() => {
                     return goalService.getGoals().pipe(
                         tapResponse({
                             next: (goals: Array<Goaldoc>) => {
                                 patchState(store, { goals })
-                                // patchState(store, { habitCount: goalService.getHabitCount(goals) })
                                 patchState(store, { habitMatrix: goalService.getProgress(goals) })
                                 console.log(store.habitMatrix())
                             },
@@ -84,18 +100,31 @@ export const GoaldocStore = signalStore(
         // ),
         saveGoaldoc: rxMethod<any>(
             pipe(
-                tap(() => patchState(store, { isLoading: true })),
+                tap(() => patchState(store, { isSaving: true })),
                 concatMap((goaldoc: Goaldoc) => {
                     return goalService.putGoaldoc(goaldoc).pipe(
                         tapResponse({
                             next: () => {
                                 // patchState(store, { goals: goaldoc })
                                 // replace updated goaldoc
-                                // patchState(store, (state: any) => ({ goals: state.goals.splice(state.goals.findIndex((item: Goaldoc) => goaldoc.id == item.id), 1, goaldoc) }))
-
+                                // let goalsDup = store.goals()
+                                // console.log(store.goals().findIndex((item: Goaldoc) => goaldoc.id == item.id))
+                                // console.log(store.goals().splice(store.goals().findIndex((item: Goaldoc) => goaldoc.id == item.id), 1, goaldoc))
+                            },
+                            error: console.error
+                        })
+                    );
+                }),
+                concatMap(() => {
+                    return goalService.getGoals().pipe(
+                        tapResponse({
+                            next: (goals: Array<Goaldoc>) => {
+                                patchState(store, { goals })
+                                patchState(store, { habitMatrix: goalService.getProgress(goals) })
+                                console.log(store.habitMatrix())
                             },
                             error: console.error,
-                            finalize: () => patchState(store, { isLoading: false }),
+                            finalize: () => patchState(store, { isSaving: false }),
                         })
                     );
                 })

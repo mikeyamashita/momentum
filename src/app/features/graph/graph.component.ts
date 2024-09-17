@@ -13,8 +13,6 @@ export class GraphComponent implements OnInit {
 
   @Input()
   year: string | undefined;
-  @Input()
-  match: any;
 
   @Input()
   colorLevel1: string | undefined;
@@ -31,60 +29,61 @@ export class GraphComponent implements OnInit {
   initialWidth: number | undefined;
   constanteHeight: number = 0;
   constanteWidth: number = 0;
-  squares: any = signal([])
-  realMatch: any = {};
 
   readonly goaldocstore = inject(GoaldocStore);
 
-  constructor() { }
+  constructor() {
+  }
 
   // Lifecycle
   ngOnInit() {
     this.initialHeight = window.screen.height;
     this.initialWidth = window.screen.width;
-    setTimeout(() => {
-      this.redrawGrid();
-    }, 1000)
+    // setTimeout(() => {
+    // }, 500)
+    // this.buildGrid();
   }
 
-  redrawGrid() {
-    console.log(this.match)
-    for (let i = 0; i < this.match.length; i++) {
-      this.realMatch[(new Date("" + this.match[i][0])).toDateString()] = this.match[i][1]
-    }
-
-    let start = new Date("01/01/" + (this.year));
-    let end = new Date("12/31/" + (this.year));
-
-    let loop = new Date(start);
-    while (loop <= end) {
-      let stringData = this.dataAtualFormatada(loop)
-
-      if (this.realMatch[loop.toDateString()] == undefined) {
-        this.squares().push({ stringData: stringData, "datalevel": 0 })
-      } else {
-        this.squares().push({ stringData: stringData, "datalevel": parseInt(this.realMatch[loop.toDateString()]) })
-      }
-
-      var newDate = loop.setDate(loop.getDate() + 1);
-      loop = new Date(newDate);
-    }
+  ionViewDidEnter() {
   }
+
+  // buildGrid() {
+  //   for (let i = 0; i < this.match.length; i++) {
+  //     this.realMatch[(new Date("" + this.match[i][0])).toDateString()] = this.match[i][1]
+  //   }
+
+  //   let start = new Date("01/01/" + (this.year));
+  //   let end = new Date("12/31/" + (this.year));
+
+  //   let loop = new Date(start);
+  //   while (loop <= end) {
+  //     let stringData = this.dataAtualFormatada(loop)
+
+  //     if (this.realMatch[loop.toDateString()] == undefined) {
+  //       this.squares().push({ stringData: stringData, "datalevel": 0 })
+  //     } else {
+  //       this.squares().push({ stringData: stringData, "datalevel": parseInt(this.realMatch[loop.toDateString()]) })
+  //     }
+
+  //     var newDate = loop.setDate(loop.getDate() + 1);
+  //     loop = new Date(newDate);
+  //   }
+  // }
 
   // Methods
-  dataAtualFormatada(data: Date) {
-    var
-      dia = data.getDate().toString(),
-      diaF = (dia.length == 1) ? '0' + dia : dia,
-      mes = (data.getMonth() + 1).toString(),
-      mesF = (mes.length == 1) ? '0' + mes : mes,
-      anoF = data.getFullYear();
+  // dataAtualFormatada(data: Date) {
+  //   var
+  //     dia = data.getDate().toString(),
+  //     diaF = (dia.length == 1) ? '0' + dia : dia,
+  //     mes = (data.getMonth() + 1).toString(),
+  //     mesF = (mes.length == 1) ? '0' + mes : mes,
+  //     anoF = data.getFullYear();
 
-    return mesF + "/" + diaF + "/" + anoF;
-  }
+  //   return mesF + "/" + diaF + "/" + anoF;
+  // }
 
-  getColor(dia: { [x: string]: any; }) {
-    let x = dia['datalevel']
+  getColor(dia: number) {
+    let x = dia
     if (x < 25 && x > 0)
       return this.colorLevel1;
     else if (x >= 25 && x < 50)

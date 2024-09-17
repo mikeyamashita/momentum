@@ -63,8 +63,9 @@ export class GoalService {
   }
 
   getProgress(goaldoc: Array<Goaldoc>): Array<any> {
-    let start = new Date("09/01/" + '2024');
-    let end = new Date("09/30/" + '2024');
+    this.matchdata = new Array<any>()
+    let start = new Date("01/01/" + '2024');
+    let end = new Date("12/31/" + '2024');
 
     let loop = new Date(start);
     while (loop <= end) {

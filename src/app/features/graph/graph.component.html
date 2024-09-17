@@ -1,4 +1,8 @@
 <!-- credit: https://github.com/SergioNoivak/ng-git-calendar -->
+@if (goaldocstore.isLoading()){
+<!-- <div class="text-xs">loading...</div> -->
+}
+@else{
 <div class="corpo" (window:resize)="onResize($event)">
   <div class="graph">
 
@@ -28,10 +32,11 @@
         <div class="w-[12px] h-[12px] grid place-content-center">F</div>
         <div class="w-[12px] h-[12px] grid place-content-center">S</div>
       </div>
-      @for(square of squares(); track square){
-      <div [id]="square.stringData" data-placement="top" class="days" [style.background-color]="getColor(square)"></div>
+      @for(square of goaldocstore.habitMatrix(); track square){
+      <div [id]="square[0]" data-placement="top" class="days" [style.background-color]="getColor(square[1])">
+      </div>
       }
     </div>
-
   </div>
 </div>
+}

@@ -4,12 +4,12 @@
     <div class="pl-2">
       <div style="margin-right:-25px" class="text-lg font-bold">{{today}}</div>
       <!-- goal row -->
-      @for(goal of goaldocstore.goals(); track goal){
+      @for(goal of goaldocstore.goals(); track goal.id){
       <div class="font-bold text-base pt-6 pb-1">{{goal.goal?.name}}</div>
       <!-- habit row -->
       <div>
         <ion-list style="margin-right:-25px" class="py-4" lines="none" mode="md">
-          @for(habit of goal.goal?.habits; track habit){
+          @for(habit of goal.goal?.habits; track habit.name){
           <ion-item class="text-sm text-wrap mx-[-0.5em]">
             <ion-checkbox mode="md" (ionChange)="habitChecked(goal ,habit)"
               [checked]="isComplete(habit)">{{habit.name}}</ion-checkbox>
@@ -22,9 +22,8 @@
     <div class="pr-3 grid place-content-end">
       @if(goaldocstore.habitMatrix()){
       <app-graph [year]="year.toString()" colorLevel1="#d9c0ff" colorLevel2="#b07eff" colorLevel3="#8b41ff"
-        colorLevel4="#6300ff" colorMilestone="#ff4600" [match]="goaldocstore.habitMatrix()"></app-graph>
+        colorLevel4="#6300ff" colorMilestone="#ff4600"></app-graph>
       }
     </div>
   </div>
-  <!-- {{goaldocstore.habitMatrix()}} -->
 </ion-content>
