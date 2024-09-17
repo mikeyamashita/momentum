@@ -1,5 +1,7 @@
 // credit: https://github.com/SergioNoivak/ng-git-calendar
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, inject, signal } from '@angular/core';
+import { HabitGrid } from '../goal/models/habitgrid';
+import { GoaldocStore } from '../goal/stores/goaldoc.store';
 
 @Component({
   selector: 'app-graph',
@@ -29,16 +31,24 @@ export class GraphComponent implements OnInit {
   initialWidth: number | undefined;
   constanteHeight: number = 0;
   constanteWidth: number = 0;
-  dias: Array<DateMatch> = new Array<DateMatch>();
+  squares: any = signal([])
   realMatch: any = {};
+
+  readonly goaldocstore = inject(GoaldocStore);
 
   constructor() { }
 
-  // Lifecycel
+  // Lifecycle
   ngOnInit() {
     this.initialHeight = window.screen.height;
     this.initialWidth = window.screen.width;
+    setTimeout(() => {
+      this.redrawGrid();
+    }, 1000)
+  }
 
+  redrawGrid() {
+    console.log(this.match)
     for (let i = 0; i < this.match.length; i++) {
       this.realMatch[(new Date("" + this.match[i][0])).toDateString()] = this.match[i][1]
     }
@@ -51,10 +61,9 @@ export class GraphComponent implements OnInit {
       let stringData = this.dataAtualFormatada(loop)
 
       if (this.realMatch[loop.toDateString()] == undefined) {
-        this.dias.push({ stringData: stringData, "datalevel": 0 })
-      }
-      else {
-        this.dias.push({ stringData: stringData, "datalevel": parseInt(this.realMatch[loop.toDateString()]) })
+        this.squares().push({ stringData: stringData, "datalevel": 0 })
+      } else {
+        this.squares().push({ stringData: stringData, "datalevel": parseInt(this.realMatch[loop.toDateString()]) })
       }
 
       var newDate = loop.setDate(loop.getDate() + 1);
@@ -67,7 +76,7 @@ export class GraphComponent implements OnInit {
     var
       dia = data.getDate().toString(),
       diaF = (dia.length == 1) ? '0' + dia : dia,
-      mes = (data.getMonth() + 1).toString(), //+1 pois no getMonth Janeiro começa com zero.
+      mes = (data.getMonth() + 1).toString(),
       mesF = (mes.length == 1) ? '0' + mes : mes,
       anoF = data.getFullYear();
 
@@ -75,25 +84,19 @@ export class GraphComponent implements OnInit {
   }
 
   getColor(dia: { [x: string]: any; }) {
-    switch (dia['datalevel']) {
-      case 1:
-        return this.colorLevel1;
-        break;
-      case 2:
-        return this.colorLevel2;
-        break;
-      case 3:
-        return this.colorLevel3;
-        break;
-      case 4:
-        return this.colorLevel4;
-        break;
-      case 5:
-        return this.colorMilestone;
-        break;
-      default:
-        return '#181818'
-    }
+    let x = dia['datalevel']
+    if (x < 25 && x > 0)
+      return this.colorLevel1;
+    else if (x >= 25 && x < 50)
+      return this.colorLevel2;
+    else if (x >= 50 && x < 75)
+      return this.colorLevel3;
+    else if (x >= 75 && x < 100)
+      return this.colorLevel4;
+    else if (x >= 100)
+      return this.colorMilestone;
+    else
+      return '#181818'
   }
 
   // Events
@@ -103,9 +106,4 @@ export class GraphComponent implements OnInit {
     if (this.initialWidth)
       this.constanteWidth = event.target.innerWidth / this.initialWidth;
   }
-}
-
-class DateMatch {
-  stringData: string = "";
-  datalevel: number = 0;
 }

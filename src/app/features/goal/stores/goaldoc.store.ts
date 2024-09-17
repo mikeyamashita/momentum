@@ -1,5 +1,5 @@
 import { computed, inject } from '@angular/core';
-import { distinctUntilChanged, pipe, switchMap, tap } from 'rxjs';
+import { concatMap, distinctUntilChanged, pipe, switchMap, tap } from 'rxjs';
 import {
     patchState,
     signalStore,
@@ -16,12 +16,16 @@ import { Goaldoc } from '../models/goaldoc';
 type GoalState = {
     id: number,
     goals: Array<Goaldoc>;
+    habitCount: number;
+    habitMatrix: Array<any>;
     isLoading: boolean;
 };
 
 const initialState: GoalState = {
     id: 0,
     goals: new Array<Goaldoc>(),
+    habitCount: 0,
+    habitMatrix: new Array<any>(),
     isLoading: false,
 };
 
@@ -44,8 +48,10 @@ export const GoaldocStore = signalStore(
                     return goalService.getGoals().pipe(
                         tapResponse({
                             next: (goals: Array<Goaldoc>) => {
-                                console.log(goals)
                                 patchState(store, { goals })
+                                // patchState(store, { habitCount: goalService.getHabitCount(goals) })
+                                patchState(store, { habitMatrix: goalService.getProgress(goals) })
+                                console.log(store.habitMatrix())
                             },
                             error: console.error,
                             finalize: () => patchState(store, { isLoading: false }),
@@ -54,26 +60,47 @@ export const GoaldocStore = signalStore(
                 })
             )
         ),
-        // saveGoaldoc: rxMethod<Goaldoc>(
+        // saveProject: rxMethod<any>(
         //     pipe(
-        //         tap(() => patchState(store, { isLoading: true })),
-        //         concatMap((goaldoc: Goaldoc) => {
-        //             return goaldocService.putGoaldoc(goaldoc).pipe(
+        //         tap(() => patchState(store, { isSavingProject: true })),
+        //         switchMap((project: any) => {
+        //             return projectService.putProject(project).pipe(
         //                 tapResponse({
-        //                     next: (res: Goaldoc) => {
-        //                         patchState(store, { goaldoc: goaldoc })
-        //                         // replace updated goaldoc
-        //                         patchState(store, (state: any) => ({ goaldoc: state.goaldocs.splice(state.goaldocs.findIndex((item: Goaldoc) => goaldoc.id == item.id), 1, goaldoc) }))
-        //                         if (goaldoc.id)
-        //                             goaldocService.getGoaldocById(goaldoc.id)
+        //                     next: (res: any) => {
+        //                         patchState(store, { project: project })
+        //                         // replace updated project
+        //                         patchState(store, (state: any) => ({ project: state.projects.splice(state.projects.findIndex((item: any) => project.id == item.id), 1, project) }))
+        //                         if (project.id)
+        //                             projectService.getProjectById(project.id)
         //                     },
         //                     error: console.error,
-        //                     finalize: () => patchState(store, { isLoading: false }),
+        //                     finalize: () => {
+        //                         patchState(store, { isSavingProject: false })
+        //                     }
         //                 })
         //             );
         //         })
         //     )
         // ),
+        saveGoaldoc: rxMethod<any>(
+            pipe(
+                tap(() => patchState(store, { isLoading: true })),
+                concatMap((goaldoc: Goaldoc) => {
+                    return goalService.putGoaldoc(goaldoc).pipe(
+                        tapResponse({
+                            next: () => {
+                                // patchState(store, { goals: goaldoc })
+                                // replace updated goaldoc
+                                // patchState(store, (state: any) => ({ goals: state.goals.splice(state.goals.findIndex((item: Goaldoc) => goaldoc.id == item.id), 1, goaldoc) }))
+
+                            },
+                            error: console.error,
+                            finalize: () => patchState(store, { isLoading: false }),
+                        })
+                    );
+                })
+            )
+        ),
         // addGoaldoc: rxMethod<any>(
         //     pipe(
         //         tap(() => patchState(store, { isLoading: true })),

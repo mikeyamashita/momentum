@@ -12,14 +12,12 @@
   grid-template-areas: "months .";
   grid-gap: 0.6666666667em;
   grid-template-rows: auto 1fr;
-  padding: 1.3333333333em;
-  margin: 1.3333333333em;
 }
 
 .months {
   grid-area: months;
   display: grid;
-  grid-template-rows: 12px 56px 56px 56px 70px 56px 56px 70px 56px 56px 70px 56px 84px;
+  grid-template-rows: 28px 56px 56px 56px 70px 56px 56px 70px 56px 56px 70px 56px 84px;
 }
 
 .days {

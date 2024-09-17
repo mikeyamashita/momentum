@@ -39,3 +39,24 @@
   width: 6.25%;
   text-align: center;
 }
+.list-md {
+  background: none;
+}
+
+ion-item {
+  --background: #1e1e1e;
+}
+
+ion-checkbox {
+  --size: 14px;
+  --checkbox-background-checked: #4c4c4c;
+  --border-color-checked: #4c4c4c;
+  --checkmark-color: #ccc;
+  --checkbox-background: #262626;
+  --border-width: 2px;
+  --border-color: #262626;
+}
+
+ion-checkbox::part(container) {
+  border-radius: 2px;
+}

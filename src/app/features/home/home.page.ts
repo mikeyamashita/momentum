@@ -1,17 +1,25 @@
-import { Component, inject } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonButton, IonCheckbox } from '@ionic/angular/standalone';
+import { Component, inject, signal } from '@angular/core';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonButton, IonCheckbox, IonCard, IonCardContent, IonCardTitle, IonCardHeader, IonCardSubtitle, IonItem, IonList, IonLabel, IonIcon } from '@ionic/angular/standalone';
 import { GoaldocStore } from '../goal/stores/goaldoc.store';
+import { HabitGriddocStore } from '../goal/stores/habitgriddoc.store';
 import { GraphComponent } from '../graph/graph.component';
+import { Habit } from '../goal/models/habit';
+import { HabitGrid } from '../goal/models/habitgrid';
+import { HabitGriddoc } from '../goal/models/habitgriddoc';
+import { Goal } from '../goal/models/goal';
+import { Goaldoc } from '../goal/models/goaldoc';
+import { GoalService } from '../goal/services/goal.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonCheckbox, IonButton, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, GraphComponent],
+  imports: [IonIcon, IonLabel, IonList, IonItem, IonCardSubtitle, IonCardHeader, IonCardTitle, IonCardContent, IonCard, IonCheckbox, IonButton, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, GraphComponent],
 })
 export class HomePage {
   readonly goaldocstore = inject(GoaldocStore);
+  readonly habitgriddocstore = inject(HabitGriddocStore);
   readonly calendar: Array<Date> = new Array<Date>()
 
   readonly months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -30,11 +38,19 @@ export class HomePage {
 
   year = new Date().getFullYear()
   month = this.visibleDate.getMonth() + 1
+  today: string
+
+  formatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  habitCount: any = signal(0);
+  habitGriddoc: HabitGriddoc | undefined = new HabitGriddoc()
 
   matchdata: any = []
 
-  constructor() {
-    this.getProgress()
+  constructor(private goalService: GoalService) {
+    // this.getProgress()
+    // this.getHabitGriddoc();
+    this.getGoaldoc();
+    this.today = this.formatter.format(new Date())
   }
 
   // Lifecycle
@@ -42,15 +58,6 @@ export class HomePage {
   }
 
   // Methods
-  format(data: Date) {
-    var
-      dia = data.getDate().toString(),
-      diaF = (dia.length == 1) ? '0' + dia : dia,
-      mes = (data.getMonth() + 1).toString(), //+1 pois no getMonth Janeiro começa com zero.
-      mesF = (mes.length == 1) ? '0' + mes : mes,
-      anoF = data.getFullYear();
-    return mesF + "/" + diaF + "/" + anoF;
-  }
 
   getNumberOfDaysInMonth(month: number) {
     return new Date(this.year, month, 0).getDate();
@@ -65,25 +72,56 @@ export class HomePage {
 
   // Events
   getProgress() {
-    let start = new Date("01/01/" + this.year);
-    let end = new Date("12/31/" + this.year);
+    let start = new Date("09/01/" + this.year);
+    let end = new Date("09/30/" + this.year);
 
     let loop = new Date(start);
     while (loop <= end) {
-      let stringData = this.format(loop)
+      let stringData = this.goalService.format(loop)
 
       this.matchdata.push([stringData, this.getGoaldoc()])
       var newDate = loop.setDate(loop.getDate() + 1);
       loop = new Date(newDate);
     }
+    console.log(this.matchdata)
   }
 
   getGoaldoc() {
     this.goaldocstore.getGoals();
+    // return Math.floor(Math.random() * 5)
 
-    return Math.floor(Math.random() * 6)
+  }
+
+  getHabitGriddoc() {
+    this.habitgriddocstore.getHabitGrid();
+  }
+
+  update() {
+    console.log("update")
+    this.goaldocstore.getGoals();
+  }
+
+  habitChecked(goaldoc: Goaldoc | undefined, habit: Habit) {
+
+    if (habit.datesCompleted?.find(date => date == this.goalService.format(new Date))) {
+      habit.datesCompleted?.splice(habit.datesCompleted.findIndex((item) => item == this.goalService.format(new Date)), 1)
+    } else {
+      habit.datesCompleted?.push(this.goalService.format(new Date))
+    }
+
+
+    this.goaldocstore.saveGoaldoc(goaldoc)
+
+
+    console.log(this.goaldocstore.habitMatrix())
+
+  }
+
+  isComplete(habit: Habit) {
+    return habit.datesCompleted?.some((item) => item == this.goalService.format(new Date))
   }
 }
+
 
 class newDate {
   year: number = new Date().getFullYear();
