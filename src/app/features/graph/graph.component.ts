@@ -9,8 +9,6 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class GraphComponent implements OnInit {
 
-  k = "l"
-
   @Input()
   year: string | undefined;
   @Input()
@@ -22,16 +20,49 @@ export class GraphComponent implements OnInit {
   colorLevel2: string | undefined;
   @Input()
   colorLevel3: string | undefined;
+  @Input()
+  colorLevel4: string | undefined;
+  @Input()
+  colorMilestone: string | undefined;
 
   initialHeight: number | undefined;
   initialWidth: number | undefined;
   constanteHeight: number = 0;
   constanteWidth: number = 0;
+  dias: Array<DateMatch> = new Array<DateMatch>();
+  realMatch: any = {};
 
-  dias: any = []
-  realMatch: any = {}
   constructor() { }
 
+  // Lifecycel
+  ngOnInit() {
+    this.initialHeight = window.screen.height;
+    this.initialWidth = window.screen.width;
+
+    for (let i = 0; i < this.match.length; i++) {
+      this.realMatch[(new Date("" + this.match[i][0])).toDateString()] = this.match[i][1]
+    }
+
+    let start = new Date("01/01/" + (this.year));
+    let end = new Date("12/31/" + (this.year));
+
+    let loop = new Date(start);
+    while (loop <= end) {
+      let stringData = this.dataAtualFormatada(loop)
+
+      if (this.realMatch[loop.toDateString()] == undefined) {
+        this.dias.push({ stringData: stringData, "datalevel": 0 })
+      }
+      else {
+        this.dias.push({ stringData: stringData, "datalevel": parseInt(this.realMatch[loop.toDateString()]) })
+      }
+
+      var newDate = loop.setDate(loop.getDate() + 1);
+      loop = new Date(newDate);
+    }
+  }
+
+  // Methods
   dataAtualFormatada(data: Date) {
     var
       dia = data.getDate().toString(),
@@ -43,46 +74,8 @@ export class GraphComponent implements OnInit {
     return mesF + "/" + diaF + "/" + anoF;
   }
 
-  ngOnInit() {
-    this.initialHeight = window.screen.height;
-    this.initialWidth = window.screen.width;
-
-    for (let i = 0; i < this.match.length; i++) {
-      // console.log((new Date("" + this.match[i][0])).toDateString())
-      // console.log(this.match[i][1])
-      this.realMatch[(new Date("" + this.match[i][0])).toDateString()] = this.match[i][1]
-    }
-
-    let start = new Date("01/01/" + (this.year));
-    let end = new Date("12/31/" + (this.year));
-
-    // let listaDiv: HTMLElement = document.getElementById('squares')
-    let loop = new Date(start);
-    while (loop <= end) {
-      let stringData = this.dataAtualFormatada(loop)
-
-      console.log(this.dias)
-      if (this.realMatch[loop.toDateString()] == undefined) {
-        this.dias.push({ stringData: stringData, "data-level": 0 })
-      }
-      else {
-        this.dias.push({ stringData: stringData, "data-level": parseInt(this.realMatch[loop.toDateString()]) })
-      }
-
-      var newDate = loop.setDate(loop.getDate() + 1);
-      loop = new Date(newDate);
-    }
-  }
-
-  onResize(event: any): void {
-    if (this.initialHeight)
-      this.constanteHeight = event.target.innerHeight / this.initialHeight;
-    if (this.initialWidth)
-      this.constanteWidth = event.target.innerWidth / this.initialWidth;
-  }
-
   getColor(dia: { [x: string]: any; }) {
-    switch (dia['data-level']) {
+    switch (dia['datalevel']) {
       case 1:
         return this.colorLevel1;
         break;
@@ -92,9 +85,27 @@ export class GraphComponent implements OnInit {
       case 3:
         return this.colorLevel3;
         break;
+      case 4:
+        return this.colorLevel4;
+        break;
+      case 5:
+        return this.colorMilestone;
+        break;
       default:
-        return ''
+        return '#181818'
     }
   }
 
+  // Events
+  onResize(event: any): void {
+    if (this.initialHeight)
+      this.constanteHeight = event.target.innerHeight / this.initialHeight;
+    if (this.initialWidth)
+      this.constanteWidth = event.target.innerWidth / this.initialWidth;
+  }
+}
+
+class DateMatch {
+  stringData: string = "";
+  datalevel: number = 0;
 }

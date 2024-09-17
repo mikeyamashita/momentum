@@ -23,15 +23,6 @@ export class HomePage {
   currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 0).getMonth()
   visibleDate = new Date()
 
-  constructor() {
-    this.loadCurrentMonth()
-  }
-
-  // Lifecycle
-  ionViewDidEnter() {
-    this.goaldocstore.getGoals();
-  }
-
   dates: Array<newDate> = [];
   selectedDate: { year: number; month: number; day: number; } | undefined;
   loading = false;
@@ -40,62 +31,25 @@ export class HomePage {
   year = new Date().getFullYear()
   month = this.visibleDate.getMonth() + 1
 
-  matchdata = [
-    ['01/21/2024', '1'],
-    ['06/20/2024', '2'],
-    ['12/25/2024', '3'],
-    ['11/05/2024', '3'],
-  ]
+  matchdata: any = []
 
-  loadCurrentMonth() {
-    for (let day = 1; day <= this.getNumberOfDaysInMonth(this.month); day++) { // Assuming each month has at most 31 days, adjust as needed.
-      this.dates.push({
-        year: this.year,
-        month: this.month,
-        day: day
-      });
-    }
+  constructor() {
+    this.getProgress()
   }
 
-  loadMoreDates() {
-    let endMonth = this.dates[this.dates.length - 1]?.month
-    let endYear = this.dates[this.dates.length - 1]?.year
-    if (endMonth == 12) {
-      endMonth = 1
-      endYear++;
-    } else {
-      endMonth++;
-    }
-
-    for (let day = 1; day <= this.getNumberOfDaysInMonth(endMonth + 1); day++) { // Assuming each month has at most 31 days, adjust as needed.
-      this.dates.push({
-        year: endYear,
-        month: endMonth,
-        day: day
-      });
-    }
-    console.log(this.dates)
+  // Lifecycle
+  ionViewDidEnter() {
   }
 
-
-  loadPreviousDates() {
-    let startMonth = this.dates[0]?.month
-    let startYear = this.dates[0]?.year
-    if (startMonth == 1) {
-      startMonth = 12
-      startYear--;
-    } else {
-      startMonth--;
-    }
-
-    for (let day = this.getNumberOfDaysInMonth(startMonth + 1); day >= 1; day--) { // Assuming each month has at most 31 days, adjust as needed.
-      this.dates.unshift({
-        year: startYear,
-        month: startMonth,
-        day: day
-      });
-    }
-    console.log(this.dates)
+  // Methods
+  format(data: Date) {
+    var
+      dia = data.getDate().toString(),
+      diaF = (dia.length == 1) ? '0' + dia : dia,
+      mes = (data.getMonth() + 1).toString(), //+1 pois no getMonth Janeiro começa com zero.
+      mesF = (mes.length == 1) ? '0' + mes : mes,
+      anoF = data.getFullYear();
+    return mesF + "/" + diaF + "/" + anoF;
   }
 
   getNumberOfDaysInMonth(month: number) {
@@ -109,7 +63,26 @@ export class HomePage {
     return month + ' ' + year
   }
 
+  // Events
+  getProgress() {
+    let start = new Date("01/01/" + this.year);
+    let end = new Date("12/31/" + this.year);
 
+    let loop = new Date(start);
+    while (loop <= end) {
+      let stringData = this.format(loop)
+
+      this.matchdata.push([stringData, this.getGoaldoc()])
+      var newDate = loop.setDate(loop.getDate() + 1);
+      loop = new Date(newDate);
+    }
+  }
+
+  getGoaldoc() {
+    this.goaldocstore.getGoals();
+
+    return Math.floor(Math.random() * 6)
+  }
 }
 
 class newDate {
