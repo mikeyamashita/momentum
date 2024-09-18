@@ -1,30 +1,49 @@
-<ion-content [fullscreen]="true">
-  <!-- <ion-button (click)="update()"></ion-button> -->
-  <div class="grid grid-cols-2 px-2 pt-7">
-    <div class="pl-2">
-      <div style="margin-right:-25px" class="text-lg font-bold">{{today}}</div>
-      <!-- goal row -->
-      @for(goal of goaldocstore.goals(); track goal.id){
-      <div class="font-bold text-base pt-6 pb-1">{{goal.goal?.name}}</div>
-      <!-- habit row -->
-      <div>
-        <ion-list style="margin-right:-25px" class="py-4" lines="none" mode="md">
-          @for(habit of goal.goal?.habits; track habit.name){
-          <ion-item class="text-sm text-wrap mx-[-0.5em]">
-            <ion-checkbox mode="md" (ionChange)="habitChecked(goal ,habit)"
-              [checked]="isComplete(habit)">{{habit.name}}</ion-checkbox>
-          </ion-item>
+<ion-content class="homepage" [fullscreen]="true">
+  <div>
+    <ion-header>
+      <ion-toolbar>
+        <div class="flex flex-row justify-stretch w-screen">
+          <ion-button fill="clear" (click)="changeDay(-1)">
+            <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+          </ion-button>
+          @if(formatter.format(day()) === formatter.format(today)){
+          <div class="w-full grid place-content-center font-bold text-xl">{{ dayFormatted()}}</div>
+          } @else {
+          <div class="w-full grid place-content-center font-bold text-xl text-stone-300">{{ dayFormatted()}}</div>
           }
-        </ion-list>
+          <ion-button fill="clear" (click)="changeDay(1)">
+            <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-toolbar>
+    </ion-header>
+    <div class="grid grid-cols-2 px-2 pt-5">
+      <div class="pl-2 my-[-10px]">
+        <div class="w-full mt-[-8px]">
+          <!-- goal row -->
+          @for(goal of goaldocstore.goals(); track goal.id){
+          <div class="font-bold text-base pt-6 pb-1">{{goal.goal?.name}}</div>
+          <!-- habit row -->
+          <div>
+            <ion-list style="margin-right:-25px" class="py-4" lines="none" mode="md">
+              @for(habit of goal.goal?.habits; track habit.name){
+              <ion-item class="text-sm text-wrap mx-[-0.5em]">
+                <ion-checkbox mode="md" (ionChange)="habitChecked(goal ,habit)" [checked]="isComplete(habit)"
+                  [value]="isComplete(habit)">{{habit.name}}</ion-checkbox>
+              </ion-item>
+              }
+            </ion-list>
+          </div>
+          }
+        </div>
       </div>
-      }
-    </div>
-    <div class="pr-3 grid place-content-end">
-      @if(goaldocstore.habitMatrix()){
-      <app-graph [year]="year.toString()" colorLevel1="#003b3b" colorLevel2="#005050" colorLevel3="#006a6a"
-        colorLevel4="#008282" colorLevel5="#009595" colorLevel6="#00aeae" colorLevel7="#00c5c5" colorLevel8="#00d9d9"
-        colorLevel9="#00eaea" colorLevel10="#00ffff" colorMilestone="#ff4600"></app-graph>
-      }
+      <div class="pr-3 mt-[-10px] grid place-content-end">
+        @if(goaldocstore.habitMatrix()){
+        <app-graph [year]="year.toString()" colorLevel1="#003b3b" colorLevel2="#005050" colorLevel3="#006a6a"
+          colorLevel4="#008282" colorLevel5="#009595" colorLevel6="#00aeae" colorLevel7="#00c5c5" colorLevel8="#00d9d9"
+          colorLevel9="#00eaea" colorLevel10="#00ffff" colorMilestone="#ff4600"></app-graph>
+        }
+      </div>
     </div>
   </div>
 </ion-content>

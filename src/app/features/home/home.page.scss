@@ -1,62 +1,69 @@
-#container {
-  text-align: center;
+.homepage {
+  #container {
+    text-align: center;
 
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
+  #container strong {
+    font-size: 20px;
+    line-height: 26px;
+  }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
+  #container p {
+    font-size: 16px;
+    line-height: 22px;
 
-  color: #8c8c8c;
+    color: #8c8c8c;
 
-  margin: 0;
-}
+    margin: 0;
+  }
 
-#container a {
-  text-decoration: none;
-}
+  #container a {
+    text-decoration: none;
+  }
 
-#calendar-grid {
-  display: flex;
-  width: 100%;
-  height: 50px;
-  border-bottom: 2px solid #ccc;
-}
-.day-of-week {
-  width: 6.25%; /* 1/16th of the total width */
-}
-.day {
-  width: 6.25%;
-  text-align: center;
-}
-.list-md {
-  background: none;
-}
+  #calendar-grid {
+    display: flex;
+    width: 100%;
+    height: 50px;
+    border-bottom: 2px solid #ccc;
+  }
+  .day-of-week {
+    width: 6.25%; /* 1/16th of the total width */
+  }
+  .day {
+    width: 6.25%;
+    text-align: center;
+  }
+  .list-md {
+    background: none;
+  }
 
-ion-item {
-  --background: #1e1e1e;
-}
+  ion-item {
+    --background: #1e1e1e;
+  }
 
-ion-checkbox {
-  --size: 18px;
-  --checkbox-background-checked: #4c4c4c;
-  --border-color-checked: #4c4c4c;
-  --checkmark-color: #ccc;
-  --checkbox-background: #262626;
-  --border-width: 2px;
-  --border-color: #262626;
-}
+  ion-checkbox {
+    --size: 18px;
+    --checkbox-background-checked: #4c4c4c;
+    --border-color-checked: #4c4c4c;
+    --checkmark-color: #ccc;
+    --checkbox-background: #262626;
+    --border-width: 2px;
+    --border-color: #262626;
+  }
 
-ion-checkbox::part(container) {
-  border-radius: 360px;
+  ion-checkbox::part(container) {
+    border-radius: 360px;
+  }
+
+  ion-button {
+    --padding-start: 0px;
+    --padding-end: 0px;
+  }
 }
