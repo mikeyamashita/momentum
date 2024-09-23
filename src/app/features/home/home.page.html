@@ -18,11 +18,19 @@
       </ion-toolbar>
     </ion-header>
     <div class="grid grid-cols-2 px-2 pt-5">
-      <div class="pl-2 my-[-10px]">
+      <div class="pl-2">
+        <ion-segment class="grid place-content-center ml-[12.5px] mb-6 mt-[-8px]" value="default" mode="ios">
+          <ion-segment-button value="habits">
+            <ion-label>Habits</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="milestones">
+            <ion-label>Milestones</ion-label>
+          </ion-segment-button>
+        </ion-segment>
         <div class="w-full mt-[-8px]">
           <!-- goal row -->
           @for(goal of goaldocstore.goals(); track goal.id){
-          <div class="font-bold text-base pt-6 pb-1">{{goal.goal?.name}}</div>
+          <div class="font-bold text-base pt-1 pb-1">{{goal.goal?.name}}</div>
           <!-- habit row -->
           <div>
             <ion-list style="margin-right:-25px" class="py-4" lines="none" mode="md">
@@ -33,8 +41,17 @@
               </ion-item>
               }
             </ion-list>
+            <ion-button class="grid place-content-center ml-[25px] mt-[-4px] text-2xl" fill="clear" (click)="addHabit()"
+              mode="ios">
+              <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+            </ion-button>
           </div>
           }
+          <ion-fab class="fixed bottom-5" mode="ios">
+            <ion-fab-button size="small" (click)="addGoal()">
+              <ion-icon name="add"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
         </div>
       </div>
       <div class="pr-3 mt-[-10px] grid place-content-end">

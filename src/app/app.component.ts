@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { chevronBackOutline, chevronForwardOutline } from 'ionicons/icons';
+import { add, addCircleOutline, chevronBackOutline, chevronForwardOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +11,6 @@ import { chevronBackOutline, chevronForwardOutline } from 'ionicons/icons';
 })
 export class AppComponent {
   constructor() {
-    addIcons({ chevronBackOutline, chevronForwardOutline })
+    addIcons({ chevronBackOutline, chevronForwardOutline, addCircleOutline, add })
   }
 }

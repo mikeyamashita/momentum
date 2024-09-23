@@ -77,28 +77,6 @@ export const GoaldocStore = signalStore(
                 })
             )
         ),
-        // saveProject: rxMethod<any>(
-        //     pipe(
-        //         tap(() => patchState(store, { isSavingProject: true })),
-        //         switchMap((project: any) => {
-        //             return projectService.putProject(project).pipe(
-        //                 tapResponse({
-        //                     next: (res: any) => {
-        //                         patchState(store, { project: project })
-        //                         // replace updated project
-        //                         patchState(store, (state: any) => ({ project: state.projects.splice(state.projects.findIndex((item: any) => project.id == item.id), 1, project) }))
-        //                         if (project.id)
-        //                             projectService.getProjectById(project.id)
-        //                     },
-        //                     error: console.error,
-        //                     finalize: () => {
-        //                         patchState(store, { isSavingProject: false })
-        //                     }
-        //                 })
-        //             );
-        //         })
-        //     )
-        // ),
         saveGoaldoc: rxMethod<any>(
             pipe(
                 tap(() => patchState(store, { isSaving: true })),
@@ -131,38 +109,38 @@ export const GoaldocStore = signalStore(
                 })
             )
         ),
-        // addGoaldoc: rxMethod<any>(
-        //     pipe(
-        //         tap(() => patchState(store, { isLoading: true })),
-        //         concatMap((goaldoc: Goaldoc) => {
-        //             return goaldocService.postGoaldoc(goaldoc).pipe(
-        //                 tapResponse({
-        //                     next: (res: Goaldoc) => {
-        //                         store.goaldocs().push(res)
-        //                     },
-        //                     error: console.error,
-        //                     finalize: () => patchState(store, { isLoading: false }),
-        //                 })
-        //             );
-        //         })
-        //     )
-        // ),
-        // deleteGoaldoc: rxMethod<number>(
-        //     pipe(
-        //         tap(() => patchState(store, { isLoading: true })),
-        //         concatMap((id) => {
-        //             return goaldocService.deleteGoaldoc(id).pipe(
-        //                 tapResponse({
-        //                     next: (res: any) => {
-        //                         // remove deleted from store
-        //                         patchState(store, (state: any) => ({ goaldocs: state.goaldocs.filter((goaldoc: Goaldoc) => goaldoc.id !== id) }))
-        //                     },
-        //                     error: console.error,
-        //                     finalize: () => patchState(store, { isLoading: false }),
-        //                 })
-        //             );
-        //         })
-        //     )
-        // )
+        addGoaldoc: rxMethod<any>(
+            pipe(
+                tap(() => patchState(store, { isLoading: true })),
+                concatMap((goaldoc: Goaldoc) => {
+                    return goalService.postGoaldoc(goaldoc).pipe(
+                        tapResponse({
+                            next: (res: Goaldoc) => {
+                                store.goals().push(res)
+                            },
+                            error: console.error,
+                            finalize: () => patchState(store, { isLoading: false }),
+                        })
+                    );
+                })
+            )
+        ),
+        deleteGoaldoc: rxMethod<number>(
+            pipe(
+                tap(() => patchState(store, { isLoading: true })),
+                concatMap((id) => {
+                    return goalService.deleteGoaldoc(id).pipe(
+                        tapResponse({
+                            next: (res: any) => {
+                                // remove deleted from store
+                                patchState(store, (state: any) => ({ goals: state.goals.filter((goal: Goaldoc) => goal.id !== id) }))
+                            },
+                            error: console.error,
+                            finalize: () => patchState(store, { isLoading: false }),
+                        })
+                    );
+                })
+            )
+        )
     }))
 );

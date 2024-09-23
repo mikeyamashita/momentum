@@ -111,16 +111,16 @@ export class GoalService {
       );
   }
 
-  // deleteGoaldoc(id: number): Observable<unknown> {
-  //   return this.http.delete(this.apiService.server() + '/api/Goaldoc/' + id, this.apiService.httpOptions)
-  //     .pipe(
-  //       tapResponse({
-  //         next: () => { },
-  //         error: catchError(this.apiService.handleError),
-  //         finalize: () => {
-  //         }
-  //       }),
-  //     );
-  // }
+  deleteGoaldoc(id: number): Observable<unknown> {
+    return this.http.delete(this.apiService.server() + '/api/goal/' + id, this.apiService.httpOptions)
+      .pipe(
+        tapResponse({
+          next: () => { },
+          error: catchError(this.apiService.handleError),
+          finalize: () => {
+          }
+        }),
+      );
+  }
 
 }

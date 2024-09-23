@@ -1,5 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonCheckbox, IonCard, IonCardContent, IonCardTitle, IonCardHeader, IonCardSubtitle, IonItem, IonList, IonLabel, IonIcon } from '@ionic/angular/standalone';
+import {
+  IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonCheckbox, IonCard, IonCardContent, IonCardTitle, IonCardHeader, IonCardSubtitle,
+  IonItem, IonList, IonLabel, IonIcon, IonFabButton, IonFab, IonFabList, IonSegment, IonSegmentButton
+} from '@ionic/angular/standalone';
 import { GoaldocStore } from '../goal/stores/goaldoc.store';
 import { HabitGriddocStore } from '../goal/stores/habitgriddoc.store';
 import { GraphComponent } from '../graph/graph.component';
@@ -15,9 +18,10 @@ import { GoalService } from '../goal/services/goal.service';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonLabel, IonList, IonItem,
+  imports: [IonSegmentButton, IonSegment, IonFabList, IonFabButton, IonIcon, IonLabel, IonList, IonItem,
     IonCardSubtitle, IonCardHeader, IonCardTitle, IonCardContent, IonCard,
     IonCheckbox, IonButton, IonHeader, IonToolbar, IonTitle, IonContent,
+    IonFab,
     GraphComponent],
 })
 export class HomePage {
@@ -124,6 +128,12 @@ export class HomePage {
     }
 
   }
+
+  addGoal() {
+
+  }
+
+  addHabit() { }
 
 }
 
