@@ -103,7 +103,6 @@ export const GoaldocStore = signalStore(
                             next: (goals: Array<Goaldoc>) => {
                                 patchState(store, { goals })
                                 patchState(store, { habitMatrix: goalService.getProgress(goals) })
-                                console.log(store.habitMatrix())
                             },
                             error: console.error,
                             finalize: () => patchState(store, { isSaving: false }),

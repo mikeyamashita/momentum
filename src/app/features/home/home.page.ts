@@ -146,7 +146,7 @@ export class HomePage {
     console.log(data)
     console.log(role)
     if (role === 'saveHabit') {
-      // this.goaldocstore.addGoaldoc(this.goaldoc)
+      this.goaldocstore.saveGoaldoc(data)
     }
   }
 

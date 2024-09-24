@@ -39,7 +39,8 @@ export class HabitModalComponent implements OnInit {
   }
 
   addNewHabit() {
-    return this.modalCtrl.dismiss(null, 'saveHabit');
+    this.goaldocstore.goal().goal?.habits?.push(this.newHabit)
+    return this.modalCtrl.dismiss(this.goaldocstore.goal(), 'saveHabit');
   }
 
   // onWillDismiss(event: Event) {
