@@ -18,13 +18,6 @@ export class GoalService {
     this.apiService.setEnvironment()
   }
 
-  // getGoaldocById(id: number): Observable<Goaldoc> {
-  //   return this.http.get<Goaldoc>(this.apiService.server() + '/api/Goaldoc/' + id, this.apiService.httpOptions)
-  //     .pipe(
-  //       catchError(this.apiService.handleError)
-  //     );
-  // }
-
   format(data: Date) {
     var
       dia = data.getDate().toString(),
@@ -65,6 +58,13 @@ export class GoalService {
     }
     // console.log(this.matchdata)
     return this.matchdata
+  }
+
+  getGoalById(id: number): Observable<Goaldoc> {
+    return this.http.get<Goaldoc>(this.apiService.server() + '/api/goal/' + id, this.apiService.httpOptions)
+      .pipe(
+        catchError(this.apiService.handleError)
+      );
   }
 
   getGoals(): Observable<Array<Goaldoc>> {

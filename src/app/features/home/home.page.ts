@@ -1,7 +1,7 @@
 import { Component, inject, signal, ViewChild } from '@angular/core';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons, IonCheckbox, IonCard, IonCardContent, IonCardTitle, IonCardHeader, IonCardSubtitle,
-  IonItem, IonList, IonLabel, IonIcon, IonFabButton, IonFab, IonFabList, IonSegment, IonSegmentButton, IonModal, IonInput
+  IonItem, IonList, IonLabel, IonIcon, IonFabButton, IonFab, IonFabList, IonSegment, IonSegmentButton, IonModal, IonInput, ModalController
 } from '@ionic/angular/standalone';
 import { OverlayEventDetail } from '@ionic/core/components';
 
@@ -14,6 +14,7 @@ import { Goaldoc } from '../goal/models/goaldoc';
 import { GoalService } from '../goal/services/goal.service';
 import { FormsModule } from '@angular/forms';
 import { Goal } from '../goal/models/goal';
+import { HabitModalComponent } from './habit-modal/habit-modal.component';
 
 @Component({
   selector: 'app-home',
@@ -30,7 +31,8 @@ export class HomePage {
   readonly goaldocstore = inject(GoaldocStore);
   readonly habitgriddocstore = inject(HabitGriddocStore);
 
-  @ViewChild(IonModal) modal!: IonModal;
+  @ViewChild('modalgoal') modalgoal!: IonModal;
+  @ViewChild('modalhabit') modalhabit!: IonModal;
 
   year = new Date().getFullYear()
   today: Date = new Date()
@@ -47,7 +49,7 @@ export class HomePage {
 
   matchdata: any = []
 
-  constructor(private goalService: GoalService) {
+  constructor(private goalService: GoalService, private modalCtrl: ModalController) {
     this.getGoaldoc();
   }
 
@@ -119,20 +121,38 @@ export class HomePage {
   }
 
   addNewGoal() {
-    this.modal.dismiss(this.newGoal, 'save');
+    this.modalgoal.dismiss(this.newGoal, 'saveGoal');
   }
 
-  cancel() {
-    this.modal.dismiss(null, 'cancel');
+  cancelGoalModal() {
+    this.modalgoal.dismiss(null, 'cancel');
   }
 
-  addHabit() {
+  async openHabitModal(goalid: number) {
+    const modal = await this.modalCtrl.create({
+      component: HabitModalComponent,
+      componentProps: {
+        goalid: goalid
+      },
+      initialBreakpoint: 0.6,
+      breakpoints: [0, 0.6, 1],
+      backdropDismiss: true,
+      backdropBreakpoint: 0,
+      presentingElement: await this.modalCtrl.getTop() // Get the top-most ion-modal
+    });
+    modal.present();
 
+    const { data, role } = await modal.onWillDismiss();
+    console.log(data)
+    console.log(role)
+    if (role === 'saveHabit') {
+      // this.goaldocstore.addGoaldoc(this.goaldoc)
+    }
   }
 
   onWillDismiss(event: Event) {
     const ev = event as CustomEvent<OverlayEventDetail<Goal>>;
-    if (ev.detail.role === 'save') {
+    if (ev.detail.role === 'saveGoal') {
       this.newGoal.name = ev.detail.data?.name!
       this.newGoal.description = ev.detail.data?.description!
       this.newGoaldoc.goal = this.newGoal

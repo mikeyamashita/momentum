@@ -15,6 +15,7 @@ import { Goaldoc } from '../models/goaldoc';
 
 type GoalState = {
     id: number,
+    goal: Goaldoc,
     goals: Array<Goaldoc>;
     habitMatrix: Array<any>;
     isLoading: boolean;
@@ -23,6 +24,7 @@ type GoalState = {
 
 const initialState: GoalState = {
     id: 0,
+    goal: new Goaldoc(),
     goals: new Array<Goaldoc>(),
     habitMatrix: new Array<any>(),
     isLoading: false,
@@ -40,23 +42,24 @@ export const GoaldocStore = signalStore(
         setGoaldocId(goaldocid: number): void {
             patchState(store, { id: goaldocid });
         },
-        // initializeHabitMatrix(): void {
-        //     let matchdata = new Array<any>()
-        //     let start = new Date("01/01/" + '2024');
-        //     let end = new Date("12/31/" + '2024');
-
-        //     let loop = new Date(start);
-        //     while (loop <= end) {
-        //       let stringData = goalService.format(loop)
-
-        //       matchdata.push([stringData, 0])
-
-        //       var newDate = loop.setDate(loop.getDate() + 1);
-        //       loop = new Date(newDate);
-        //     }
-        //     // console.log(this.matchdata)
-        //     patchState(store, { habitMatrix: matchdata })
-        // },
+        getGoalId: rxMethod<number>(
+            pipe(
+                distinctUntilChanged(),
+                tap(() => patchState(store, { isLoading: true })),
+                concatMap((id) => {
+                    return goalService.getGoalById(id).pipe(
+                        tapResponse({
+                            next: (goal: Goaldoc) => {
+                                console.log(goal)
+                                patchState(store, { goal })
+                            },
+                            error: console.error,
+                            finalize: () => patchState(store, { isLoading: false }),
+                        })
+                    );
+                })
+            )
+        ),
         getGoals: rxMethod<void>(
             pipe(
                 distinctUntilChanged(),
@@ -68,7 +71,7 @@ export const GoaldocStore = signalStore(
                                 // goals.sort((a, b) => a?.id - b?.id)
                                 patchState(store, { goals })
                                 patchState(store, { habitMatrix: goalService.getProgress(goals) })
-                                console.log(store.habitMatrix())
+                                // console.log(store.habitMatrix())
                             },
                             error: console.error,
                             finalize: () => patchState(store, { isLoading: false }),

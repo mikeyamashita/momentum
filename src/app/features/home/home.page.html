@@ -19,14 +19,14 @@
     </ion-header>
     <div class="grid grid-cols-2 px-2 pt-5">
       <div class="pl-2">
-        <ion-segment class="grid place-content-center ml-[12.5px] mb-6 mt-[-8px]" value="habits" mode="ios">
+        <!-- <ion-segment class="grid place-content-center ml-[12.5px] mb-6 mt-[-8px]" value="habits" mode="ios">
           <ion-segment-button value="habits">
             <ion-label>Habits</ion-label>
           </ion-segment-button>
           <ion-segment-button value="milestones">
             <ion-label>Milestones</ion-label>
           </ion-segment-button>
-        </ion-segment>
+        </ion-segment> -->
         <div class="w-full mt-[-8px]">
           <!-- goal row -->
           @for(goal of goaldocstore.goals(); track goal.id){
@@ -40,15 +40,17 @@
                   [value]="isComplete(habit)">{{habit.name}}</ion-checkbox>
               </ion-item>
               }
+              <ion-item class="text-sm text-wrap mx-[-0.5em]">
+                <ion-button id="open-modal-habit" class="w-full mt-[-4px] text-2xl" fill="clear" mode="ios"
+                  (click)="openHabitModal(goal.id!)">
+                  <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+                </ion-button>
+              </ion-item>
             </ion-list>
-            <ion-button class="grid place-content-center ml-[25px] mt-[-4px] text-2xl" fill="clear" (click)="addHabit()"
-              mode="ios">
-              <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
-            </ion-button>
           </div>
           }
           <ion-fab class="fixed bottom-5" mode="ios">
-            <ion-fab-button id="open-modal" size="small" expand="block">
+            <ion-fab-button id="open-modal-goal" size="small" expand="block">
               <ion-icon name="add"></ion-icon>
             </ion-fab-button>
           </ion-fab>
@@ -63,15 +65,15 @@
       </div>
     </div>
   </div>
-
-  <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+  <ion-modal #modalgoal trigger="open-modal-goal" (willDismiss)="onWillDismiss($event)" [initialBreakpoint]="0.6"
+    [backdropDismiss]="true" [backdropBreakpoint]="0" [breakpoints]="[0, 0.6, 1]">
     <ng-template>
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-button (click)="cancel()">Cancel</ion-button>
+            <ion-button (click)="cancelGoalModal()">Cancel</ion-button>
           </ion-buttons>
-          <ion-title>New Goal</ion-title>
+          <ion-title></ion-title>
           <ion-buttons slot="end">
             <ion-button (click)="addNewGoal()" [strong]="true">Save</ion-button>
           </ion-buttons>
@@ -79,12 +81,12 @@
       </ion-header>
       <ion-content class="ion-padding">
         <ion-item class="pb-4" lines="none">
-          <ion-input labelPlacement="stacked" type="text" placeholder="Name" [(ngModel)]="newGoal.name"></ion-input>
+          <ion-input labelPlacement="stacked" type="text" placeholder="New Goal" [(ngModel)]="newGoal.name"></ion-input>
         </ion-item>
-        <ion-item class="pb-4" lines="none">
+        <!-- <ion-item class="pb-4" lines="none">
           <ion-input labelPlacement="stacked" type="text" placeholder="Description"
             [(ngModel)]="newGoal.description"></ion-input>
-        </ion-item>
+        </ion-item> -->
       </ion-content>
     </ng-template>
   </ion-modal>
