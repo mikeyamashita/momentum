@@ -19,7 +19,7 @@
     </ion-header>
     <div class="grid grid-cols-2 px-2 pt-5">
       <div class="pl-2">
-        <ion-segment class="grid place-content-center ml-[12.5px] mb-6 mt-[-8px]" value="default" mode="ios">
+        <ion-segment class="grid place-content-center ml-[12.5px] mb-6 mt-[-8px]" value="habits" mode="ios">
           <ion-segment-button value="habits">
             <ion-label>Habits</ion-label>
           </ion-segment-button>
@@ -48,7 +48,7 @@
           </div>
           }
           <ion-fab class="fixed bottom-5" mode="ios">
-            <ion-fab-button size="small" (click)="addGoal()">
+            <ion-fab-button id="open-modal" size="small" expand="block">
               <ion-icon name="add"></ion-icon>
             </ion-fab-button>
           </ion-fab>
@@ -63,4 +63,29 @@
       </div>
     </div>
   </div>
+
+  <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="cancel()">Cancel</ion-button>
+          </ion-buttons>
+          <ion-title>New Goal</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="addNewGoal()" [strong]="true">Save</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-item class="pb-4" lines="none">
+          <ion-input labelPlacement="stacked" type="text" placeholder="Name" [(ngModel)]="newGoal.name"></ion-input>
+        </ion-item>
+        <ion-item class="pb-4" lines="none">
+          <ion-input labelPlacement="stacked" type="text" placeholder="Description"
+            [(ngModel)]="newGoal.description"></ion-input>
+        </ion-item>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

@@ -35,19 +35,6 @@ export class GoalService {
     return mesF + "/" + diaF + "/" + anoF;
   }
 
-  // getHabitCount(goaldoc: Array<Goaldoc>): number {
-  //   let count = 0
-  //   let dateMatrix = []
-  //   goaldoc?.forEach(goaldoc => {
-  //     goaldoc.goal?.habits?.forEach(habit => {
-  //       if (habit.datesCompleted?.some((item) => item == this.format(new Date))) {
-  //         count++
-  //       }
-  //     })
-  //   })
-  //   return count
-  // }
-
   getProgressCount(goaldoc: Array<Goaldoc>, date: Date): number {
     let count = 0
     let numHabits = 0
