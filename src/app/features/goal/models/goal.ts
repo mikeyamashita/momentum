@@ -4,7 +4,7 @@ import { Milestone } from "./milestone";
 export class Goal {
     name: string = "";
     description: string = "";
-    habits: Array<Habit> | undefined;
-    milestones: Array<Milestone> | undefined;
+    habits: Array<Habit> = [];
+    milestones: Array<Milestone> = [];
     isComplete: boolean = false;
 }

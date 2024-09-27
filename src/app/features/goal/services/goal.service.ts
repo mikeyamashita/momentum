@@ -59,6 +59,10 @@ export class GoalService {
     return this.matchdata
   }
 
+  saveProgress(date: Date) {
+
+  }
+
   getGoalById(id: number): Observable<Goaldoc> {
     return this.http.get<Goaldoc>(this.apiService.server() + '/api/goal/' + id, this.apiService.httpOptions)
       .pipe(

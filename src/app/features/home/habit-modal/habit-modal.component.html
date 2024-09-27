@@ -15,7 +15,10 @@
       <ion-input labelPlacement="stacked" type="text" placeholder="New Habit" [(ngModel)]="habit.name"></ion-input>
     </ion-item>
     @if(role === 'save'){
-    <ion-button class="flex justify-stretch" (click)="deleteHabit()" [strong]="true" fill="clear">Delete</ion-button>
+    <ion-button id="present-alert" class="flex justify-stretch" [strong]="true" fill="clear">Delete</ion-button>
+    <ion-alert trigger="present-alert" header="Are you sure you would like to delete this habit?"
+      [buttons]="alertButtons" (didDismiss)="deleteHabit($event)">
+    </ion-alert>
     }
   </div>
 </ion-content>

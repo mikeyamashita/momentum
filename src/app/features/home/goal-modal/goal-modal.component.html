@@ -23,7 +23,10 @@
       [(ngModel)]="newGoal.description"></ion-input>
   </ion-item> -->
     @if(role === 'save'){
-    <ion-button class="flex justify-stretch" (click)="deleteGoal()" [strong]="true" fill="clear">Delete</ion-button>
+    <ion-button id="present-alert" class="flex justify-stretch" [strong]="true" fill="clear">Delete</ion-button>
+    <ion-alert trigger="present-alert" header="Are you sure you would like to delete this goal?"
+      [buttons]="alertButtons" (didDismiss)="deleteGoal($event)">
+    </ion-alert>
     }
   </div>
 </ion-content>

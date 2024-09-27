@@ -92,10 +92,6 @@ export class HomePage {
     }
   }
 
-  update() {
-    this.goaldocstore.getGoals();
-  }
-
   habitChecked(goaldoc: Goaldoc | undefined, habit: Habit) {
     if (habit.datesCompleted?.find(date => date == this.goalService.format(this.day()))) {
       habit.datesCompleted?.splice(habit.datesCompleted.findIndex((item) => item == this.goalService.format(this.day())), 1)

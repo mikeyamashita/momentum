@@ -27,13 +27,13 @@
             <ion-label>Milestones</ion-label>
           </ion-segment-button>
         </ion-segment> -->
-        <div class="w-full mt-[-8px]">
+        <div class="w-full mt-[-8px] pb-4">
           <!-- goal row -->
           @for(goal of goaldocstore.goals(); track goal.id){
           <div class="flex flex-row justify-start">
             <div class="font-bold text-base flex items-center">{{goal.goal?.name}}</div>
             <ion-button class="pl-3" fill="clear" mode="ios" (click)="openGoalModal('save', goal)">
-              <ion-icon class="text-base" slot="icon-only" name="pencil" color="light"></ion-icon>
+              <ion-icon class="text-sm" slot="icon-only" name="pencil" color="light"></ion-icon>
             </ion-button>
           </div>
           <!-- habit row -->
@@ -68,7 +68,7 @@
           </ion-fab>
         </div>
       </div>
-      <div class="pr-3 mt-[-10px] grid place-content-end">
+      <div class="pr-3 mt-[-10px] flex justify-end">
         @if(goaldocstore.habitMatrix()){
         <app-graph [year]="year.toString()" colorLevel1="#003b3b" colorLevel2="#005050" colorLevel3="#006a6a"
           colorLevel4="#008282" colorLevel5="#009595" colorLevel6="#00aeae" colorLevel7="#00c5c5" colorLevel8="#00d9d9"
