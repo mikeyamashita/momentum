@@ -10,7 +10,12 @@
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <ion-item class="pb-4" lines="none">
-    <ion-input labelPlacement="stacked" type="text" placeholder="New Habit" [(ngModel)]="habit.name"></ion-input>
-  </ion-item>
+  <div class="flex flex-col justify-between h-full pb-1">
+    <ion-item class="pb-4" lines="none">
+      <ion-input labelPlacement="stacked" type="text" placeholder="New Habit" [(ngModel)]="habit.name"></ion-input>
+    </ion-item>
+    @if(role === 'save'){
+    <ion-button class="flex justify-stretch" (click)="deleteHabit()" [strong]="true" fill="clear">Delete</ion-button>
+    }
+  </div>
 </ion-content>

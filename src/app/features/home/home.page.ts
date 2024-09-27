@@ -5,7 +5,6 @@ import {
   IonItem, IonItemSliding, IonList, IonLabel, IonIcon, IonFabButton, IonFab, IonFabList, IonSegment, IonSegmentButton,
   IonModal, IonInput, ModalController
 } from '@ionic/angular/standalone';
-// import { OverlayEventDetail } from '@ionic/core/components';
 
 import { GoaldocStore } from '../goal/stores/goaldoc.store';
 import { HabitGriddocStore } from '../goal/stores/habitgriddoc.store';
@@ -37,21 +36,18 @@ export class HomePage {
 
   @ViewChild('modalgoal') modalgoal!: IonModal;
   @ViewChild('modalhabit') modalhabit!: IonModal;
-  @ViewChild('habitSlide') habitSlide!: IonItemSliding;
+  @ViewChild('habitslide') habitslide!: IonItemSliding;
 
   year = new Date().getFullYear()
   today: Date = new Date()
   day = signal(new Date());
   formatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   dayFormatted = signal(this.formatter.format(this.day()));
-
   habitCount: any = signal(0);
-
   habitGriddoc: HabitGriddoc = new HabitGriddoc()
   newGoal: Goal = new Goal()
   newGoaldoc: Goaldoc = new Goaldoc()
   name: string = ''
-
   matchdata: any = []
 
   constructor(private goalService: GoalService, private modalCtrl: ModalController) {
@@ -90,7 +86,6 @@ export class HomePage {
     let loop = new Date(start);
     while (loop <= end) {
       let stringData = this.goalService.format(loop)
-
       this.matchdata.push([stringData, this.getGoaldoc()])
       var newDate = loop.setDate(loop.getDate() + 1);
       loop = new Date(newDate);
@@ -133,18 +128,16 @@ export class HomePage {
         goalid: goalid,
         habitprop: habit
       },
-      initialBreakpoint: 0.6,
-      breakpoints: [0, 0.6, 1],
+      initialBreakpoint: 0.99,
+      breakpoints: [0, 0.99, 1],
       backdropDismiss: true,
       backdropBreakpoint: 0,
       presentingElement: await this.modalCtrl.getTop() // Get the top-most ion-modal
     });
     modal.present();
     const { data, role } = await modal.onWillDismiss();
-    if (role === 'saveHabit') {
-      this.goaldocstore.saveGoaldoc(data)
-    }
-    this.habitSlide.closeOpened()
+    this.goaldocstore.saveGoaldoc(data)
+    this.habitslide.closeOpened()
   }
 
   async openGoalModal(roletype: string, goaldoc?: Goaldoc) {
@@ -154,8 +147,8 @@ export class HomePage {
         role: roletype,
         goaldocprop: goaldoc
       },
-      initialBreakpoint: 0.6,
-      breakpoints: [0, 0.6, 1],
+      initialBreakpoint: 0.99,
+      breakpoints: [0, 0.99, 1],
       backdropDismiss: true,
       backdropBreakpoint: 0,
       presentingElement: await this.modalCtrl.getTop() // Get the top-most ion-modal
@@ -169,8 +162,9 @@ export class HomePage {
       this.goaldocstore.addGoaldoc(this.newGoaldoc)
     } else if (role === 'saveGoal') {
       this.newGoaldoc.id = goaldoc?.id
-      console.log(this.newGoaldoc)
       this.goaldocstore.saveGoaldoc(this.newGoaldoc)
+    } else if (role === 'deleteGoal') {
+      this.goaldocstore.deleteGoaldoc(goaldoc?.id!)
     }
   }
 }

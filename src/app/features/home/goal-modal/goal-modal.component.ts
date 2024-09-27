@@ -49,4 +49,8 @@ export class GoalModalComponent implements OnInit {
     return this.modalCtrl.dismiss(this.goal, 'saveGoal');
   }
 
+  deleteGoal() {
+    return this.modalCtrl.dismiss(this.goaldocprop.id!, 'deleteGoal');
+  }
+
 }

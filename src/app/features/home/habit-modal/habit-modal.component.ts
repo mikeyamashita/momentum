@@ -26,7 +26,6 @@ export class HabitModalComponent implements OnInit {
   role: string = ''
   goalid: number = 0;
   habitprop: Habit = new Habit();
-
   goaldoc: Goaldoc = new Goaldoc();
   goal: Goal = new Goal();
   habit: Habit = new Habit();
@@ -56,7 +55,13 @@ export class HabitModalComponent implements OnInit {
       let habitIndex = this.goaldocstore.goal().goal?.habits?.findIndex(habit => habit.name === JSON.parse(this.habitclone).name)
       this.goaldocstore.goal().goal?.habits?.splice(habitIndex!, 1, this.habit)
     }
-    return this.modalCtrl.dismiss(this.goaldocstore.goal(), 'saveHabit');
+    return this.modalCtrl.dismiss(this.goaldocstore.goal(), 'saveHabit')
   }
 
+  deleteHabit() {
+    let habitIndex = this.goaldocstore.goal().goal?.habits?.findIndex(habit => habit.name === JSON.parse(this.habitclone).name)
+    console.log(habitIndex)
+    this.goaldocstore.goal().goal?.habits?.splice(habitIndex!, 1)
+    return this.modalCtrl.dismiss(this.goaldocstore.goal(), 'deleteHabit')
+  }
 }

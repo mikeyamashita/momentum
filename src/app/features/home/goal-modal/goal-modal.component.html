@@ -14,11 +14,16 @@
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <ion-item class="pb-4" lines="none">
-    <ion-input labelPlacement="stacked" type="text" placeholder="New Goal" [(ngModel)]="goal.name"></ion-input>
-  </ion-item>
-  <!-- <ion-item class="pb-4" lines="none">
+  <div class="flex flex-col justify-between h-full pb-1">
+    <ion-item class="pb-4" lines="none">
+      <ion-input labelPlacement="stacked" type="text" placeholder="New Goal" [(ngModel)]="goal.name"></ion-input>
+    </ion-item>
+    <!-- <ion-item class="pb-4" lines="none">
     <ion-input labelPlacement="stacked" type="text" placeholder="Description"
       [(ngModel)]="newGoal.description"></ion-input>
   </ion-item> -->
+    @if(role === 'save'){
+    <ion-button class="flex justify-stretch" (click)="deleteGoal()" [strong]="true" fill="clear">Delete</ion-button>
+    }
+  </div>
 </ion-content>
