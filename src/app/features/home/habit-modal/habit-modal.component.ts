@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-// import { OverlayEventDetail } from '@ionic/core/components';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons,
   IonItem, IonList, IonLabel, IonFab, IonModal, IonInput, ModalController
@@ -21,33 +20,43 @@ import { Goaldoc } from '../../goal/models/goaldoc';
     IonFab, FormsModule]
 })
 export class HabitModalComponent implements OnInit {
+  readonly goaldocstore = inject(GoaldocStore);
+
+  //inputs
+  role: string = ''
   goalid: number = 0;
+  habitprop: Habit = new Habit();
+
   goaldoc: Goaldoc = new Goaldoc();
   goal: Goal = new Goal();
-  newHabit: Habit = new Habit();
-  readonly goaldocstore = inject(GoaldocStore);
+  habit: Habit = new Habit();
+  habitclone: any
 
   constructor(private modalCtrl: ModalController) {
   }
 
   ngOnInit() {
-    this.goaldocstore.getGoalId(this.goalid)
+    this.goaldocstore.getGoalById(this.goalid)
+    if (this.role === 'save') {
+      if (this.habitprop) {
+        this.habit = this.habitprop
+        this.habitclone = JSON.stringify(this.habitprop) // non mutable clone for findIndex
+      }
+    }
   }
 
   cancelHabitModal() {
     return this.modalCtrl.dismiss(null, 'cancel');
   }
 
-  addNewHabit() {
-    this.goaldocstore.goal().goal?.habits?.push(this.newHabit)
+  saveHabit() {
+    if (this.role === 'add') {
+      this.goaldocstore.goal().goal?.habits?.push(this.habit)
+    } else {
+      let habitIndex = this.goaldocstore.goal().goal?.habits?.findIndex(habit => habit.name === JSON.parse(this.habitclone).name)
+      this.goaldocstore.goal().goal?.habits?.splice(habitIndex!, 1, this.habit)
+    }
     return this.modalCtrl.dismiss(this.goaldocstore.goal(), 'saveHabit');
   }
 
-  // onWillDismiss(event: Event) {
-  //   const ev = event as CustomEvent<OverlayEventDetail<Habit>>;
-  //   console.log(ev.detail.role)
-  //   // if (ev.detail.role === 'saveHabit') {
-  //   //   this.goaldocstore.addGoaldoc(this.goaldoc)
-  //   // }
-  // }
 }

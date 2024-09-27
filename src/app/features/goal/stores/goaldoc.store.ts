@@ -10,7 +10,6 @@ import {
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import { GoalService } from '../services/goal.service';
-import { Goal } from '../models/goal';
 import { Goaldoc } from '../models/goaldoc';
 
 type GoalState = {
@@ -42,7 +41,7 @@ export const GoaldocStore = signalStore(
         setGoaldocId(goaldocid: number): void {
             patchState(store, { id: goaldocid });
         },
-        getGoalId: rxMethod<number>(
+        getGoalById: rxMethod<number>(
             pipe(
                 distinctUntilChanged(),
                 tap(() => patchState(store, { isLoading: true })),
@@ -50,7 +49,6 @@ export const GoaldocStore = signalStore(
                     return goalService.getGoalById(id).pipe(
                         tapResponse({
                             next: (goal: Goaldoc) => {
-                                console.log(goal)
                                 patchState(store, { goal })
                             },
                             error: console.error,
@@ -68,10 +66,8 @@ export const GoaldocStore = signalStore(
                     return goalService.getGoals().pipe(
                         tapResponse({
                             next: (goals: Array<Goaldoc>) => {
-                                // goals.sort((a, b) => a?.id - b?.id)
                                 patchState(store, { goals })
                                 patchState(store, { habitMatrix: goalService.getProgress(goals) })
-                                // console.log(store.habitMatrix())
                             },
                             error: console.error,
                             finalize: () => patchState(store, { isLoading: false }),
@@ -86,8 +82,9 @@ export const GoaldocStore = signalStore(
                 concatMap((goaldoc: Goaldoc) => {
                     return goalService.putGoaldoc(goaldoc).pipe(
                         tapResponse({
-                            next: () => {
-                                // patchState(store, { goals: goaldoc })
+                            next: (res) => {
+                                console.log(res)
+                                // patchState(store, { goal: res })
                                 // replace updated goaldoc
                                 // let goalsDup = store.goals()
                                 // console.log(store.goals().findIndex((item: Goaldoc) => goaldoc.id == item.id))
@@ -118,6 +115,7 @@ export const GoaldocStore = signalStore(
                     return goalService.postGoaldoc(goaldoc).pipe(
                         tapResponse({
                             next: (res: Goaldoc) => {
+                                console.log(res)
                                 store.goals().push(res)
                             },
                             error: console.error,

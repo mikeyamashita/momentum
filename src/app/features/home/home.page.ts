@@ -1,9 +1,11 @@
 import { Component, inject, signal, ViewChild } from '@angular/core';
 import {
-  IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons, IonCheckbox, IonCard, IonCardContent, IonCardTitle, IonCardHeader, IonCardSubtitle,
-  IonItem, IonList, IonLabel, IonIcon, IonFabButton, IonFab, IonFabList, IonSegment, IonSegmentButton, IonModal, IonInput, ModalController
+  IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons, IonCheckbox, IonCard, IonCardContent, IonCardTitle,
+  IonCardHeader, IonCardSubtitle, IonItemOption, IonItemOptions,
+  IonItem, IonItemSliding, IonList, IonLabel, IonIcon, IonFabButton, IonFab, IonFabList, IonSegment, IonSegmentButton,
+  IonModal, IonInput, ModalController
 } from '@ionic/angular/standalone';
-import { OverlayEventDetail } from '@ionic/core/components';
+// import { OverlayEventDetail } from '@ionic/core/components';
 
 import { GoaldocStore } from '../goal/stores/goaldoc.store';
 import { HabitGriddocStore } from '../goal/stores/habitgriddoc.store';
@@ -15,6 +17,7 @@ import { GoalService } from '../goal/services/goal.service';
 import { FormsModule } from '@angular/forms';
 import { Goal } from '../goal/models/goal';
 import { HabitModalComponent } from './habit-modal/habit-modal.component';
+import { GoalModalComponent } from './goal-modal/goal-modal.component';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +25,8 @@ import { HabitModalComponent } from './habit-modal/habit-modal.component';
   styleUrls: ['home.page.scss'],
   standalone: true,
   imports: [IonModal, IonSegmentButton, IonSegment, IonFabList, IonFabButton, IonIcon, IonLabel, IonList, IonItem,
-    IonCardSubtitle, IonCardHeader, IonCardTitle, IonCardContent, IonCard, IonInput,
+    IonItemSliding, IonItemOptions,
+    IonCardSubtitle, IonCardHeader, IonCardTitle, IonCardContent, IonCard, IonInput, IonItemOption,
     IonCheckbox, IonButton, IonButtons, IonHeader, IonToolbar, IonTitle, IonContent,
     IonFab,
     GraphComponent, FormsModule]
@@ -33,6 +37,7 @@ export class HomePage {
 
   @ViewChild('modalgoal') modalgoal!: IonModal;
   @ViewChild('modalhabit') modalhabit!: IonModal;
+  @ViewChild('habitSlide') habitSlide!: IonItemSliding;
 
   year = new Date().getFullYear()
   today: Date = new Date()
@@ -120,19 +125,13 @@ export class HomePage {
     }
   }
 
-  addNewGoal() {
-    this.modalgoal.dismiss(this.newGoal, 'saveGoal');
-  }
-
-  cancelGoalModal() {
-    this.modalgoal.dismiss(null, 'cancel');
-  }
-
-  async openHabitModal(goalid: number) {
+  async openHabitModal(roletype: string, goalid: number, habit?: Habit) {
     const modal = await this.modalCtrl.create({
       component: HabitModalComponent,
       componentProps: {
-        goalid: goalid
+        role: roletype,
+        goalid: goalid,
+        habitprop: habit
       },
       initialBreakpoint: 0.6,
       breakpoints: [0, 0.6, 1],
@@ -141,22 +140,37 @@ export class HomePage {
       presentingElement: await this.modalCtrl.getTop() // Get the top-most ion-modal
     });
     modal.present();
-
     const { data, role } = await modal.onWillDismiss();
-    console.log(data)
-    console.log(role)
     if (role === 'saveHabit') {
       this.goaldocstore.saveGoaldoc(data)
     }
+    this.habitSlide.closeOpened()
   }
 
-  onWillDismiss(event: Event) {
-    const ev = event as CustomEvent<OverlayEventDetail<Goal>>;
-    if (ev.detail.role === 'saveGoal') {
-      this.newGoal.name = ev.detail.data?.name!
-      this.newGoal.description = ev.detail.data?.description!
-      this.newGoaldoc.goal = this.newGoal
+  async openGoalModal(roletype: string, goaldoc?: Goaldoc) {
+    const modal = await this.modalCtrl.create({
+      component: GoalModalComponent,
+      componentProps: {
+        role: roletype,
+        goaldocprop: goaldoc
+      },
+      initialBreakpoint: 0.6,
+      breakpoints: [0, 0.6, 1],
+      backdropDismiss: true,
+      backdropBreakpoint: 0,
+      presentingElement: await this.modalCtrl.getTop() // Get the top-most ion-modal
+    });
+    modal.present();
+    const { data, role } = await modal.onWillDismiss();
+    this.newGoal.name = data?.name
+    this.newGoal.description = data?.description
+    this.newGoaldoc.goal = this.newGoal
+    if (role == 'addGoal') {
       this.goaldocstore.addGoaldoc(this.newGoaldoc)
+    } else if (role === 'saveGoal') {
+      this.newGoaldoc.id = goaldoc?.id
+      console.log(this.newGoaldoc)
+      this.goaldocstore.saveGoaldoc(this.newGoaldoc)
     }
   }
 }

@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancelGoalModal()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      @if(role === 'add'){
+      <ion-button (click)="addGoal()" [strong]="true">Save</ion-button>
+      } @else if (role ==='save') {
+      <ion-button (click)="saveGoal()" [strong]="true">Save</ion-button>
+      }
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-item class="pb-4" lines="none">
+    <ion-input labelPlacement="stacked" type="text" placeholder="New Goal" [(ngModel)]="goal.name"></ion-input>
+  </ion-item>
+  <!-- <ion-item class="pb-4" lines="none">
+    <ion-input labelPlacement="stacked" type="text" placeholder="Description"
+      [(ngModel)]="newGoal.description"></ion-input>
+  </ion-item> -->
+</ion-content>

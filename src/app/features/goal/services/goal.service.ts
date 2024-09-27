@@ -56,7 +56,6 @@ export class GoalService {
       var newDate = loop.setDate(loop.getDate() + 1);
       loop = new Date(newDate);
     }
-    // console.log(this.matchdata)
     return this.matchdata
   }
 
