@@ -115,7 +115,6 @@ export const GoaldocStore = signalStore(
                     return goalService.postGoaldoc(goaldoc).pipe(
                         tapResponse({
                             next: (res: Goaldoc) => {
-                                console.log(res)
                                 store.goals().push(res)
                             },
                             error: console.error,

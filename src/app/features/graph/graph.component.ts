@@ -1,6 +1,4 @@
-// credit: https://github.com/SergioNoivak/ng-git-calendar
-import { Component, OnInit, Input, inject, signal } from '@angular/core';
-import { HabitGrid } from '../goal/models/habitgrid';
+import { Component, OnInit, Input, inject } from '@angular/core';
 import { GoaldocStore } from '../goal/stores/goaldoc.store';
 
 @Component({
@@ -10,6 +8,7 @@ import { GoaldocStore } from '../goal/stores/goaldoc.store';
   standalone: true,
 })
 export class GraphComponent implements OnInit {
+  readonly goaldocstore = inject(GoaldocStore);
 
   @Input()
   year: string | undefined;
@@ -42,8 +41,6 @@ export class GraphComponent implements OnInit {
   constanteHeight: number = 0;
   constanteWidth: number = 0;
 
-  readonly goaldocstore = inject(GoaldocStore);
-
   constructor() {
   }
 
@@ -51,48 +48,10 @@ export class GraphComponent implements OnInit {
   ngOnInit() {
     this.initialHeight = window.screen.height;
     this.initialWidth = window.screen.width;
-    // setTimeout(() => {
-    // }, 500)
-    // this.buildGrid();
   }
 
   ionViewDidEnter() {
   }
-
-  // buildGrid() {
-  //   for (let i = 0; i < this.match.length; i++) {
-  //     this.realMatch[(new Date("" + this.match[i][0])).toDateString()] = this.match[i][1]
-  //   }
-
-  //   let start = new Date("01/01/" + (this.year));
-  //   let end = new Date("12/31/" + (this.year));
-
-  //   let loop = new Date(start);
-  //   while (loop <= end) {
-  //     let stringData = this.dataAtualFormatada(loop)
-
-  //     if (this.realMatch[loop.toDateString()] == undefined) {
-  //       this.squares().push({ stringData: stringData, "datalevel": 0 })
-  //     } else {
-  //       this.squares().push({ stringData: stringData, "datalevel": parseInt(this.realMatch[loop.toDateString()]) })
-  //     }
-
-  //     var newDate = loop.setDate(loop.getDate() + 1);
-  //     loop = new Date(newDate);
-  //   }
-  // }
-
-  // Methods
-  // dataAtualFormatada(data: Date) {
-  //   var
-  //     dia = data.getDate().toString(),
-  //     diaF = (dia.length == 1) ? '0' + dia : dia,
-  //     mes = (data.getMonth() + 1).toString(),
-  //     mesF = (mes.length == 1) ? '0' + mes : mes,
-  //     anoF = data.getFullYear();
-
-  //   return mesF + "/" + diaF + "/" + anoF;
-  // }
 
   getColor(dia: number) {
     let x = dia

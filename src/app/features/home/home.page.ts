@@ -76,20 +76,7 @@ export class HomePage {
   }
 
   getHabitGriddoc() {
-    this.habitgriddocstore.getHabitGrid();
-  }
-
-  getProgress() {
-    let start = new Date("09/01/" + this.year);
-    let end = new Date("09/30/" + this.year);
-
-    let loop = new Date(start);
-    while (loop <= end) {
-      let stringData = this.goalService.format(loop)
-      this.matchdata.push([stringData, this.getGoaldoc()])
-      var newDate = loop.setDate(loop.getDate() + 1);
-      loop = new Date(newDate);
-    }
+    this.habitgriddocstore.getHabitGriddoc();
   }
 
   habitChecked(goaldoc: Goaldoc | undefined, habit: Habit) {
@@ -98,6 +85,7 @@ export class HomePage {
     } else {
       habit.datesCompleted?.push(this.goalService.format(this.day()))
     }
+
     this.goaldocstore.saveGoaldoc(goaldoc)
   }
 

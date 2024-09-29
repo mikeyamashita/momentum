@@ -1,4 +1,4 @@
 export class HabitGrid {
-    stringData: string = "";
-    datalevel: number = 0;
+    date: string = "";
+    progress: number = 0;
 }
