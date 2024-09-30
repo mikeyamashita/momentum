@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, catchError, tap } from 'rxjs';
+import { Observable, catchError } from 'rxjs';
 
 import { Goaldoc } from '../models/goaldoc'
 import { ApiService } from '../../../api.service';
 import { tapResponse } from '@ngrx/operators';
-import { HabitGridService } from './habitgrid.service';
 import { HabitGriddocStore } from '../stores/habitgriddoc.store';
 import { HabitGrid } from '../models/habitgrid';
 import { HabitGriddoc } from '../models/habitgriddoc';
@@ -40,7 +39,6 @@ export class GoalService {
     habitGrid.progress = Math.round(count / numHabits * 100)
     let habitGridDoc: HabitGriddoc = new HabitGriddoc()
     habitGridDoc.habitGrid = habitGrid
-    console.log(habitGridDoc)
 
     return Math.round(count / numHabits * 100)
   }

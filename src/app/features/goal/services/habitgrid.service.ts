@@ -28,12 +28,56 @@ export class HabitGridService {
     return this.matchdata
   }
 
-  getHabitGridByDate(date: string): Observable<HabitGrid> {
-    return this.http.get<HabitGrid>(this.apiService.server() + '/api/habitgrid/' + date, this.apiService.httpOptions)
-      .pipe(
-        catchError(this.apiService.handleError)
-      );
+  // initHabitGrid(year: string) {
+  //   let start = new Date("09/30/" + '2024');
+  //   let end = new Date("12/31/" + '2024');
+
+  //   let loop = new Date(start);
+  //   while (loop < end) {
+  //     var newDate = loop.setDate(loop.getDate() + 1);
+  //     loop = new Date(newDate);
+  //     let habitGrid: HabitGrid = new HabitGrid()
+  //     habitGrid.date = this.helperService.format(loop)
+  //     // console.log(habitGrid.date)
+  //     habitGrid.progress = 0
+  //     let habitGridDoc: HabitGriddoc = new HabitGriddoc()
+  //     habitGridDoc.habitGrid = habitGrid
+
+  //     setTimeout(() => {
+  //       this.postHabitGriddoc(habitGridDoc).subscribe(() => { })
+  //     }, 1000)
+  //   }
+  // }
+
+  addMatrixDates(inputdate: string, year: number) {
+    let start = new Date("09/21/" + year);
+    let end = new Date("09/30/" + year);
+    let loop = new Date(start);
+
+    while (loop < end) {
+      var newDate = loop.setDate(loop.getDate() + 1);
+      loop = new Date(newDate);
+      if (inputdate === this.helperService.format(loop))
+        console.log(inputdate)
+    }
   }
+
+  newDateForHabitGrid(inputdate: string) {
+    let habitGrid: HabitGrid = new HabitGrid()
+    habitGrid.date = inputdate
+    habitGrid.progress = 0
+    let habitGridDoc: HabitGriddoc = new HabitGriddoc()
+    habitGridDoc.habitGrid = habitGrid
+
+    this.postHabitGriddoc(habitGridDoc).subscribe(() => { })
+  }
+
+  // getHabitGridByDate(date: string): Observable<HabitGrid> {
+  //   return this.http.get<HabitGrid>(this.apiService.server() + '/api/habitgrid/' + date, this.apiService.httpOptions)
+  //     .pipe(
+  //       catchError(this.apiService.handleError)
+  //     );
+  // }
 
   getHabitGriddoc(): Observable<Array<HabitGriddoc>> {
     return this.http.get<Array<HabitGriddoc>>(this.apiService.server() + '/api/habitgrid', this.apiService.httpOptions)
@@ -47,7 +91,6 @@ export class HabitGridService {
       .pipe(
         tapResponse({
           next: (habitgriddoc: HabitGriddoc) => {
-            console.log(habitgriddoc)
           },
           error: catchError(this.apiService.handleError),
           finalize: () => {
@@ -60,7 +103,7 @@ export class HabitGridService {
     return this.http.put<HabitGriddoc>(this.apiService.server() + '/api/habitgrid/' + habitgriddoc.id, habitgriddoc, this.apiService.httpOptions)
       .pipe(
         tapResponse({
-          next: (res) => { console.log(res) },
+          next: (res) => { },
           error: catchError(this.apiService.handleError),
           finalize: () => {
           }

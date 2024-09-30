@@ -12,8 +12,6 @@ import { tapResponse } from '@ngrx/operators';
 import { HabitGridService } from '../services/habitgrid.service';
 import { HabitGriddoc } from '../models/habitgriddoc';
 import { HabitGrid } from '../models/habitgrid';
-import { GoalService } from '../services/goal.service';
-import { Goaldoc } from '../models/goaldoc';
 
 type HabitGridState = {
     id: number,
@@ -45,24 +43,23 @@ export const HabitGriddocStore = signalStore(
             patchState(store, { id: habitgridid });
         },
 
-        getHabitGridByDate: rxMethod<string>(
-            pipe(
-                distinctUntilChanged(),
-                tap(() => patchState(store, { isLoading: true })),
-                concatMap((date) => {
-                    return habitgridService.getHabitGridByDate(date).pipe(
-                        tapResponse({
-                            next: (habitprogress: HabitGrid) => {
-                                console.log(habitprogress)
-                                patchState(store, { habitprogress })
-                            },
-                            error: console.error,
-                            finalize: () => patchState(store, { isLoading: false }),
-                        })
-                    );
-                })
-            )
-        ),
+        // getHabitGridByDate: rxMethod<string>(
+        //     pipe(
+        //         distinctUntilChanged(),
+        //         tap(() => patchState(store, { isLoading: true })),
+        //         concatMap((date) => {
+        //             return habitgridService.getHabitGridByDate(date).pipe(
+        //                 tapResponse({
+        //                     next: (habitprogress: HabitGrid) => {
+        //                         patchState(store, { habitprogress })
+        //                     },
+        //                     error: console.error,
+        //                     finalize: () => patchState(store, { isLoading: false }),
+        //                 })
+        //             );
+        //         })
+        //     )
+        // ),
         getHabitGriddoc: rxMethod<void>(
             pipe(
                 distinctUntilChanged(),
@@ -71,9 +68,9 @@ export const HabitGriddocStore = signalStore(
                     return habitgridService.getHabitGriddoc().pipe(
                         tapResponse({
                             next: (habitgriddoc: Array<HabitGriddoc>) => {
-                                habitgriddoc.sort((a, b) => a.id! - b.id!)
+                                habitgriddoc.sort((a, b) => new Date(a.habitGrid?.date!).setHours(0, 0, 0, 0) - new Date(b.habitGrid?.date!).setHours(0, 0, 0, 0))
                                 let habitMatrix = habitgridService.buildHabitMatrix(habitgriddoc)
-                                console.log(habitMatrix)
+                                // patchState(store, { habitgriddoc })
                                 patchState(store, { habitMatrix })
                             },
                             error: console.error,
@@ -83,7 +80,6 @@ export const HabitGriddocStore = signalStore(
                 })
             )
         ),
-
         addHabitGriddoc: rxMethod<any>(
             pipe(
                 tap(() => patchState(store, { isLoading: true })),
@@ -91,7 +87,20 @@ export const HabitGriddocStore = signalStore(
                     return habitgridService.postHabitGriddoc(habitgriddoc).pipe(
                         tapResponse({
                             next: (res: HabitGriddoc) => {
-                                console.log(res)
+                            },
+                            error: console.error,
+                            finalize: () => patchState(store, { isLoading: false }),
+                        })
+                    );
+                }),
+                concatMap(() => {
+                    return habitgridService.getHabitGriddoc().pipe(
+                        tapResponse({
+                            next: (habitgriddoc: Array<HabitGriddoc>) => {
+                                habitgriddoc.sort((a, b) => new Date(a.habitGrid?.date!).setHours(0, 0, 0, 0) - new Date(b.habitGrid?.date!).setHours(0, 0, 0, 0))
+                                let habitMatrix = habitgridService.buildHabitMatrix(habitgriddoc)
+                                // patchState(store, { habitgriddoc })
+                                patchState(store, { habitMatrix })
                             },
                             error: console.error,
                             finalize: () => patchState(store, { isLoading: false }),
@@ -100,7 +109,6 @@ export const HabitGriddocStore = signalStore(
                 })
             )
         ),
-
         saveHabitGriddoc: rxMethod<HabitGriddoc>(
             pipe(
                 tap(() => patchState(store, { isLoading: true })),
@@ -109,7 +117,6 @@ export const HabitGriddocStore = signalStore(
                         tapResponse({
                             next: (res: HabitGriddoc) => {
                                 let habitMatrix = habitgridService.buildHabitMatrix(store.habitgriddoc())
-                                console.log(habitMatrix)
                                 patchState(store, { habitMatrix })
                             },
                             error: console.error,
@@ -121,9 +128,9 @@ export const HabitGriddocStore = signalStore(
                     return habitgridService.getHabitGriddoc().pipe(
                         tapResponse({
                             next: (habitgriddoc: Array<HabitGriddoc>) => {
-                                habitgriddoc.sort((a, b) => a.id! - b.id!)
+                                habitgriddoc.sort((a, b) => new Date(a.habitGrid?.date!).setHours(0, 0, 0, 0) - new Date(b.habitGrid?.date!).setHours(0, 0, 0, 0))
                                 let habitMatrix = habitgridService.buildHabitMatrix(habitgriddoc)
-                                console.log(habitMatrix)
+                                // patchState(store, { habitgriddoc })
                                 patchState(store, { habitMatrix })
                             },
                             error: console.error,
@@ -133,7 +140,6 @@ export const HabitGriddocStore = signalStore(
                 })
             )
         ),
-
         deleteHabitGriddoc: rxMethod<number>(
             pipe(
                 tap(() => patchState(store, { isLoading: true })),

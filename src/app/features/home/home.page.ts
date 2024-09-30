@@ -19,6 +19,7 @@ import { HabitModalComponent } from './habit-modal/habit-modal.component';
 import { GoalModalComponent } from './goal-modal/goal-modal.component';
 import { HelperService } from 'src/app/helper.service';
 import { HabitGrid } from '../goal/models/habitgrid';
+import { HabitGridService } from '../goal/services/habitgrid.service';
 
 @Component({
   selector: 'app-home',
@@ -52,9 +53,12 @@ export class HomePage {
   name: string = ''
   matchdata: any = []
 
-  constructor(private goalService: GoalService, private modalCtrl: ModalController, private helperService: HelperService) {
+  constructor(private goalService: GoalService, private modalCtrl: ModalController, private helperService: HelperService,
+    private habitGridService: HabitGridService
+  ) {
     this.getGoaldoc();
     this.habitgriddocstore.getHabitGriddoc()
+    // this.habitGridService.initHabitGrid()
   }
 
   // Lifecycle
@@ -76,7 +80,6 @@ export class HomePage {
   // Events
   getGoaldoc() {
     this.goaldocstore.getGoals();
-    // this.habitgriddocstore.getHabitGriddoc();
   }
 
   getHabitGriddoc() {
@@ -90,26 +93,35 @@ export class HomePage {
       habit.datesCompleted?.push(this.helperService.format(this.day()))
     }
 
+
     let progress = this.goalService.getProgressCount(this.goaldocstore.goals(), this.day())
-    console.log(progress)
-    // get habitgrid by current day
-    this.habitgriddocstore.habitMatrix().forEach((habitmatrix) => {
-      if (habitmatrix[0] === this.helperService.format(this.day())) {
-        // update progress
-        let newhabitgriddoc: HabitGriddoc = new HabitGriddoc()
-        let newhabitgrid: HabitGrid = new HabitGrid()
-        newhabitgrid.date = habitmatrix[0]
-        newhabitgrid.progress = progress
-        newhabitgriddoc.habitGrid = newhabitgrid
-        newhabitgriddoc.id = habitmatrix[2]
-        console.log(newhabitgriddoc)
-        this.habitgriddocstore.saveHabitGriddoc(newhabitgriddoc)
-      } else
-        console.log('not found') // add new date with progress
-    })
-    // this.habitgriddocstore.getHabitGridByDate(this.helperService.format(this.day()))
-    // update or add progress
-    // this.habitgriddocstore.saveHabitGriddoc()
+
+    // this.habitGridService.addMatrixDates(this.helperService.format(this.day()), this.year)
+    let findDateInMatrix = this.habitgriddocstore.habitMatrix().find(matrix => matrix[0] === this.helperService.format(this.day()))
+
+    if (findDateInMatrix) {
+      // get habitgrid by current day
+      this.habitgriddocstore.habitMatrix().forEach((habitmatrix) => {
+        if (habitmatrix[0] === this.helperService.format(this.day())) {
+          // update progress
+          let newhabitgriddoc: HabitGriddoc = new HabitGriddoc()
+          let newhabitgrid: HabitGrid = new HabitGrid()
+          newhabitgrid.date = habitmatrix[0]
+          newhabitgrid.progress = progress
+          newhabitgriddoc.habitGrid = newhabitgrid
+          newhabitgriddoc.id = habitmatrix[2]
+          this.habitgriddocstore.saveHabitGriddoc(newhabitgriddoc)
+        }
+      })
+    } else {
+      console.log('not found')
+      let newhabitgriddoc: HabitGriddoc = new HabitGriddoc()
+      let newhabitgrid: HabitGrid = new HabitGrid()
+      newhabitgrid.date = this.helperService.format(this.day())
+      newhabitgrid.progress = progress
+      newhabitgriddoc.habitGrid = newhabitgrid
+      this.habitgriddocstore.addHabitGriddoc(newhabitgriddoc)
+    }
 
     this.goaldocstore.saveGoaldoc(goaldoc)
   }
