@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, inject } from '@angular/core';
-import { GoaldocStore } from '../goal/stores/goaldoc.store';
+import { HabitGriddocStore } from '../goal/stores/habitgriddoc.store';
 
 @Component({
   selector: 'app-graph',
@@ -8,7 +8,7 @@ import { GoaldocStore } from '../goal/stores/goaldoc.store';
   standalone: true,
 })
 export class GraphComponent implements OnInit {
-  readonly goaldocstore = inject(GoaldocStore);
+  readonly habitgriddocstore = inject(HabitGriddocStore);
 
   @Input()
   year: string | undefined;

@@ -17,6 +17,8 @@ import { FormsModule } from '@angular/forms';
 import { Goal } from '../goal/models/goal';
 import { HabitModalComponent } from './habit-modal/habit-modal.component';
 import { GoalModalComponent } from './goal-modal/goal-modal.component';
+import { HelperService } from 'src/app/helper.service';
+import { HabitGrid } from '../goal/models/habitgrid';
 
 @Component({
   selector: 'app-home',
@@ -50,8 +52,9 @@ export class HomePage {
   name: string = ''
   matchdata: any = []
 
-  constructor(private goalService: GoalService, private modalCtrl: ModalController) {
+  constructor(private goalService: GoalService, private modalCtrl: ModalController, private helperService: HelperService) {
     this.getGoaldoc();
+    this.habitgriddocstore.getHabitGriddoc()
   }
 
   // Lifecycle
@@ -73,6 +76,7 @@ export class HomePage {
   // Events
   getGoaldoc() {
     this.goaldocstore.getGoals();
+    // this.habitgriddocstore.getHabitGriddoc();
   }
 
   getHabitGriddoc() {
@@ -80,17 +84,38 @@ export class HomePage {
   }
 
   habitChecked(goaldoc: Goaldoc | undefined, habit: Habit) {
-    if (habit.datesCompleted?.find(date => date == this.goalService.format(this.day()))) {
-      habit.datesCompleted?.splice(habit.datesCompleted.findIndex((item) => item == this.goalService.format(this.day())), 1)
+    if (habit.datesCompleted?.find(date => date == this.helperService.format(this.day()))) {
+      habit.datesCompleted?.splice(habit.datesCompleted.findIndex((item) => item == this.helperService.format(this.day())), 1)
     } else {
-      habit.datesCompleted?.push(this.goalService.format(this.day()))
+      habit.datesCompleted?.push(this.helperService.format(this.day()))
     }
+
+    let progress = this.goalService.getProgressCount(this.goaldocstore.goals(), this.day())
+    console.log(progress)
+    // get habitgrid by current day
+    this.habitgriddocstore.habitMatrix().forEach((habitmatrix) => {
+      if (habitmatrix[0] === this.helperService.format(this.day())) {
+        // update progress
+        let newhabitgriddoc: HabitGriddoc = new HabitGriddoc()
+        let newhabitgrid: HabitGrid = new HabitGrid()
+        newhabitgrid.date = habitmatrix[0]
+        newhabitgrid.progress = progress
+        newhabitgriddoc.habitGrid = newhabitgrid
+        newhabitgriddoc.id = habitmatrix[2]
+        console.log(newhabitgriddoc)
+        this.habitgriddocstore.saveHabitGriddoc(newhabitgriddoc)
+      } else
+        console.log('not found') // add new date with progress
+    })
+    // this.habitgriddocstore.getHabitGridByDate(this.helperService.format(this.day()))
+    // update or add progress
+    // this.habitgriddocstore.saveHabitGriddoc()
 
     this.goaldocstore.saveGoaldoc(goaldoc)
   }
 
   isComplete(habit: Habit) {
-    return habit.datesCompleted?.some((item) => item == this.goalService.format(this.day()))
+    return habit.datesCompleted?.some((item) => item == this.helperService.format(this.day()))
   }
 
   changeDay(direction: number) {

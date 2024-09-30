@@ -1,4 +1,4 @@
-@if (goaldocstore.isLoading()){
+@if (habitgriddocstore.isLoading()){
 <!-- <div class="text-xs">loading...</div> -->
 }
 @else{
@@ -30,7 +30,7 @@
         <div class="w-[12px] h-[12px] grid place-content-center">F</div>
         <div class="w-[12px] h-[12px] grid place-content-center">S</div>
       </div>
-      @for(square of goaldocstore.habitMatrix(); track square){
+      @for(square of habitgriddocstore.habitMatrix(); track square){
       <div [id]="square[0]" data-placement="top" class="days" [style.background-color]="getColor(square[1])">
       </div>
       }

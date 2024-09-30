@@ -6,10 +6,10 @@ import { Goaldoc } from '../models/goaldoc'
 import { ApiService } from '../../../api.service';
 import { tapResponse } from '@ngrx/operators';
 import { HabitGridService } from './habitgrid.service';
+import { HabitGriddocStore } from '../stores/habitgriddoc.store';
 import { HabitGrid } from '../models/habitgrid';
 import { HabitGriddoc } from '../models/habitgriddoc';
-import { HabitGriddocStore } from '../stores/habitgriddoc.store';
-import { ISODateString } from '@capacitor/core';
+import { HelperService } from 'src/app/helper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,18 +19,8 @@ export class GoalService {
   readonly habitgriddocstore = inject(HabitGriddocStore);
   matchdata: any = []
 
-  constructor(private http: HttpClient, private apiService: ApiService, private habitGridService: HabitGridService) {
+  constructor(private http: HttpClient, private apiService: ApiService, private helperService: HelperService) {
     this.apiService.setEnvironment()
-  }
-
-  format(data: Date) {
-    var
-      dia = data.getDate().toString(),
-      diaF = (dia.length == 1) ? '0' + dia : dia,
-      mes = (data.getMonth() + 1).toString(), //+1 pois no getMonth Janeiro começa com zero.
-      mesF = (mes.length == 1) ? '0' + mes : mes,
-      anoF = data.getFullYear();
-    return mesF + "/" + diaF + "/" + anoF;
   }
 
   getProgressCount(goaldoc: Array<Goaldoc>, date: Date): number {
@@ -39,50 +29,20 @@ export class GoalService {
 
     goaldoc?.forEach(goaldoc => {
       goaldoc.goal?.habits?.forEach(habit => {
-        if (habit.datesCompleted?.some((item) => item == this.format(date)))
+        if (habit.datesCompleted?.some((item) => item == this.helperService.format(date)))
           count++
         numHabits++
       })
     })
 
     let habitGrid: HabitGrid = new HabitGrid()
-    habitGrid.date = this.format(date)
+    habitGrid.date = this.helperService.format(date)
     habitGrid.progress = Math.round(count / numHabits * 100)
     let habitGridDoc: HabitGriddoc = new HabitGriddoc()
     habitGridDoc.habitGrid = habitGrid
     console.log(habitGridDoc)
 
-    //this.habitgriddocstore.addHabitGriddoc(habitGridDoc);
-
     return Math.round(count / numHabits * 100)
-  }
-
-  getProgress(goaldoc: Array<Goaldoc>, date?: string): Array<any> {
-    this.matchdata = new Array<any>()
-    let start = new Date("01/01/" + '2024');
-    let end = new Date("12/31/" + '2024');
-
-    let startdate = new Date(start);
-    while (startdate <= end) {
-      let thedate = this.format(startdate)
-      this.matchdata.push([thedate, this.getProgressCount(goaldoc, startdate)])
-      var newDate = startdate.setDate(startdate.getDate() + 1);
-      startdate = new Date(newDate);
-    }
-    return this.matchdata
-  }
-
-  getProgressForDate(goaldoc: Array<Goaldoc>, date?: string) {
-    this.habitGridService.getHabitGriddoc().subscribe(habitgriddoc => {
-      habitgriddoc.forEach(habitgriddoc => {
-        if (habitgriddoc.habitGrid?.date === date)
-          console.log(habitgriddoc)
-      })
-    })
-  }
-
-  saveProgress(date: Date) {
-
   }
 
   getGoalById(id: number): Observable<Goaldoc> {
@@ -112,7 +72,7 @@ export class GoalService {
   }
 
   putGoaldoc(goaldoc: Goaldoc): Observable<Goaldoc> {
-    return this.http.put<Goaldoc>(this.apiService.server() + '/api/goal' + goaldoc.id, goaldoc, this.apiService.httpOptions)
+    return this.http.put<Goaldoc>(this.apiService.server() + '/api/goal/' + goaldoc.id, goaldoc, this.apiService.httpOptions)
       .pipe(
         tapResponse({
           next: () => { },
@@ -124,7 +84,7 @@ export class GoalService {
   }
 
   deleteGoaldoc(id: number): Observable<unknown> {
-    return this.http.delete(this.apiService.server() + '/api/goal' + id, this.apiService.httpOptions)
+    return this.http.delete(this.apiService.server() + '/api/goal/' + id, this.apiService.httpOptions)
       .pipe(
         tapResponse({
           next: () => { },
@@ -134,5 +94,4 @@ export class GoalService {
         }),
       );
   }
-
 }
