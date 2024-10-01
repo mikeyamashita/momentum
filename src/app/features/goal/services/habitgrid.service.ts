@@ -7,6 +7,7 @@ import { HabitGriddoc } from '../models/habitgriddoc'
 import { ApiService } from '../../../api.service';
 import { tapResponse } from '@ngrx/operators';
 import { HelperService } from 'src/app/helper.service';
+import { HabitGrid } from '../models/habitgrid';
 
 @Injectable({
   providedIn: 'root'
@@ -24,38 +25,40 @@ export class HabitGridService {
     habitgriddoc?.forEach((habitgriddoc: HabitGriddoc) => {
       this.matchdata.push([habitgriddoc.habitGrid?.date, habitgriddoc.habitGrid?.progress, habitgriddoc.id])
     });
-    console.log(this.matchdata)
-    console.log(this.matchdata.length)
 
     let currentyear = new Date().getFullYear()
     const isLeapYear = (year: number) => new Date(year, 1, 29).getMonth() === 1;
     let numberOfDays = isLeapYear(currentyear) ? 366 : 365
-    console.log(numberOfDays)
 
-    for (let i = this.matchdata.length; i < numberOfDays; i++) {
-      console.log('test', i)
-      this.matchdata.push([]) //fill empty matrix days with empty array
+    if (this.matchdata.length < numberOfDays) {
+      this.handleMissingDates(currentyear)
     }
-
     return this.matchdata
   }
 
-  // addMatrixDates(inputdate: string, year: number) {
-  //   let start = new Date("09/21/" + year);
-  //   let end = new Date("09/30/" + year);
-  //   let loop = new Date(start);
+  handleMissingDates(year: number) {
+    let start = new Date("01/01/" + year);
+    let end = new Date("12/31/" + year);
+    let i = 0
+    let loop = new Date(start);
 
-  //   while (loop < end) {
-  //     var newDate = loop.setDate(loop.getDate() + 1);
-  //     loop = new Date(newDate);
-  //     if (inputdate === this.helperService.format(loop))
-  //       console.log(inputdate)
-  //   }
-  // }
+    while (loop < end) {
+      if (this.matchdata[i]) {
+        if (this.helperService.format(loop) !== this.matchdata[i][0]) {
+          this.matchdata.splice(i, 0, [])// replace missing dates with empty array 
+        }
+      }
 
-  // initHabitGrid(year: string) {
-  //   let start = new Date("09/30/" + '2024');
-  //   let end = new Date("12/31/" + '2024');
+      var newDate = loop.setDate(loop.getDate() + 1);
+      loop = new Date(newDate);
+      i++
+    }
+  }
+
+
+  // rebuildHabitMatrix( year: string) {
+  //   let start = new Date("01/01/" + year);
+  //   let end = new Date("12/31/" + year);
 
   //   let loop = new Date(start);
   //   while (loop < end) {
@@ -68,9 +71,7 @@ export class HabitGridService {
   //     let habitGridDoc: HabitGriddoc = new HabitGriddoc()
   //     habitGridDoc.habitGrid = habitGrid
 
-  //     setTimeout(() => {
-  //       this.postHabitGriddoc(habitGridDoc).subscribe(() => { })
-  //     }, 1000)
+  //     this.postHabitGriddoc(habitGridDoc).subscribe(() => { })
   //   }
   // }
 
