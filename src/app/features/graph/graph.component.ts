@@ -7,7 +7,7 @@ import { HabitGriddocStore } from '../goal/stores/habitgriddoc.store';
   styleUrls: ['./graph.component.css'],
   standalone: true,
 })
-export class GraphComponent implements OnInit {
+export class GraphComponent {
   readonly habitgriddocstore = inject(HabitGriddocStore);
 
   @Input()
@@ -36,20 +36,10 @@ export class GraphComponent implements OnInit {
   @Input()
   colorMilestone: string | undefined;
 
-  initialHeight: number | undefined;
-  initialWidth: number | undefined;
-  constanteHeight: number = 0;
-  constanteWidth: number = 0;
-
   constructor() {
   }
 
   // Lifecycle
-  ngOnInit() {
-    this.initialHeight = window.screen.height;
-    this.initialWidth = window.screen.width;
-  }
-
   ionViewDidEnter() {
   }
 
@@ -81,11 +71,4 @@ export class GraphComponent implements OnInit {
       return '#181818'
   }
 
-  // Events
-  onResize(event: any): void {
-    if (this.initialHeight)
-      this.constanteHeight = event.target.innerHeight / this.initialHeight;
-    if (this.initialWidth)
-      this.constanteWidth = event.target.innerWidth / this.initialWidth;
-  }
 }

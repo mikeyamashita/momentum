@@ -93,10 +93,17 @@ export class HomePage {
       habit.datesCompleted?.push(this.helperService.format(this.day()))
     }
 
+    this.updateHabitGrid()
 
+    this.goaldocstore.saveGoaldoc(goaldoc)
+  }
+
+  isComplete(habit: Habit) {
+    return habit.datesCompleted?.some((item) => item == this.helperService.format(this.day()))
+  }
+
+  updateHabitGrid() {
     let progress = this.goalService.getProgressCount(this.goaldocstore.goals(), this.day())
-
-    // this.habitGridService.addMatrixDates(this.helperService.format(this.day()), this.year)
     let findDateInMatrix = this.habitgriddocstore.habitMatrix().find(matrix => matrix[0] === this.helperService.format(this.day()))
 
     if (findDateInMatrix) {
@@ -114,20 +121,14 @@ export class HomePage {
         }
       })
     } else {
-      console.log('not found')
+      // console.log('not found')
       let newhabitgriddoc: HabitGriddoc = new HabitGriddoc()
       let newhabitgrid: HabitGrid = new HabitGrid()
       newhabitgrid.date = this.helperService.format(this.day())
       newhabitgrid.progress = progress
       newhabitgriddoc.habitGrid = newhabitgrid
-      this.habitgriddocstore.addHabitGriddoc(newhabitgriddoc)
+      this.habitgriddocstore.addHabitGriddoc(newhabitgriddoc) //adds date if it doesnt exist
     }
-
-    this.goaldocstore.saveGoaldoc(goaldoc)
-  }
-
-  isComplete(habit: Habit) {
-    return habit.datesCompleted?.some((item) => item == this.helperService.format(this.day()))
   }
 
   changeDay(direction: number) {

@@ -42,24 +42,6 @@ export const HabitGriddocStore = signalStore(
         setHabitGriddocId(habitgridid: number): void {
             patchState(store, { id: habitgridid });
         },
-
-        // getHabitGridByDate: rxMethod<string>(
-        //     pipe(
-        //         distinctUntilChanged(),
-        //         tap(() => patchState(store, { isLoading: true })),
-        //         concatMap((date) => {
-        //             return habitgridService.getHabitGridByDate(date).pipe(
-        //                 tapResponse({
-        //                     next: (habitprogress: HabitGrid) => {
-        //                         patchState(store, { habitprogress })
-        //                     },
-        //                     error: console.error,
-        //                     finalize: () => patchState(store, { isLoading: false }),
-        //                 })
-        //             );
-        //         })
-        //     )
-        // ),
         getHabitGriddoc: rxMethod<void>(
             pipe(
                 distinctUntilChanged(),
