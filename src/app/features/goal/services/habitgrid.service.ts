@@ -55,6 +55,97 @@ export class HabitGridService {
     }
   }
 
+  getHabitGriddoc(): Observable<Array<HabitGriddoc>> {
+    // return this.http.get<Array<HabitGriddoc>>(this.apiService.server() + '/api/habitgrid', this.apiService.httpOptions)
+    //   .pipe(
+    //     catchError(this.apiService.handleError)
+    //   );
+
+
+    const observable = new Observable((observer: { next: (arg0: Array<HabitGriddoc>) => void; complete: () => void; }) => {
+      let habitgriddocs: Array<any> = JSON.parse(localStorage.getItem('habitgriddocs')!);
+      console.log(habitgriddocs);
+      observer.next(habitgriddocs);
+      observer.complete();
+    })
+    return observable
+  }
+
+  postHabitGriddoc(habitgriddoc: HabitGriddoc): Observable<HabitGriddoc> {
+    // return this.http.post<HabitGriddoc>(this.apiService.server() + '/api/habitgrid', habitgriddoc, this.apiService.httpOptions)
+    //   .pipe(
+    //     tapResponse({
+    //       next: (habitgriddoc: HabitGriddoc) => {
+    //       },
+    //       error: catchError(this.apiService.handleError),
+    //       finalize: () => {
+    //       }
+    //     }),
+    //   );
+
+
+    const addHabitGriddoc = new Observable((observer: { next: (input: HabitGriddoc) => void; complete: () => void; }) => {
+      let habitgriddocs: Array<any> = JSON.parse(localStorage.getItem('habitgriddocs')!)
+      let maxId = 0
+      habitgriddocs.forEach(habitgriddocfind => {
+        if (habitgriddocfind.id > maxId)
+          maxId = habitgriddocfind.id
+      })
+      habitgriddoc.id = maxId + 1001
+      habitgriddocs.push(habitgriddoc)
+      localStorage.setItem("habitgriddocs", JSON.stringify(habitgriddocs))
+      observer.next(habitgriddoc)
+      observer.complete()
+    })
+    return addHabitGriddoc
+  }
+
+  putHabitGriddoc(habitgriddoc: HabitGriddoc): Observable<HabitGriddoc> {
+    // return this.http.put<HabitGriddoc>(this.apiService.server() + '/api/habitgrid/' + habitgriddoc.id, habitgriddoc, this.apiService.httpOptions)
+    //   .pipe(
+    //     tapResponse({
+    //       next: (res) => { },
+    //       error: catchError(this.apiService.handleError),
+    //       finalize: () => {
+    //       }
+    //     }),
+    //   );
+
+    const saveHabitGriddoc = new Observable((observer: { next: (input: HabitGriddoc) => void; complete: () => void; }) => {
+      let habitgriddocs: Array<any> = JSON.parse(localStorage.getItem('habitgriddocs')!)
+      let findindex = habitgriddocs.findIndex((findhabitgriddoc: HabitGriddoc) => findhabitgriddoc.id === habitgriddoc.id)
+      habitgriddocs.splice(findindex, 1, habitgriddoc)
+      localStorage.setItem("habitgriddocs", JSON.stringify(habitgriddocs))
+      console.log(habitgriddocs)
+      observer.next(habitgriddoc)
+      observer.complete()
+    })
+    return saveHabitGriddoc
+  }
+
+  deleteHabitGriddoc(id: number): Observable<unknown> {
+    // return this.http.delete(this.apiService.server() + '/api/habitgrid/' + id, this.apiService.httpOptions)
+    //   .pipe(
+    //     tapResponse({
+    //       next: () => { },
+    //       error: catchError(this.apiService.handleError),
+    //       finalize: () => {
+    //       }
+    //     }),
+    //   );
+
+
+    const deleteHabitGriddoc = new Observable((observer: { next: () => void; complete: () => void; }) => {
+      let habitgriddocs: Array<any> = JSON.parse(localStorage.getItem('habitgriddocs')!)
+      let findindex = habitgriddocs.findIndex((findhabitgriddoc: HabitGriddoc) => findhabitgriddoc.id === id)
+      habitgriddocs.splice(findindex, 1)
+      localStorage.setItem("habitgriddocs", JSON.stringify(habitgriddocs))
+      console.log(habitgriddocs)
+      observer.next()
+      observer.complete()
+    })
+    return deleteHabitGriddoc
+  }
 
   // rebuildHabitMatrix( year: string) {
   //   let start = new Date("01/01/" + year);
@@ -74,48 +165,4 @@ export class HabitGridService {
   //     this.postHabitGriddoc(habitGridDoc).subscribe(() => { })
   //   }
   // }
-
-  getHabitGriddoc(): Observable<Array<HabitGriddoc>> {
-    return this.http.get<Array<HabitGriddoc>>(this.apiService.server() + '/api/habitgrid', this.apiService.httpOptions)
-      .pipe(
-        catchError(this.apiService.handleError)
-      );
-  }
-
-  postHabitGriddoc(habitgriddoc: HabitGriddoc): Observable<HabitGriddoc> {
-    return this.http.post<HabitGriddoc>(this.apiService.server() + '/api/habitgrid', habitgriddoc, this.apiService.httpOptions)
-      .pipe(
-        tapResponse({
-          next: (habitgriddoc: HabitGriddoc) => {
-          },
-          error: catchError(this.apiService.handleError),
-          finalize: () => {
-          }
-        }),
-      );
-  }
-
-  putHabitGriddoc(habitgriddoc: HabitGriddoc): Observable<HabitGriddoc> {
-    return this.http.put<HabitGriddoc>(this.apiService.server() + '/api/habitgrid/' + habitgriddoc.id, habitgriddoc, this.apiService.httpOptions)
-      .pipe(
-        tapResponse({
-          next: (res) => { },
-          error: catchError(this.apiService.handleError),
-          finalize: () => {
-          }
-        }),
-      );
-  }
-
-  deleteHabitGriddoc(id: number): Observable<unknown> {
-    return this.http.delete(this.apiService.server() + '/api/habitgrid/' + id, this.apiService.httpOptions)
-      .pipe(
-        tapResponse({
-          next: () => { },
-          error: catchError(this.apiService.handleError),
-          finalize: () => {
-          }
-        }),
-      );
-  }
 }
