@@ -71,6 +71,9 @@ export class GoalService {
     //   );
 
     const getGoals = new Observable((observer: { next: (input: Array<Goaldoc>) => void; complete: () => void; }) => {
+      if (!localStorage.getItem('goaldocs')) {
+        localStorage.setItem('goaldocs', '[]')
+      }
       let goaldocs: Array<any> = JSON.parse(localStorage.getItem('goaldocs')!)
       observer.next(goaldocs)
       observer.complete()

@@ -33,6 +33,7 @@ export class HabitGridService {
     if (this.matchdata.length < numberOfDays) {
       this.handleMissingDates(currentyear)
     }
+    console.log(this.matchdata)
     return this.matchdata
   }
 
@@ -62,12 +63,17 @@ export class HabitGridService {
     //   );
 
 
-    const observable = new Observable((observer: { next: (arg0: Array<HabitGriddoc>) => void; complete: () => void; }) => {
+    const getHabitGriddoc = new Observable((observer: { next: (arg0: Array<HabitGriddoc>) => void; complete: () => void; }) => {
+      if (!localStorage.getItem('habitgriddocs')) {
+        localStorage.setItem('habitgriddocs', '[]');
+        console.log(localStorage.getItem('habitgriddocs'))
+        this.rebuildHabitMatrix(new Date().getFullYear())
+      }
       let habitgriddocs: Array<any> = JSON.parse(localStorage.getItem('habitgriddocs')!);
       observer.next(habitgriddocs);
-      observer.complete();
+      observer.complete()
     })
-    return observable
+    return getHabitGriddoc
   }
 
   postHabitGriddoc(habitgriddoc: HabitGriddoc): Observable<HabitGriddoc> {
@@ -144,22 +150,22 @@ export class HabitGridService {
     return deleteHabitGriddoc
   }
 
-  // rebuildHabitMatrix( year: string) {
-  //   let start = new Date("01/01/" + year);
-  //   let end = new Date("12/31/" + year);
+  rebuildHabitMatrix(year: number) {
+    let start = new Date("01/01/" + year);
+    let end = new Date("12/31/" + year);
 
-  //   let loop = new Date(start);
-  //   while (loop < end) {
-  //     var newDate = loop.setDate(loop.getDate() + 1);
-  //     loop = new Date(newDate);
-  //     let habitGrid: HabitGrid = new HabitGrid()
-  //     habitGrid.date = this.helperService.format(loop)
-  //     // console.log(habitGrid.date)
-  //     habitGrid.progress = 0
-  //     let habitGridDoc: HabitGriddoc = new HabitGriddoc()
-  //     habitGridDoc.habitGrid = habitGrid
+    let loop = new Date(start);
+    while (loop < end) {
+      var newDate = loop.setDate(loop.getDate() + 1);
+      loop = new Date(newDate);
+      let habitGrid: HabitGrid = new HabitGrid()
+      habitGrid.date = this.helperService.format(loop)
+      // console.log(habitGrid.date)
+      habitGrid.progress = 0
+      let habitGridDoc: HabitGriddoc = new HabitGriddoc()
+      habitGridDoc.habitGrid = habitGrid
 
-  //     this.postHabitGriddoc(habitGridDoc).subscribe(() => { })
-  //   }
-  // }
+      this.postHabitGriddoc(habitGridDoc).subscribe(() => { })
+    }
+  }
 }
