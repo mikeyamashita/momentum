@@ -112,6 +112,18 @@ export const GoaldocStore = signalStore(
                             finalize: () => patchState(store, { isLoading: false }),
                         })
                     );
+                }),
+                concatMap(() => {
+                    return goalService.getGoals().pipe(
+                        tapResponse({
+                            next: (goals: Array<Goaldoc>) => {
+                                patchState(store, { goals })
+                                // patchState(store, { habitMatrix: goalService.getProgress(goals) })
+                            },
+                            error: console.error,
+                            finalize: () => patchState(store, { isSaving: false }),
+                        })
+                    );
                 })
             )
         ),

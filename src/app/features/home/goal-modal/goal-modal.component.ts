@@ -2,7 +2,7 @@ import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons,
-  IonAlert, IonDatetime, IonDatetimeButton, IonPopover,
+  IonAlert, IonDatetime, IonDatetimeButton, IonPopover, IonToast,
   IonItem, IonList, IonLabel, IonFab, IonModal, IonInput, ModalController
 } from '@ionic/angular/standalone';
 import { GoaldocStore } from '../../goal/stores/goaldoc.store';
@@ -14,7 +14,7 @@ import { Goaldoc } from '../../goal/models/goaldoc';
   templateUrl: './goal-modal.component.html',
   styleUrls: ['./goal-modal.component.scss'],
   standalone: true,
-  imports: [IonModal, IonLabel, IonList, IonItem, IonDatetime, IonDatetimeButton,
+  imports: [IonModal, IonLabel, IonList, IonItem, IonDatetime, IonDatetimeButton, IonToast,
     IonPopover, IonInput, IonButton, IonButtons, IonHeader, IonToolbar, IonTitle, IonContent,
     IonFab, IonAlert, FormsModule]
 })
@@ -32,6 +32,7 @@ export class GoalModalComponent implements OnInit {
   goal: Goal = new Goal();
   goalid: number = 0;
   goaldoc: Goaldoc = new Goaldoc();
+  isToastOpen: boolean = false;
 
   alertButtons = [
     {
@@ -57,6 +58,19 @@ export class GoalModalComponent implements OnInit {
     if (this.goaldocprop)
       this.goal = this.goaldocprop.goal!
     console.log(this.goal)
+  }
+
+  validate(role: string) {
+    console.log(role)
+    if (this.goal.startdate && this.goal.enddate) {
+      if (role == 'add') {
+        this.addGoal()
+      } else if (role == 'save') {
+        this.saveGoal()
+      }
+    } else
+      this.isToastOpen = true
+
   }
 
   cancelGoalModal() {

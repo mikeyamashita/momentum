@@ -117,10 +117,10 @@ export class HomePage {
           // update progress
           let newhabitgriddoc: HabitGriddoc = new HabitGriddoc()
           let newhabitgrid: HabitGrid = new HabitGrid()
+          newhabitgriddoc.id = habitmatrix[2]
           newhabitgrid.date = habitmatrix[0]
           newhabitgrid.progress = progress
           newhabitgriddoc.habitGrid = newhabitgrid
-          newhabitgriddoc.id = habitmatrix[2]
           this.habitgriddocstore.saveHabitGriddoc(newhabitgriddoc)
         }
       })

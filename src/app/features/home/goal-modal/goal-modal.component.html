@@ -6,40 +6,50 @@
     <ion-title></ion-title>
     <ion-buttons slot="end">
       @if(role === 'add'){
-      <ion-button (click)="addGoal()" [strong]="true">Save</ion-button>
+      <ion-button (click)="validate('add')" [strong]="true">Save</ion-button>
       } @else if (role ==='save') {
-      <ion-button (click)="saveGoal()" [strong]="true">Save</ion-button>
+      <ion-button (click)="validate('save')" [strong]="true">Save</ion-button>
       }
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <div class="flex flex-col h-full pb-1">
-    <ion-item class="pb-4" lines="none">
-      <ion-input labelPlacement="stacked" type="text" placeholder="New Goal" [(ngModel)]="goal.name"></ion-input>
-    </ion-item>
-    <!-- <ion-item class="pb-4" lines="none">
+  <div class="h-full flex flex-col justify-between pb-1">
+    <div>
+      <ion-item class="pb-4" lines="none">
+        <ion-input labelPlacement="stacked" type="text" placeholder="New Goal" [(ngModel)]="goal.name"></ion-input>
+      </ion-item>
+      <!-- <ion-item class="pb-4" lines="none">
       <ion-input labelPlacement="stacked" type="text" placeholder="Description"
         [(ngModel)]="newGoal.description"></ion-input>
     </ion-item>  -->
-    <ion-item class="pb-4" lines="none">
-      <ion-datetime-button datetime="startdate"></ion-datetime-button>
-      <ion-popover #startdatepopover [keepContentsMounted]="true">
-        <ng-template>
-          <ion-datetime id="startdate" presentation="date" mode="md" (ionChange)="selectStartDate($event)"
-            [value]="goal.startdate"></ion-datetime>
-        </ng-template>
-      </ion-popover>
-    </ion-item>
-    <ion-item class="pb-4" lines="none">
-      <ion-datetime-button datetime="enddate"></ion-datetime-button>
-      <ion-popover #enddatepopover [keepContentsMounted]="true">
-        <ng-template>
-          <ion-datetime id="enddate" presentation="date" mode="md" (ionChange)="selectEndDate($event)"
-            [value]="goal.enddate"></ion-datetime>
-        </ng-template>
-      </ion-popover>
-    </ion-item>
+      <div class="flex flex-col pb-4">
+        <div class="pb-4 grid place-content-start">
+          <div class="flex flex-row">
+            <ion-label class="p-2 w-[120px]">Start Date:</ion-label>
+            <ion-datetime-button datetime="startdate"></ion-datetime-button>
+            <ion-popover #startdatepopover [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime id="startdate" presentation="date" mode="md" (ionChange)="selectStartDate($event)"
+                  [value]="goal.startdate"></ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </div>
+        </div>
+        <div class="pb-4 grid place-content-start">
+          <div class="flex flex-row">
+            <ion-label class="p-2 w-[120px]">End Date:</ion-label>
+            <ion-datetime-button datetime="enddate"></ion-datetime-button>
+            <ion-popover #enddatepopover [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime id="enddate" presentation="date" mode="md" (ionChange)="selectEndDate($event)"
+                  [value]="goal.enddate"></ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </div>
+        </div>
+      </div>
+    </div>
     @if(role === 'save'){
     <ion-button id="present-alert" class="flex justify-stretch" [strong]="true" fill="clear">Delete</ion-button>
     <ion-alert trigger="present-alert" header="Are you sure you would like to delete this goal?"
@@ -47,4 +57,5 @@
     </ion-alert>
     }
   </div>
+  <ion-toast [isOpen]="isToastOpen" message="Enter start date and end date" [duration]="2000"></ion-toast>
 </ion-content>
