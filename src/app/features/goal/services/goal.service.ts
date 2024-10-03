@@ -30,7 +30,9 @@ export class GoalService {
       goaldoc.goal?.habits?.forEach(habit => {
         if (habit.datesCompleted?.some((item) => item == this.helperService.format(date)))
           count++
-        numHabits++
+        console.log(goaldoc)
+        if (date >= new Date(goaldoc.goal?.startdate!) && date <= new Date(goaldoc.goal?.enddate!))
+          numHabits++
       })
     })
 
@@ -39,7 +41,9 @@ export class GoalService {
     habitGrid.progress = Math.round(count / numHabits * 100)
     let habitGridDoc: HabitGriddoc = new HabitGriddoc()
     habitGridDoc.habitGrid = habitGrid
-
+    console.log(count)
+    console.log(numHabits)
+    console.log(Math.round(count / numHabits * 100))
     return Math.round(count / numHabits * 100)
   }
 
@@ -53,7 +57,6 @@ export class GoalService {
     const getGoalById = new Observable((observer: { next: (input: Goaldoc) => void; complete: () => void; }) => {
       let goaldocs: Array<any> = JSON.parse(localStorage.getItem('goaldocs')!)
       let findgoaldoc = goaldocs.find((findgoaldoc: Goaldoc) => findgoaldoc.id === id)
-      console.log(findgoaldoc)
 
       observer.next(findgoaldoc)
       observer.complete()
@@ -69,7 +72,6 @@ export class GoalService {
 
     const getGoals = new Observable((observer: { next: (input: Array<Goaldoc>) => void; complete: () => void; }) => {
       let goaldocs: Array<any> = JSON.parse(localStorage.getItem('goaldocs')!)
-      console.log(goaldocs)
       observer.next(goaldocs)
       observer.complete()
     })
@@ -119,7 +121,6 @@ export class GoalService {
       let findindex = goaldocs.findIndex((findgoaldoc: Goaldoc) => findgoaldoc.id === goaldoc.id)
       goaldocs.splice(findindex, 1, goaldoc)
       localStorage.setItem("goaldocs", JSON.stringify(goaldocs))
-      console.log(goaldocs)
       observer.next(goaldoc)
       observer.complete()
     })
@@ -142,7 +143,6 @@ export class GoalService {
       let findindex = goaldocs.findIndex((findgoaldoc: Goaldoc) => findgoaldoc.id === id)
       goaldocs.splice(findindex, 1)
       localStorage.setItem("goaldocs", JSON.stringify(goaldocs))
-      console.log(goaldocs)
       observer.next()
       observer.complete()
     })

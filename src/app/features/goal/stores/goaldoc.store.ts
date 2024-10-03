@@ -64,7 +64,6 @@ export const GoaldocStore = signalStore(
                     return goalService.getGoals().pipe(
                         tapResponse({
                             next: (goals: Array<Goaldoc>) => {
-                                console.log(JSON.stringify(goals))
                                 patchState(store, { goals })
                                 // patchState(store, { habitMatrix: goalService.getProgress(goals) })
                             },

@@ -1,8 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons,
-  IonAlert,
+  IonAlert, IonDatetime, IonDatetimeButton, IonPopover,
   IonItem, IonList, IonLabel, IonFab, IonModal, IonInput, ModalController
 } from '@ionic/angular/standalone';
 import { GoaldocStore } from '../../goal/stores/goaldoc.store';
@@ -14,12 +14,15 @@ import { Goaldoc } from '../../goal/models/goaldoc';
   templateUrl: './goal-modal.component.html',
   styleUrls: ['./goal-modal.component.scss'],
   standalone: true,
-  imports: [IonModal, IonLabel, IonList, IonItem,
-    IonInput, IonButton, IonButtons, IonHeader, IonToolbar, IonTitle, IonContent,
+  imports: [IonModal, IonLabel, IonList, IonItem, IonDatetime, IonDatetimeButton,
+    IonPopover, IonInput, IonButton, IonButtons, IonHeader, IonToolbar, IonTitle, IonContent,
     IonFab, IonAlert, FormsModule]
 })
 export class GoalModalComponent implements OnInit {
   readonly goaldocstore = inject(GoaldocStore);
+
+  @ViewChild('startdatepopover') startdatepopover!: IonPopover;
+  @ViewChild('enddatepopover') enddatepopover!: IonPopover;
 
   // inputs
   role: string = ''
@@ -53,6 +56,7 @@ export class GoalModalComponent implements OnInit {
   ngOnInit() {
     if (this.goaldocprop)
       this.goal = this.goaldocprop.goal!
+    console.log(this.goal)
   }
 
   cancelGoalModal() {
@@ -72,6 +76,16 @@ export class GoalModalComponent implements OnInit {
       return this.modalCtrl.dismiss(this.goaldocprop.id!, 'deleteGoal');
     else
       return this.modalCtrl.dismiss(null, 'cancel');
+  }
+
+  selectStartDate(ev: any) {
+    this.goal.startdate = new Date(ev.detail.value)
+    this.startdatepopover.dismiss()
+  }
+
+  selectEndDate(ev: any) {
+    this.goal.enddate = new Date(ev.detail.value)
+    this.enddatepopover.dismiss()
   }
 
 }

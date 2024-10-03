@@ -64,7 +64,6 @@ export class HabitGridService {
 
     const observable = new Observable((observer: { next: (arg0: Array<HabitGriddoc>) => void; complete: () => void; }) => {
       let habitgriddocs: Array<any> = JSON.parse(localStorage.getItem('habitgriddocs')!);
-      console.log(habitgriddocs);
       observer.next(habitgriddocs);
       observer.complete();
     })
@@ -116,7 +115,6 @@ export class HabitGridService {
       let findindex = habitgriddocs.findIndex((findhabitgriddoc: HabitGriddoc) => findhabitgriddoc.id === habitgriddoc.id)
       habitgriddocs.splice(findindex, 1, habitgriddoc)
       localStorage.setItem("habitgriddocs", JSON.stringify(habitgriddocs))
-      console.log(habitgriddocs)
       observer.next(habitgriddoc)
       observer.complete()
     })
@@ -140,7 +138,6 @@ export class HabitGridService {
       let findindex = habitgriddocs.findIndex((findhabitgriddoc: HabitGriddoc) => findhabitgriddoc.id === id)
       habitgriddocs.splice(findindex, 1)
       localStorage.setItem("habitgriddocs", JSON.stringify(habitgriddocs))
-      console.log(habitgriddocs)
       observer.next()
       observer.complete()
     })

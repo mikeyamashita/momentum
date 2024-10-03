@@ -37,8 +37,8 @@ export class HomePage {
   readonly goaldocstore = inject(GoaldocStore);
   readonly habitgriddocstore = inject(HabitGriddocStore);
 
-  @ViewChild('modalgoal') modalgoal!: IonModal;
-  @ViewChild('modalhabit') modalhabit!: IonModal;
+  // @ViewChild('modalgoal') modalgoal!: IonModal;
+  // @ViewChild('modalhabit') modalhabit!: IonModal;
   @ViewChild('habitslide') habitslide!: IonItemSliding;
 
   year = new Date().getFullYear()
@@ -54,7 +54,7 @@ export class HomePage {
   matchdata: any = []
 
   constructor(private goalService: GoalService, private modalCtrl: ModalController, private helperService: HelperService,
-    private habitGridService: HabitGridService
+    public habitGridService: HabitGridService
   ) {
     this.getGoaldoc();
     this.habitgriddocstore.getHabitGriddoc()
@@ -75,6 +75,10 @@ export class HomePage {
     const month = thedate.toLocaleString('default', { month: 'long' });
     const year = thedate.toLocaleString('default', { year: 'numeric' });
     return month + ' ' + year
+  }
+
+  formatToDate(datestring: Date): Date {
+    return new Date(datestring)
   }
 
   // Events
@@ -179,6 +183,9 @@ export class HomePage {
     const { data, role } = await modal.onWillDismiss();
     this.newGoal.name = data?.name
     this.newGoal.description = data?.description
+    this.newGoal.startdate = data?.startdate
+    this.newGoal.enddate = data?.enddate
+    this.newGoal.habits = data?.habits
     this.newGoaldoc.goal = this.newGoal
     if (role == 'addGoal') {
       this.goaldocstore.addGoaldoc(this.newGoaldoc)
