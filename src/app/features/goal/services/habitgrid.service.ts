@@ -62,11 +62,9 @@ export class HabitGridService {
     //     catchError(this.apiService.handleError)
     //   );
 
-
     const getHabitGriddoc = new Observable((observer: { next: (arg0: Array<HabitGriddoc>) => void; complete: () => void; }) => {
       if (!localStorage.getItem('habitgriddocs')) {
         localStorage.setItem('habitgriddocs', '[]');
-        console.log(localStorage.getItem('habitgriddocs'))
         this.rebuildHabitMatrix(new Date().getFullYear())
       }
       let habitgriddocs: Array<any> = JSON.parse(localStorage.getItem('habitgriddocs')!);

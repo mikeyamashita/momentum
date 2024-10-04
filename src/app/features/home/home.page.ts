@@ -58,7 +58,6 @@ export class HomePage {
   ) {
     this.getGoaldoc();
     this.habitgriddocstore.getHabitGriddoc()
-    // this.habitGridService.initHabitGrid()
   }
 
   // Lifecycle
@@ -96,9 +95,7 @@ export class HomePage {
     } else {
       habit.datesCompleted?.push(this.helperService.format(this.day()))
     }
-
     this.updateHabitGrid()
-
     this.goaldocstore.saveGoaldoc(goaldoc)
   }
 
@@ -162,8 +159,10 @@ export class HomePage {
     });
     modal.present();
     const { data, role } = await modal.onWillDismiss();
+    // this.habitGridService.buildHabitMatrix(this.habitgriddocstore.habitgriddoc())
+    this.updateHabitGrid()
     this.goaldocstore.saveGoaldoc(data)
-    this.habitslide.closeOpened()
+    this.habitslide?.closeOpened()
   }
 
   async openGoalModal(roletype: string, goaldoc?: Goaldoc) {

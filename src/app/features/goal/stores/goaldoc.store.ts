@@ -47,6 +47,7 @@ export const GoaldocStore = signalStore(
                     return goalService.getGoalById(id).pipe(
                         tapResponse({
                             next: (goal: Goaldoc) => {
+                                console.log(goal)
                                 patchState(store, { goal })
                             },
                             error: console.error,
@@ -80,7 +81,9 @@ export const GoaldocStore = signalStore(
                 concatMap((goaldoc: Goaldoc) => {
                     return goalService.putGoaldoc(goaldoc).pipe(
                         tapResponse({
-                            next: (res) => { },
+                            next: (goal) => {
+                                patchState(store, { goal })
+                            },
                             error: console.error
                         })
                     );
@@ -89,6 +92,7 @@ export const GoaldocStore = signalStore(
                     return goalService.getGoals().pipe(
                         tapResponse({
                             next: (goals: Array<Goaldoc>) => {
+                                console.log(goals)
                                 patchState(store, { goals })
                                 // patchState(store, { habitMatrix: goalService.getProgress(goals) })
                             },
