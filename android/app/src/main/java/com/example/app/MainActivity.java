@@ -1,4 +1,4 @@
-package ca.habitmountain.mobile;
+package com.example.app;
 
 import com.getcapacitor.BridgeActivity;
 

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">habitmountain</string>
-    <string name="title_activity_main">habitmountain</string>
-    <string name="package_name">ca.habitmountain.mobile</string>
-    <string name="custom_url_scheme">ca.habitmountain.mobile</string>
+    <string name="app_name">momentum</string>
+    <string name="title_activity_main">momentum</string>
+    <string name="package_name">com.example.app</string>
+    <string name="custom_url_scheme">com.example.app</string>
 </resources>
