@@ -83,7 +83,7 @@ export const GoaldocStore = signalStore(
                     return goalService.putGoaldoc(goaldoc).pipe(
                         tapResponse({
                             next: (goal) => {
-                                patchState(store, { goal })
+                                // patchState(store, { goal })
                             },
                             error: console.error
                         })
