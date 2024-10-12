@@ -11,6 +11,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import { GoalService } from '../services/goal.service';
 import { Goaldoc } from '../models/goaldoc';
+import { HabitGridService } from '../services/habitgrid.service';
 
 type GoalState = {
     id: number,
@@ -35,7 +36,7 @@ export const GoaldocStore = signalStore(
         goaldocsCount: computed(() => goals().length),
         goaldocsList: computed(() => goals())
     })),
-    withMethods((store, goalService = inject(GoalService)) => ({
+    withMethods((store, goalService = inject(GoalService), habitService = inject(HabitGridService)) => ({
         setGoaldocId(goaldocid: number): void {
             patchState(store, { id: goaldocid });
         },
@@ -65,8 +66,8 @@ export const GoaldocStore = signalStore(
                     return goalService.getGoals().pipe(
                         tapResponse({
                             next: (goals: Array<Goaldoc>) => {
+                                // habitService.rebuildHabitMatrix(goals, 2024)
                                 patchState(store, { goals })
-                                // patchState(store, { habitMatrix: goalService.getProgress(goals) })
                             },
                             error: console.error,
                             finalize: () => patchState(store, { isLoading: false }),
@@ -92,9 +93,7 @@ export const GoaldocStore = signalStore(
                     return goalService.getGoals().pipe(
                         tapResponse({
                             next: (goals: Array<Goaldoc>) => {
-                                console.log(goals)
                                 patchState(store, { goals })
-                                // patchState(store, { habitMatrix: goalService.getProgress(goals) })
                             },
                             error: console.error,
                             finalize: () => patchState(store, { isSaving: false }),
@@ -122,7 +121,6 @@ export const GoaldocStore = signalStore(
                         tapResponse({
                             next: (goals: Array<Goaldoc>) => {
                                 patchState(store, { goals })
-                                // patchState(store, { habitMatrix: goalService.getProgress(goals) })
                             },
                             error: console.error,
                             finalize: () => patchState(store, { isSaving: false }),

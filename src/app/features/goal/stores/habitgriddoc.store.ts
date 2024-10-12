@@ -50,7 +50,7 @@ export const HabitGriddocStore = signalStore(
                     return habitgridService.getHabitGriddoc().pipe(
                         tapResponse({
                             next: (habitgriddoc: Array<HabitGriddoc>) => {
-                                console.log(habitgriddoc)
+                                // console.log(habitgriddoc)
                                 habitgriddoc.sort((a, b) => new Date(a.habitGrid?.date!).setHours(0, 0, 0, 0) - new Date(b.habitGrid?.date!).setHours(0, 0, 0, 0))
                                 let habitMatrix = habitgridService.buildHabitMatrix(habitgriddoc)
                                 // patchState(store, { habitgriddoc })
@@ -140,5 +140,6 @@ export const HabitGriddocStore = signalStore(
                 })
             )
         )
+
     }))
 );
