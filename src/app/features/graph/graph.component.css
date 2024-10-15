@@ -15,7 +15,7 @@
 .months {
   grid-area: months;
   display: grid;
-  grid-template-rows: 28px 56px 56px 56px 70px 56px 56px 70px 56px 70px 56px 56px 84px;
+  grid-template-rows: 27px 53px 51px 52px 66px 51px 53px 65px 51px 66px 51px 53px 0px;
 }
 
 .days {
