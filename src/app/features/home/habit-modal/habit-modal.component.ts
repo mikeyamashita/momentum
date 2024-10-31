@@ -2,6 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons, IonAlert,
+  IonDatetime, IonDatetimeButton, IonToast,
+  IonPopover,
   IonItem, IonList, IonLabel, IonFab, IonModal, IonInput, ModalController
 } from '@ionic/angular/standalone';
 import { GoaldocStore } from '../../goal/stores/goaldoc.store';
@@ -15,7 +17,8 @@ import { Goaldoc } from '../../goal/models/goaldoc';
   styleUrls: ['./habit-modal.component.scss'],
   standalone: true,
   imports: [IonModal, IonLabel, IonList, IonItem,
-    IonInput, IonAlert,
+    IonInput, IonAlert, IonDatetime, IonDatetimeButton, IonToast,
+    IonPopover,
     IonButton, IonButtons, IonHeader, IonToolbar, IonTitle, IonContent,
     IonFab, FormsModule]
 })
@@ -67,6 +70,7 @@ export class HabitModalComponent implements OnInit {
   }
 
   saveHabit() {
+    this.habit.times = ['9:00', '21:00']
     if (this.role === 'add') {
       this.goaldocstore.goal().goal?.habits?.push(this.habit)
     } else {

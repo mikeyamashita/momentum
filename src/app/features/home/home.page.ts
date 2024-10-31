@@ -40,6 +40,7 @@ export class HomePage {
   // @ViewChild('modalgoal') modalgoal!: IonModal;
   // @ViewChild('modalhabit') modalhabit!: IonModal;
   @ViewChild('habitslide') habitslide!: IonItemSliding;
+  @ViewChild('filterSegment') filterSegment!: IonSegment;
 
   year = new Date().getFullYear()
   today: Date = new Date()
@@ -62,6 +63,7 @@ export class HomePage {
 
   // Lifecycle
   ionViewDidEnter() {
+    
   }
 
   // Methods
@@ -159,9 +161,12 @@ export class HomePage {
     });
     modal.present();
     const { data, role } = await modal.onWillDismiss();
+    console.log(data)
     // this.habitGridService.buildHabitMatrix(this.habitgriddocstore.habitgriddoc())
-    this.updateHabitGrid()
-    this.goaldocstore.saveGoaldoc(data)
+    if(data){
+      this.updateHabitGrid()
+      this.goaldocstore.saveGoaldoc(data)
+    } 
     this.habitslide?.closeOpened()
   }
 
@@ -182,10 +187,11 @@ export class HomePage {
     const { data, role } = await modal.onWillDismiss();
     this.newGoal.name = data?.name
     this.newGoal.description = data?.description
-    this.newGoal.startdate = data?.startdate
-    this.newGoal.enddate = data?.enddate
+    this.newGoal.startDate = data?.startDate
+    this.newGoal.endDate = data?.endDate
     this.newGoal.habits = data?.habits
     this.newGoaldoc.goal = this.newGoal
+    console.log(this.newGoal)
     if (role == 'addGoal') {
       this.goaldocstore.addGoaldoc(this.newGoaldoc)
     } else if (role === 'saveGoal') {
@@ -194,6 +200,10 @@ export class HomePage {
     } else if (role === 'deleteGoal') {
       this.goaldocstore.deleteGoaldoc(goaldoc?.id!)
     }
+  }
+
+  segmentClicked( ){
+    console.log(this.filterSegment.value)
   }
 }
 
