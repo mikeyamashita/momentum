@@ -62,7 +62,7 @@ export class GoalModalComponent implements OnInit {
 
   validate(role: string) {
     console.log(role)
-    if (this.goal.startdate && this.goal.enddate) {
+    if (this.goal.startDate && this.goal.endDate) {
       if (role == 'add') {
         this.addGoal()
       } else if (role == 'save') {
@@ -93,12 +93,13 @@ export class GoalModalComponent implements OnInit {
   }
 
   selectStartDate(ev: any) {
-    this.goal.startdate = new Date(ev.detail.value)
+    console.log(ev.detail.value)
+    this.goal.startDate = new Date(ev.detail.value)
     this.startdatepopover.dismiss()
   }
 
   selectEndDate(ev: any) {
-    this.goal.enddate = new Date(ev.detail.value)
+    this.goal.endDate = new Date(ev.detail.value)
     this.enddatepopover.dismiss()
   }
 
