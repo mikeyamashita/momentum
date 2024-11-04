@@ -1,6 +1,6 @@
 export class Habit {
     name: string | undefined;
     datesCompleted: Array<string> = [];
-    times: Array<string> = [];
+    time: string = '' ;
     isComplete: boolean = false;
 }

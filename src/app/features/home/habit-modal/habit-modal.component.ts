@@ -52,6 +52,7 @@ export class HabitModalComponent implements OnInit {
       },
     },
   ];
+
   constructor(private modalCtrl: ModalController) {
   }
 
@@ -70,7 +71,7 @@ export class HabitModalComponent implements OnInit {
   }
 
   saveHabit() {
-    this.habit.times = ['9:00', '21:00']
+    this.habit.time = '2:00pm'
     if (this.role === 'add') {
       this.goaldocstore.goal().goal?.habits?.push(this.habit)
     } else {
