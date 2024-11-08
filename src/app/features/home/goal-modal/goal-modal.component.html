@@ -31,7 +31,7 @@
             <ion-popover #startdatepopover [keepContentsMounted]="true">
               <ng-template>
                 <ion-datetime id="startdate" presentation="date" mode="md" (ionChange)="selectStartDate($event)"
-                  [value]="goal.startDate"></ion-datetime>
+                  [value]="goal.startdate"></ion-datetime>
               </ng-template>
             </ion-popover>
           </div>
@@ -43,7 +43,7 @@
             <ion-popover #enddatepopover [keepContentsMounted]="true">
               <ng-template>
                 <ion-datetime id="enddate" presentation="date" mode="md" (ionChange)="selectEndDate($event)"
-                  [value]="goal.endDate"></ion-datetime>
+                  [value]="goal.enddate"></ion-datetime>
               </ng-template>
             </ion-popover>
           </div>

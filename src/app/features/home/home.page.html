@@ -34,8 +34,8 @@
         <div class="w-full mt-[-8px] pb-4">
           <!-- goal row -->
           @for(goal of goaldocstore.goals(); track goal.id){
-          <!-- {{goal.goal?.startDate!}} -->
-          @if( day() >= formatToDate(goal.goal?.startDate!) && day() <= formatToDate(goal.goal?.endDate!)){ <div
+          <!-- {{goal.goal?.startdate!}} -->
+          @if( day() >= formatToDate(goal.goal?.startdate!) && day() <= formatToDate(goal.goal?.enddate!)){ <div
             class="flex flex-row justify-start">
             <div class="font-bold text-base flex items-center">{{goal.goal?.name}}</div>
             <ion-button class="pl-3" fill="clear" mode="ios" (click)="openGoalModal('save', goal)">

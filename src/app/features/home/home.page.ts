@@ -199,8 +199,8 @@ export class HomePage {
     const { data, role } = await modal.onWillDismiss();
     this.newGoal.name = data?.name
     this.newGoal.description = data?.description
-    this.newGoal.startDate = data?.startDate
-    this.newGoal.endDate = data?.endDate
+    this.newGoal.startdate = data?.startdate
+    this.newGoal.enddate = data?.enddate
     this.newGoal.habits = data?.habits
     this.newGoaldoc.goal = this.newGoal
     console.log(this.newGoal)

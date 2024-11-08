@@ -31,7 +31,7 @@ export class GoalService {
         if (habit.datesCompleted?.some((item) => item == this.helperService.format(date)))
           count++
         // console.log(goaldoc)
-        if (date >= new Date(goaldoc.goal?.startDate!) && date <= new Date(goaldoc.goal?.endDate!))
+        if (date >= new Date(goaldoc.goal?.startdate!) && date <= new Date(goaldoc.goal?.enddate!))
           numHabits++
       })
     })
