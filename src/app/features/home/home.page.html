@@ -7,9 +7,9 @@
             <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
           </ion-button>
           @if(formatter.format(day()) === formatter.format(today)){
-          <div class="w-full grid place-content-center font-bold text-xl">{{ dayFormatted()}}</div>
+            <div class="w-full grid place-content-center font-bold text-xl">{{ dayFormatted()}}</div>
           } @else {
-          <div class="w-full grid place-content-center font-bold text-xl text-stone-300">{{ dayFormatted()}}</div>
+            <div class="w-full grid place-content-center font-bold text-xl text-stone-300">{{ dayFormatted()}}</div>
           }
           <ion-button fill="clear" (click)="changeDay(1)">
             <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
@@ -19,51 +19,54 @@
     </ion-header>
     <div class="grid grid-cols-2 px-2 pt-5">
       <div class="pl-2">
-        <!-- <ion-segment class="grid place-content-center ml-[12.5px] mb-6 mt-[-8px]" value="habits" mode="ios">
-          <ion-segment-button value="habits">
-            <ion-label>Habits</ion-label>
+        <ion-segment #filterSegment class="grid place-content-center ml-[12.5px] mb-6 mt-[-8px]" value="goals">
+          <ion-segment-button value="goals" (click)="segmentClicked()">
+            <ion-label>Goals</ion-label>
           </ion-segment-button>
-          <ion-segment-button value="milestones">
+          <ion-segment-button value="plan" (click)="segmentClicked()">
+            <ion-label>Plan</ion-label>
+          </ion-segment-button>
+          <!-- <ion-segment-button value="milestones">
             <ion-label>Milestones</ion-label>
-          </ion-segment-button>
-        </ion-segment> -->
+          </ion-segment-button> -->
+        </ion-segment>
+        @if( filterSegment.value == 'goals'){
         <div class="w-full mt-[-8px] pb-4">
           <!-- goal row -->
           @for(goal of goaldocstore.goals(); track goal.id){
-          <!-- {{day()}}
-          {{formatToDate(goal.goal?.startdate!)}} -->
-          @if( day() >= formatToDate(goal.goal?.startdate!) && day() <= formatToDate(goal.goal?.enddate!)){ <div
-            class="flex flex-row justify-start">
-            <div class="font-bold text-base flex items-center">{{goal.goal?.name}}</div>
-            <ion-button class="pl-3" fill="clear" mode="ios" (click)="openGoalModal('save', goal)">
-              <ion-icon class="text-sm" slot="icon-only" name="pencil" color="light"></ion-icon>
-            </ion-button>
-        </div>
-        <!-- habit row -->
-        <div>
-          <ion-list style="margin-right:-25px" class="py-4" lines="none" mode="md">
-            @for(habit of goal.goal?.habits; track habit.name){
-            <ion-item-sliding #habitslide>
-              <ion-item class="text-sm text-wrap mx-[-0.5em]">
-                <ion-checkbox mode="md" (ionChange)="habitChecked(goal ,habit)" [checked]="isComplete(habit)"
-                  [value]="isComplete(habit)">{{habit.name}}</ion-checkbox>
-              </ion-item>
-              <ion-item-options>
-                <ion-item-option color="dark" (click)="openHabitModal('save',goal.id!, habit!)">
-                  <ion-icon class="text-lg" slot="icon-only" name="pencil"></ion-icon>
-                </ion-item-option>
-              </ion-item-options>
-            </ion-item-sliding>
-            }
-            <ion-item class="text-sm text-wrap mx-[-0.5em]">
-              <ion-button class="w-full mt-[-4px] text-2xl" fill="clear" mode="ios"
-                (click)="openHabitModal('add',goal.id!)">
-                <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
-              </ion-button>
-            </ion-item>
-          </ion-list>
-        </div>
-        }
+            <!-- {{goal.goal?.startDate!}} -->
+            @if( day() >= formatToDate(goal.goal?.startDate!) && day() <= formatToDate(goal.goal?.endDate!)){
+              <div class="flex flex-row justify-start">
+                  <div class="font-bold text-base flex items-center">{{goal.goal?.name}}</div>
+                  <ion-button class="pl-3" fill="clear" mode="ios" (click)="openGoalModal('save', goal)">
+                    <ion-icon class="text-sm" slot="icon-only" name="pencil" color="light"></ion-icon>
+                  </ion-button>
+              </div>
+              <!-- habit row -->
+              <div>
+                <ion-list style="margin-right:-25px" class="py-4" lines="none" mode="md">
+                  @for(habit of goal.goal?.habits; track $index; let index = $index){
+                    <ion-item-sliding #habitslide>
+                      <ion-item class="text-sm text-wrap mx-[-0.5em]">
+                        <ion-checkbox mode="md" (ionChange)="habitChecked(goal?.id!, index ,habit)" [checked]="isComplete(habit)"
+                          [value]="isComplete(habit)">{{habit.name}}</ion-checkbox>
+                      </ion-item>
+                      <ion-item-options>
+                        <ion-item-option color="dark" (click)="openHabitModal('save',goal.id!, habit!)">
+                          <ion-icon class="text-lg" slot="icon-only" name="pencil"></ion-icon>
+                        </ion-item-option>
+                      </ion-item-options>
+                    </ion-item-sliding>
+                  }
+                  <ion-item class="text-sm text-wrap mx-[-0.5em]">
+                    <ion-button class="w-full mt-[-4px] text-2xl" fill="clear" mode="ios"
+                      (click)="openHabitModal('add', goal.id!)">
+                      <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+                    </ion-button>
+                  </ion-item>
+                </ion-list>
+              </div>
+          }
         }
         <ion-fab class="fixed bottom-5" mode="ios">
           <ion-fab-button size="small" expand="block" (click)="openGoalModal('add')">
@@ -71,14 +74,39 @@
           </ion-fab-button>
         </ion-fab>
       </div>
-    </div>
-    <div class="pr-3 mt-[-10px] flex justify-end">
-      @if(habitgriddocstore.habitMatrix()){
-      <app-graph [year]="year.toString()" colorLevel1="#003b3b" colorLevel2="#005050" colorLevel3="#006a6a"
-        colorLevel4="#008282" colorLevel5="#009595" colorLevel6="#00aeae" colorLevel7="#00c5c5" colorLevel8="#00d9d9"
-        colorLevel9="#00eaea" colorLevel10="#00ffff" colorMilestone="#ff4600"></app-graph>
       }
-    </div>
+      @else if (filterSegment.value == 'plan') {
+        <div class="w-full mt-[-8px] pb-4">
+          <!-- habit row -->
+          <div>
+              @for(time of times; track time){
+                <div class="font-bold text-base flex items-center py-[14px]">{{time}}</div>
+                <ion-list style="margin-right:-25px" class="pt-[14px] pb-[8px]" lines="none" mode="md">
+                @for(plan of planner[time]; track $index){
+                  <ion-item class="text-sm text-wrap mx-[-0.5em]">
+                    <ion-checkbox mode="md"  [checked]="isComplete(plan.habit)"
+                      [value]="isComplete(plan.habit)" (ionChange)="habitChecked(plan.goalid!, plan.index, plan.habit)">{{plan.habit.name}}</ion-checkbox>
+                  </ion-item>
+                }
+              </ion-list>
+              }
+              <!-- <ion-item class="text-sm text-wrap mx-[-0.5em]">
+                <ion-button class="w-full mt-[-4px] text-2xl" fill="clear" mode="ios"
+                  (click)="openHabitModal('add', goal.id!)">
+                  <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+                </ion-button>
+              </ion-item> -->
+          </div>
+      </div>
+    }
+  </div>
+  <div class="pr-3 mt-[-10px] flex justify-end">
+    @if(habitgriddocstore.habitMatrix()){
+    <app-graph [year]="year.toString()" colorLevel1="#003b3b" colorLevel2="#005050" colorLevel3="#006a6a"
+      colorLevel4="#008282" colorLevel5="#009595" colorLevel6="#00aeae" colorLevel7="#00c5c5" colorLevel8="#00d9d9"
+      colorLevel9="#00eaea" colorLevel10="#00ffff" colorMilestone="#ff4600"></app-graph>
+    }
+  </div>
   </div>
   </div>
 </ion-content>

@@ -40,6 +40,7 @@ export class HomePage {
   // @ViewChild('modalgoal') modalgoal!: IonModal;
   // @ViewChild('modalhabit') modalhabit!: IonModal;
   @ViewChild('habitslide') habitslide!: IonItemSliding;
+  @ViewChild('filterSegment') filterSegment!: IonSegment;
 
   year = new Date().getFullYear()
   today: Date = new Date()
@@ -52,6 +53,9 @@ export class HomePage {
   newGoaldoc: Goaldoc = new Goaldoc()
   name: string = ''
   matchdata: any = []
+  planner: Array<any> = []
+  habitslist: Array<any> = []
+  times: Array<any> = []
 
   constructor(private goalService: GoalService, private modalCtrl: ModalController, private helperService: HelperService,
     public habitGridService: HabitGridService
@@ -62,6 +66,7 @@ export class HomePage {
 
   // Lifecycle
   ionViewDidEnter() {
+
   }
 
   // Methods
@@ -80,6 +85,7 @@ export class HomePage {
     return new Date(datestring)
   }
 
+
   // Events
   getGoaldoc() {
     this.goaldocstore.getGoals();
@@ -89,12 +95,20 @@ export class HomePage {
     this.habitgriddocstore.getHabitGriddoc();
   }
 
-  habitChecked(goaldoc: Goaldoc | undefined, habit: Habit) {
+  habitChecked(goalid: number, index: number, habit: Habit) {
     if (habit.datesCompleted?.find(date => date == this.helperService.format(this.day()))) {
       habit.datesCompleted?.splice(habit.datesCompleted.findIndex((item) => item == this.helperService.format(this.day())), 1)
     } else {
       habit.datesCompleted?.push(this.helperService.format(this.day()))
     }
+    console.log(habit)
+    let goaldoc = this.goaldocstore.goals().find(goal => goal.id == goalid)
+
+    if (this.filterSegment.value == "plan") {
+      goaldoc?.goal?.habits.splice(index, 1, habit)
+      // goaldoc?.goal?.habits.push(habit)
+    }
+
     this.updateHabitGrid()
     this.goaldocstore.saveGoaldoc(goaldoc)
   }
@@ -159,9 +173,12 @@ export class HomePage {
     });
     modal.present();
     const { data, role } = await modal.onWillDismiss();
+    console.log(data)
     // this.habitGridService.buildHabitMatrix(this.habitgriddocstore.habitgriddoc())
-    this.updateHabitGrid()
-    this.goaldocstore.saveGoaldoc(data)
+    if (data) {
+      this.updateHabitGrid()
+      this.goaldocstore.saveGoaldoc(data)
+    }
     this.habitslide?.closeOpened()
   }
 
@@ -182,10 +199,11 @@ export class HomePage {
     const { data, role } = await modal.onWillDismiss();
     this.newGoal.name = data?.name
     this.newGoal.description = data?.description
-    this.newGoal.startdate = data?.startdate
-    this.newGoal.enddate = data?.enddate
+    this.newGoal.startDate = data?.startDate
+    this.newGoal.endDate = data?.endDate
     this.newGoal.habits = data?.habits
     this.newGoaldoc.goal = this.newGoal
+    console.log(this.newGoal)
     if (role == 'addGoal') {
       this.goaldocstore.addGoaldoc(this.newGoaldoc)
     } else if (role === 'saveGoal') {
@@ -193,6 +211,55 @@ export class HomePage {
       this.goaldocstore.saveGoaldoc(this.newGoaldoc)
     } else if (role === 'deleteGoal') {
       this.goaldocstore.deleteGoaldoc(goaldoc?.id!)
+    }
+  }
+
+  convertTo24Hour(time: any) {
+    let [hour, minutePeriod] = time.split(":");
+    let minute = minutePeriod.slice(0, 2);
+    let period = minutePeriod.slice(3).toUpperCase();
+
+    hour = parseInt(hour, 10);
+    minute = parseInt(minute, 10);
+
+    // Convert hour to 24-hour format
+    if (period === "PM" && hour !== 12) hour += 12;
+    if (period === "AM" && hour === 12) hour = 0;
+
+    return hour * 60 + minute; // Total minutes since midnight
+  };
+
+  groupedByTime() {
+    const groupbytime = this.habitslist?.reduce((group, habitarr) => {
+      const time: string = habitarr.habit.time;
+      if (!group[time]) {
+        group[time] = [];
+      }
+      group[time].push(habitarr);
+      this.times.push(time)
+      return group;
+    }, {});
+    return groupbytime
+  }
+
+  segmentClicked() {
+    // if (this.filterSegment.value == "goals") {
+    //   this.habitslist = []
+    //   this.planner = []
+    //   this.times = []
+    // } else 
+    if (this.filterSegment.value == "plan") {
+      this.habitslist = new Array<any>()
+      this.goaldocstore.goals().forEach(goal => {
+        goal.goal?.habits.forEach((habit, index) => {
+          this.habitslist.push({ goalid: goal.id, index: index, habit: habit })
+        })
+      })
+      this.habitslist.sort((a, b) => this.convertTo24Hour(a.habit.time) - this.convertTo24Hour(b.habit.time))
+      // console.log(this.habitslist)
+      this.planner = this.groupedByTime()
+      console.log(this.planner)
+      this.times = [...new Set(this.times)]
     }
   }
 }
