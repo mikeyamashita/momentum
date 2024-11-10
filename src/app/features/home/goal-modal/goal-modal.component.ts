@@ -138,7 +138,9 @@ export class GoalModalComponent implements OnInit {
     modal.present();
     const { data, role } = await modal.onWillDismiss();
     console.log(data)
+
     if (data) {
+      this.goal = data.goal
       this.update(milestone?.isComplete!)
       this.goaldocstore.saveGoaldoc(data)
     }

@@ -55,7 +55,13 @@
         <ion-item-sliding #milestoneslide>
           <ion-item class="text-sm text-wrap mx-[-0.5em]">
             <ion-checkbox mode="md" (ionChange)="milestoneChecked(goalid!, index, milestone)"
-              [checked]="milestone.isComplete" [value]="milestone.isComplete">{{milestone.name}}</ion-checkbox>
+              [checked]="milestone.isComplete" [value]="milestone.isComplete">
+              <div>
+                <div>{{milestone.name}} </div>
+                <div>Forecast Date: {{milestone.forecastDate}} </div>
+                <div>Date Completed: {{milestone.dateCompleted}}</div>
+              </div>
+            </ion-checkbox>
           </ion-item>
           <ion-item-options>
             <ion-item-option color="dark" (click)="openMilestoneModal('save',goalid!, milestone!)">
