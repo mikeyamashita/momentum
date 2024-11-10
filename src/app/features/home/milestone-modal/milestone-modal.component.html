@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancelMilestoneModal()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="saveMilestone()" [strong]="true">Save</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <div class="flex flex-col justify-between h-full pb-1">
+    <ion-item class="pb-4" lines="none">
+      <ion-input labelPlacement="stacked" type="text" placeholder="New Milestone" [(ngModel)]="milestone.name"></ion-input>
+    </ion-item>  
+    <div class="flex flex-col pb-4">
+      <div class="pb-4 grid place-content-start">
+        <div class="flex flex-row">
+          <ion-label class="p-2 w-[120px]">Forecast Date:</ion-label>
+          <ion-datetime-button datetime="forecastdate"></ion-datetime-button>
+          <ion-popover #forecastdatepopover [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime id="forecastdate" presentation="date" mode="md" (ionChange)="selectForecastDate($event)"
+                [value]="milestone.forecastDate"></ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </div>
+      </div>
+    </div>
+    @if(role === 'save'){
+    <ion-button id="present-alert" class="flex justify-stretch" [strong]="true" fill="clear">Delete</ion-button>
+    <ion-alert trigger="present-alert" header="Are you sure you would like to delete this milestone?"
+      [buttons]="alertButtons" (didDismiss)="deleteMilestone($event)">
+    </ion-alert>
+    }
+  </div>
+</ion-content>

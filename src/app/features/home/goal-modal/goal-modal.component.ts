@@ -51,7 +51,7 @@ export class GoalModalComponent implements OnInit {
     },
   ];
 
-  constructor(private modalCtrl: ModalController) {
+  constructor(private modalCtrl: ModalController, private helperService: HelperService, private goalService: GoalService) {
   }
 
   ngOnInit() {
@@ -103,4 +103,86 @@ export class GoalModalComponent implements OnInit {
     this.enddatepopover.dismiss()
   }
 
+  milestoneChecked(goalid: number, index: number, milestone: Milestone) {
+    if (milestone.isComplete) {
+      milestone.dateCompleted = undefined
+      milestone.isComplete = false
+    } else {
+      milestone.dateCompleted = this.day()
+      milestone.isComplete = true;
+    }
+
+    let goaldoc = this.goaldocstore.goals().find(goal => goal.id == goalid)
+
+    goaldoc?.goal?.milestones.splice(index, 1, milestone)
+    console.log(goaldoc)
+
+    this.update(milestone.isComplete)
+    this.goaldocstore.saveGoaldoc(goaldoc)
+  }
+
+  async openMilestoneModal(roletype: string, goalid: number, milestone?: Milestone) {
+    const modal = await this.modalCtrl.create({
+      component: MilestoneModalComponent,
+      componentProps: {
+        role: roletype,
+        goalid: goalid,
+        milestoneprop: milestone
+      },
+      initialBreakpoint: 0.99,
+      breakpoints: [0, 0.99, 1],
+      backdropDismiss: true,
+      backdropBreakpoint: 0,
+      presentingElement: await this.modalCtrl.getTop() // Get the top-most ion-modal
+    });
+    modal.present();
+    const { data, role } = await modal.onWillDismiss();
+    console.log(data)
+    if (data) {
+      this.update(milestone?.isComplete!)
+      this.goaldocstore.saveGoaldoc(data)
+    }
+    this.milestoneslide?.closeOpened()
+  }
+
+  update(isComplete: boolean) {
+    let progress
+    if (isComplete)
+      progress = 101
+    else
+      progress = this.goalService.getProgressCount(this.goaldocstore.goals(), this.day())
+
+    let findDateInMatrix = this.habitgriddocstore.habitMatrix().find(matrix => matrix[0] === this.helperService.format(this.day()))
+
+    if (findDateInMatrix) {
+      // get habitgrid by current day
+      this.habitgriddocstore.habitMatrix().forEach((habitmatrix) => {
+        if (habitmatrix[0] === this.helperService.format(this.day())) {
+          // update progress
+          let newhabitgriddoc: HabitGriddoc = new HabitGriddoc()
+          let newhabitgrid: HabitGrid = new HabitGrid()
+          newhabitgriddoc.id = habitmatrix[2]
+          newhabitgrid.date = habitmatrix[0]
+          newhabitgrid.progress = progress
+          newhabitgriddoc.habitGrid = newhabitgrid
+          this.habitgriddocstore.saveHabitGriddoc(newhabitgriddoc)
+        }
+      })
+    } else {
+      // console.log('not found')
+      let newhabitgriddoc: HabitGriddoc = new HabitGriddoc()
+      let newhabitgrid: HabitGrid = new HabitGrid()
+      newhabitgrid.date = this.helperService.format(this.day())
+      newhabitgrid.progress = progress
+      newhabitgriddoc.habitGrid = newhabitgrid
+      this.habitgriddocstore.addHabitGriddoc(newhabitgriddoc) //adds date if it doesnt exist
+    }
+
+  }
+  // isComplete(milestone: Milestone) {
+  //   if (milestone.dateCompleted)
+  //     return this.helperService.format( milestone.dateCompleted!) == this.helperService.format(this.day())
+  //   else 
+  //     return false
+  // }
 }

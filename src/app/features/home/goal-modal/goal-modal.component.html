@@ -49,6 +49,29 @@
           </div>
         </div>
       </div>
+
+      <ion-list style="margin-right:-25px" class="py-4" lines="none" mode="md">
+        @for(milestone of goal.milestones; track $index; let index = $index){
+        <ion-item-sliding #milestoneslide>
+          <ion-item class="text-sm text-wrap mx-[-0.5em]">
+            <ion-checkbox mode="md" (ionChange)="milestoneChecked(goalid!, index, milestone)"
+              [checked]="milestone.isComplete" [value]="milestone.isComplete">{{milestone.name}}</ion-checkbox>
+          </ion-item>
+          <ion-item-options>
+            <ion-item-option color="dark" (click)="openMilestoneModal('save',goalid!, milestone!)">
+              <ion-icon class="text-lg" slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+        }
+        <ion-item class="text-sm text-wrap mx-[-0.5em]">
+          <ion-button class="w-full mt-[-4px] text-2xl" fill="clear" mode="ios"
+            (click)="openMilestoneModal('add', goalid!)">
+            <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+
     </div>
     @if(role === 'save'){
     <ion-button id="present-alert" class="flex justify-stretch" [strong]="true" fill="clear">Delete</ion-button>

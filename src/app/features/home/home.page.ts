@@ -173,7 +173,6 @@ export class HomePage {
     });
     modal.present();
     const { data, role } = await modal.onWillDismiss();
-    console.log(data)
     // this.habitGridService.buildHabitMatrix(this.habitgriddocstore.habitgriddoc())
     if (data) {
       this.updateHabitGrid()
@@ -203,7 +202,6 @@ export class HomePage {
     this.newGoal.enddate = data?.enddate
     this.newGoal.habits = data?.habits
     this.newGoaldoc.goal = this.newGoal
-    console.log(this.newGoal)
     if (role == 'addGoal') {
       this.goaldocstore.addGoaldoc(this.newGoaldoc)
     } else if (role === 'saveGoal') {
