@@ -1,11 +1,15 @@
 import { Component, OnInit, Input, inject } from '@angular/core';
 import { HabitGriddocStore } from '../goal/stores/habitgriddoc.store';
+import {
+  IonIcon
+} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-graph',
   templateUrl: './graph.component.html',
   styleUrls: ['./graph.component.css'],
   standalone: true,
+  imports: [IonIcon]
 })
 export class GraphComponent {
   readonly habitgriddocstore = inject(HabitGriddocStore);
@@ -36,6 +40,7 @@ export class GraphComponent {
   @Input()
   colorMilestone: string | undefined;
 
+
   constructor() {
   }
 
@@ -43,32 +48,38 @@ export class GraphComponent {
   ionViewDidEnter() {
   }
 
-  getColor(dia: number) {
-    let x = dia
-    if (x < 0 && x < 10)
+  getColor(progress: number) {
+    if (progress < 0 && progress < 10)
       return this.colorLevel1;
-    else if (x >= 10 && x < 20)
+    else if (progress >= 10 && progress < 20)
       return this.colorLevel2;
-    else if (x >= 20 && x < 30)
+    else if (progress >= 20 && progress < 30)
       return this.colorLevel3;
-    else if (x >= 30 && x < 40)
+    else if (progress >= 30 && progress < 40)
       return this.colorLevel4;
-    else if (x >= 40 && x < 50)
+    else if (progress >= 40 && progress < 50)
       return this.colorLevel5;
-    else if (x >= 50 && x < 60)
+    else if (progress >= 50 && progress < 60)
       return this.colorLevel6;
-    else if (x >= 60 && x < 70)
+    else if (progress >= 60 && progress < 70)
       return this.colorLevel7;
-    else if (x >= 70 && x < 80)
+    else if (progress >= 70 && progress < 80)
       return this.colorLevel8;
-    else if (x >= 80 && x < 90)
+    else if (progress >= 80 && progress < 90)
       return this.colorLevel9;
-    else if (x >= 90 && x <= 100)
+    else if (progress >= 90 && progress <= 100)
       return this.colorLevel10;
-    else if (x > 100)
+    else if (progress > 100)
       return this.colorMilestone;
     else
       return '#181818'
+  }
+
+  isMilestoneAchieved(milestoneCount: number): boolean {
+    if (milestoneCount! > 0)
+      return true
+    else 
+      return false
   }
 
 }

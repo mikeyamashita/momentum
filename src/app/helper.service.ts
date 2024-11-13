@@ -8,6 +8,7 @@ export class HelperService {
   constructor() { }
 
   format(data: Date) {
+    // console.log(data)
     var
       dia = data?.getDate().toString(),
       diaF = (dia.length == 1) ? '0' + dia : dia,

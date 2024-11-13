@@ -54,7 +54,7 @@
         @for(milestone of goal.milestones; track $index; let index = $index){
         <ion-item-sliding #milestoneslide>
           <ion-item class="text-sm text-wrap mx-[-0.5em]">
-            <ion-checkbox mode="md" (ionChange)="milestoneChecked(goalid!, index, milestone)"
+            <ion-checkbox mode="md" (ionChange)="milestoneChecked($event, goalid!, index, milestone)"
               [checked]="milestone.isComplete" [value]="milestone.isComplete">
               <div>
                 <div>{{milestone.name}} </div>

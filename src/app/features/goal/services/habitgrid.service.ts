@@ -26,17 +26,17 @@ export class HabitGridService {
   buildHabitMatrix(habitgriddoc: Array<HabitGriddoc>) {
     this.matchdata = new Array<any>()
     habitgriddoc?.forEach((habitgriddoc: HabitGriddoc) => {
-      this.matchdata.push([habitgriddoc.habitGrid?.date, habitgriddoc.habitGrid?.progress, habitgriddoc.id])
+      this.matchdata.push([habitgriddoc.habitGrid?.date, habitgriddoc.habitGrid?.progress, habitgriddoc.id, habitgriddoc.habitGrid?.milestones])
     });
 
     let currentyear = new Date().getFullYear()
     const isLeapYear = (year: number) => new Date(year, 1, 29).getMonth() === 1;
     let numberOfDays = isLeapYear(currentyear) ? 366 : 365
 
+    console.log(this.matchdata)
     if (this.matchdata.length < numberOfDays) {
       this.handleMissingDates(currentyear)
     }
-    // console.log(this.matchdata)
     return this.matchdata
   }
 

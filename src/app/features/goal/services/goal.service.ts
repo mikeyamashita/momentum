@@ -41,9 +41,11 @@ export class GoalService {
     habitGrid.progress = Math.round(count / numHabits * 100)
     let habitGridDoc: HabitGriddoc = new HabitGriddoc()
     habitGridDoc.habitGrid = habitGrid
-    // console.log(count)
-    // console.log(numHabits)
-    // console.log(Math.round(count / numHabits * 100))
+
+    console.log(count)
+    console.log(numHabits)
+    console.log(Math.round(count / numHabits * 100))
+
     return Math.round(count / numHabits * 100)
   }
 

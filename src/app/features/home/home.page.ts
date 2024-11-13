@@ -101,7 +101,6 @@ export class HomePage {
     } else {
       habit.datesCompleted?.push(this.helperService.format(this.day()))
     }
-    console.log(habit)
     let goaldoc = this.goaldocstore.goals().find(goal => goal.id == goalid)
 
     if (this.filterSegment.value == "plan") {
@@ -131,6 +130,7 @@ export class HomePage {
           newhabitgriddoc.id = habitmatrix[2]
           newhabitgrid.date = habitmatrix[0]
           newhabitgrid.progress = progress
+          newhabitgrid.milestones = habitmatrix[3]
           newhabitgriddoc.habitGrid = newhabitgrid
           this.habitgriddocstore.saveHabitGriddoc(newhabitgriddoc)
         }
@@ -141,6 +141,7 @@ export class HomePage {
       let newhabitgrid: HabitGrid = new HabitGrid()
       newhabitgrid.date = this.helperService.format(this.day())
       newhabitgrid.progress = progress
+      newhabitgrid.milestones = 0
       newhabitgriddoc.habitGrid = newhabitgrid
       this.habitgriddocstore.addHabitGriddoc(newhabitgriddoc) //adds date if it doesnt exist
     }
@@ -186,7 +187,8 @@ export class HomePage {
       component: GoalModalComponent,
       componentProps: {
         role: roletype,
-        goaldocprop: goaldoc
+        goaldocprop: goaldoc,
+        goaldate: this.day()
       },
       initialBreakpoint: 0.99,
       breakpoints: [0, 0.99, 1],
@@ -210,6 +212,7 @@ export class HomePage {
     } else if (role === 'deleteGoal') {
       this.goaldocstore.deleteGoaldoc(goaldoc?.id!)
     }
+    // this.updateHabitGrid()
   }
 
   convertTo24Hour(time: any) {

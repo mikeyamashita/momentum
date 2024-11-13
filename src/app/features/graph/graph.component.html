@@ -32,6 +32,10 @@
       </div>
       @for(square of habitgriddocstore.habitMatrix(); track square){
       <div [id]="square[0]" data-placement="top" class="days" [style.background-color]="getColor(square[1])">
+        <!-- {{square[2]}} -->
+        @if(isMilestoneAchieved(square[3]) == true) {
+          <ion-icon name="star-outline"></ion-icon>
+        }
       </div>
       }
     </div>
