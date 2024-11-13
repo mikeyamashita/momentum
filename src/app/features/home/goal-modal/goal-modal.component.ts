@@ -34,7 +34,6 @@ export class GoalModalComponent implements OnInit {
   goalid: number = 0;
   goaldoc: Goaldoc = new Goaldoc();
   isToastOpen: boolean = false;
-  milestoneAchievedCount: number = 0
 
   alertButtons = [
     {
@@ -111,12 +110,17 @@ milestoneChecked(goalid: number, index: number, milestone: Milestone){
   if (milestone.isComplete) {
     milestone.dateCompleted = undefined
     milestone.isComplete = false
+  } else {
+    milestone.dateCompleted = this.day()
+    milestone.isComplete = true;
   }
 
   let goaldoc = this.goaldocstore.goals().find(goal => goal.id == goalid)
+
   goaldoc?.goal?.milestones.splice(index, 1, milestone)
-  this.milestoneAchievedCount = this.getMilestoneCount()
-  this.updateHabitGrid(milestone.isComplete, milestone.dateCompleted!)
+  console.log(goaldoc)
+
+  this.update(milestone.isComplete)
   this.goaldocstore.saveGoaldoc(goaldoc)
 }
   
@@ -140,7 +144,7 @@ milestoneChecked(goalid: number, index: number, milestone: Milestone){
 
   if (data) {
     this.goal = data.goal
-    // this.updateHabitGrid(milestone?.isComplete!, milestone?.dateCompleted!)
+    this.update(milestone?.isComplete!)
     this.goaldocstore.saveGoaldoc(data)
   }
   this.milestoneslide?.closeOpened()
