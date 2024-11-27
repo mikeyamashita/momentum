@@ -16,15 +16,15 @@ import { Goaldoc } from '../../goal/models/goaldoc';
   templateUrl: './milestone-modal.component.html',
   styleUrls: ['./milestone-modal.component.scss'],
   standalone: true,
-  imports: [IonModal, IonLabel, IonList, IonItem,
-    IonInput, IonAlert, IonDatetime, IonDatetimeButton, IonToast,
+  imports: [IonLabel, IonItem,
+    IonInput, IonAlert, IonDatetime, IonDatetimeButton,
     IonPopover,
     IonButton, IonButtons, IonHeader, IonToolbar, IonTitle, IonContent,
-    IonFab, FormsModule]
+    FormsModule]
 })
 export class MilestoneModalComponent implements OnInit {
   @ViewChild('forecastdatepopover') forecastdatepopover!: IonPopover;
-  
+
   readonly goaldocstore = inject(GoaldocStore);
 
   // inputs

@@ -9,22 +9,31 @@ import {
 import { GoaldocStore } from '../../goal/stores/goaldoc.store';
 import { Goal } from '../../goal/models/goal';
 import { Goaldoc } from '../../goal/models/goaldoc';
+import { Milestone } from '../../goal/models/milestone';
+import { GoalService } from '../../goal/services/goal.service';
+import { HelperService } from 'src/app/helper.service';
+import { HabitGriddocStore } from '../../goal/stores/habitgriddoc.store';
+import { HabitGriddoc } from '../../goal/models/habitgriddoc';
+import { HabitGrid } from '../../goal/models/habitgrid';
+import { MilestoneModalComponent } from '../milestone-modal/milestone-modal.component';
 
 @Component({
   selector: 'app-goal-modal',
   templateUrl: './goal-modal.component.html',
   styleUrls: ['./goal-modal.component.scss'],
   standalone: true,
-  imports: [IonModal, IonLabel, IonList, IonItem, IonDatetime, IonDatetimeButton, IonToast,
+  imports: [IonLabel, IonList, IonItem, IonDatetime, IonDatetimeButton, IonToast,
     IonPopover, IonInput, IonButton, IonButtons, IonHeader, IonToolbar, IonTitle, IonContent, IonCheckbox,
     IonItemSliding, IonIcon, IonItemSliding, IonItemOptions, IonItemOption,
-    IonFab, IonAlert, FormsModule]
+    IonAlert, FormsModule]
 })
 export class GoalModalComponent implements OnInit {
   readonly goaldocstore = inject(GoaldocStore);
+  readonly habitgriddocstore = inject(HabitGriddocStore);
 
   @ViewChild('startdatepopover') startdatepopover!: IonPopover;
   @ViewChild('enddatepopover') enddatepopover!: IonPopover;
+  @ViewChild('milestoneslide') milestoneslide!: IonItemSliding;
 
   // inputs
   role: string = ''
@@ -179,7 +188,7 @@ export class GoalModalComponent implements OnInit {
 
     if (data) {
       this.goal = data.goal
-      this.update(milestone?.isComplete!)
+      // this.update(milestone?.isComplete!)
       this.goaldocstore.saveGoaldoc(data)
     }
     this.milestoneslide?.closeOpened()

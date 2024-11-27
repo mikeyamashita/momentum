@@ -1,7 +1,6 @@
 export class Milestone {
     name: string | undefined;
-    datesCompleted: Array<string> | undefined;
-    startdate?: Date;
-    enddate?: Date;
+    dateCompleted?: Date;
+    forecastDate?: Date;
     isComplete: boolean = false;
 }

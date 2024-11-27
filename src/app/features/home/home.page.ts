@@ -1,9 +1,9 @@
 import { Component, inject, signal, ViewChild } from '@angular/core';
 import {
-  IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons, IonCheckbox, IonCard, IonCardContent, IonCardTitle,
-  IonCardHeader, IonCardSubtitle, IonItemOption, IonItemOptions,
-  IonItem, IonItemSliding, IonList, IonLabel, IonIcon, IonFabButton, IonFab, IonFabList, IonSegment, IonSegmentButton,
-  IonModal, IonInput, ModalController
+  IonHeader, IonToolbar, IonContent, IonButton, IonCheckbox,
+  IonItemOption, IonItemOptions,
+  IonItem, IonItemSliding, IonList, IonLabel, IonIcon, IonFabButton, IonFab, IonSegment, IonSegmentButton,
+  ModalController
 } from '@ionic/angular/standalone';
 
 import { GoaldocStore } from '../goal/stores/goaldoc.store';
@@ -26,19 +26,15 @@ import { HabitGridService } from '../goal/services/habitgrid.service';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonModal, IonSegmentButton, IonSegment, IonFabList, IonFabButton, IonIcon, IonLabel, IonList, IonItem,
-    IonItemSliding, IonItemOptions,
-    IonCardSubtitle, IonCardHeader, IonCardTitle, IonCardContent, IonCard, IonInput, IonItemOption,
-    IonCheckbox, IonButton, IonButtons, IonHeader, IonToolbar, IonTitle, IonContent,
+  imports: [IonSegmentButton, IonSegment, IonFabButton, IonIcon, IonLabel, IonList, IonItem,
+    IonItemSliding, IonItemOptions, IonItemOption,
+    IonCheckbox, IonButton, IonHeader, IonToolbar, IonContent,
     IonFab,
     GraphComponent, FormsModule]
 })
 export class HomePage {
   readonly goaldocstore = inject(GoaldocStore);
   readonly habitgriddocstore = inject(HabitGriddocStore);
-
-  // @ViewChild('modalgoal') modalgoal!: IonModal;
-  // @ViewChild('modalhabit') modalhabit!: IonModal;
   @ViewChild('habitslide') habitslide!: IonItemSliding;
   @ViewChild('filterSegment') filterSegment!: IonSegment;
 
