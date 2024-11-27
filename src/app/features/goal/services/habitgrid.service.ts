@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
@@ -6,10 +6,8 @@ import { tapResponse } from '@ngrx/operators';
 import { HabitGrid } from '../models/habitgrid';
 import { HabitGriddoc } from '../models/habitgriddoc'
 
-import { GoaldocStore } from '../stores/goaldoc.store';
 import { ApiService } from '../../../api.service';
 import { HelperService } from 'src/app/helper.service';
-import { GoalService } from './goal.service';
 import { Goaldoc } from '../models/goaldoc';
 
 @Injectable({
@@ -33,7 +31,6 @@ export class HabitGridService {
     const isLeapYear = (year: number) => new Date(year, 1, 29).getMonth() === 1;
     let numberOfDays = isLeapYear(currentyear) ? 366 : 365
 
-    console.log(this.matchdata)
     if (this.matchdata.length < numberOfDays) {
       this.handleMissingDates(currentyear)
     }
@@ -183,14 +180,6 @@ export class HabitGridService {
       })
     })
 
-    // let habitGrid: HabitGrid = new HabitGrid()
-    // habitGrid.date = this.helperService.format(date)
-    // habitGrid.progress = Math.round(count / numHabits * 100)
-    // let habitGridDoc: HabitGriddoc = new HabitGriddoc()
-    // habitGridDoc.habitGrid = habitGrid
-    console.log(count)
-    console.log(numHabits)
-    console.log(Math.round(count / numHabits * 100))
     if (numHabits > 1)
       return Math.round(count / numHabits * 100)
     else

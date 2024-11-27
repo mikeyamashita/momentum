@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons, IonIcon,
   IonAlert, IonDatetime, IonDatetimeButton, IonPopover, IonToast,
-  IonItem, IonList, IonLabel, IonFab, IonModal, IonInput, ModalController, IonCheckbox,
+  IonItem, IonList, IonLabel, IonInput, ModalController, IonCheckbox,
   IonItemSliding, IonItemOptions, IonItemOption
 } from '@ionic/angular/standalone';
 import { GoaldocStore } from '../../goal/stores/goaldoc.store';
@@ -123,7 +123,6 @@ export class GoalModalComponent implements OnInit {
       milestone.dateCompleted = this.goaldate
       milestone.isComplete = true
     } else {
-
       if (this.goaldate !== milestone.dateCompleted!) {
         console.warn("uncheck achieved milestone?")
         // update habitgrid for other date
@@ -142,7 +141,7 @@ export class GoalModalComponent implements OnInit {
           }
         })
       }
-      // milestone.dateCompleted = undefined
+      milestone.dateCompleted = undefined
       milestone.isComplete = false
     }
 
@@ -156,7 +155,7 @@ export class GoalModalComponent implements OnInit {
   getMilestoneCount() {
     this.milestoneAchievedCount = 0 //reset count
     this.goaldocstore.goals().forEach(goal => {
-      console.log('milestone:', goal.goal?.milestones)
+      // console.log('milestone:', goal.goal?.milestones)
       goal.goal?.milestones.forEach(milestone => {
         if (milestone.dateCompleted) {
           if (this.helperService.format(new Date(milestone.dateCompleted!)) === this.helperService.format(this.goaldate) && milestone.isComplete === true)
@@ -188,7 +187,8 @@ export class GoalModalComponent implements OnInit {
 
     if (data) {
       this.goal = data.goal
-      // this.update(milestone?.isComplete!)
+      console.log(data.goal)
+      // this.updateHabitGrid(milestone?.isComplete!, milestone?.dateCompleted!)
       this.goaldocstore.saveGoaldoc(data)
     }
     this.milestoneslide?.closeOpened()

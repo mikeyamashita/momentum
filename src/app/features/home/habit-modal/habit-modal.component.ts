@@ -2,9 +2,9 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons, IonAlert,
-  IonDatetime, IonDatetimeButton, IonToast,
+  IonDatetime, IonDatetimeButton,
   IonPopover,
-  IonItem, IonList, IonLabel, IonFab, IonModal, IonInput, ModalController
+  IonItem, IonLabel, IonInput, ModalController
 } from '@ionic/angular/standalone';
 import { GoaldocStore } from '../../goal/stores/goaldoc.store';
 import { Goal } from '../../goal/models/goal';
@@ -16,11 +16,11 @@ import { Goaldoc } from '../../goal/models/goaldoc';
   templateUrl: './habit-modal.component.html',
   styleUrls: ['./habit-modal.component.scss'],
   standalone: true,
-  imports: [IonModal, IonLabel, IonList, IonItem,
-    IonInput, IonAlert, IonDatetime, IonDatetimeButton, IonToast,
+  imports: [IonLabel, IonItem,
+    IonInput, IonAlert, IonDatetime, IonDatetimeButton,
     IonPopover,
     IonButton, IonButtons, IonHeader, IonToolbar, IonTitle, IonContent,
-    IonFab, FormsModule]
+    FormsModule]
 })
 export class HabitModalComponent implements OnInit {
   readonly goaldocstore = inject(GoaldocStore);

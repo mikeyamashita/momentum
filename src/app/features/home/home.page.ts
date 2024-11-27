@@ -194,11 +194,13 @@ export class HomePage {
     });
     modal.present();
     const { data, role } = await modal.onWillDismiss();
+    console.log(data)
     this.newGoal.name = data?.name
     this.newGoal.description = data?.description
     this.newGoal.startdate = data?.startdate
     this.newGoal.enddate = data?.enddate
     this.newGoal.habits = data?.habits
+    this.newGoal.milestones = data?.milestones
     this.newGoaldoc.goal = this.newGoal
     if (role == 'addGoal') {
       this.goaldocstore.addGoaldoc(this.newGoaldoc)
@@ -212,18 +214,23 @@ export class HomePage {
   }
 
   convertTo24Hour(time: any) {
-    let [hour, minutePeriod] = time.split(":");
-    let minute = minutePeriod.slice(0, 2);
-    let period = minutePeriod.slice(3).toUpperCase();
+    console.log(time)
+    if (time) {
+      let [hour, minutePeriod] = time.split(":");
+      let minute = minutePeriod.slice(0, 2);
+      let period = minutePeriod.slice(3).toUpperCase();
 
-    hour = parseInt(hour, 10);
-    minute = parseInt(minute, 10);
+      hour = parseInt(hour, 10);
+      minute = parseInt(minute, 10);
 
-    // Convert hour to 24-hour format
-    if (period === "PM" && hour !== 12) hour += 12;
-    if (period === "AM" && hour === 12) hour = 0;
+      // Convert hour to 24-hour format
+      if (period === "PM" && hour !== 12) hour += 12;
+      if (period === "AM" && hour === 12) hour = 0;
 
-    return hour * 60 + minute; // Total minutes since midnight
+      return hour * 60 + minute; // Total minutes since midnight
+    } else {
+      return null
+    }
   };
 
   groupedByTime() {
@@ -248,11 +255,13 @@ export class HomePage {
     if (this.filterSegment.value == "plan") {
       this.habitslist = new Array<any>()
       this.goaldocstore.goals().forEach(goal => {
-        goal.goal?.habits.forEach((habit, index) => {
-          this.habitslist.push({ goalid: goal.id, index: index, habit: habit })
-        })
+        if (this.day() >= this.formatToDate(goal.goal?.startdate!) && this.day() <= this.formatToDate(goal.goal?.enddate!)) {
+          goal.goal?.habits.forEach((habit, index) => {
+            this.habitslist.push({ goalid: goal.id, index: index, habit: habit })
+          })
+        }
       })
-      this.habitslist.sort((a, b) => this.convertTo24Hour(a.habit.time) - this.convertTo24Hour(b.habit.time))
+      this.habitslist.sort((a, b) => this.convertTo24Hour(a.habit?.time) - this.convertTo24Hour(b.habit?.time))
       // console.log(this.habitslist)
       this.planner = this.groupedByTime()
       console.log(this.planner)
