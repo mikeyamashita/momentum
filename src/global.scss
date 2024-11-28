@@ -40,3 +40,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.small-modal {
+    --max-height: 200px;
+    --width: 90%;
+    margin-top: -210px;
+}
+
+.small-modal-nested {
+    --max-height: 200px;
+    --width: 90%;
+    margin-top: -1000px;
+}

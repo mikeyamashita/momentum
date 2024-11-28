@@ -175,8 +175,7 @@ export class GoalModalComponent implements OnInit {
         goalid: goalid,
         milestoneprop: milestone
       },
-      initialBreakpoint: 0.99,
-      breakpoints: [0, 0.99, 1],
+      cssClass: "small-modal-nested",
       backdropDismiss: true,
       backdropBreakpoint: 0,
       presentingElement: await this.modalCtrl.getTop() // Get the top-most ion-modal

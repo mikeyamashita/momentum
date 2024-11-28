@@ -162,8 +162,7 @@ export class HomePage {
         goalid: goalid,
         habitprop: habit
       },
-      initialBreakpoint: 0.99,
-      breakpoints: [0, 0.99, 1],
+      cssClass: "small-modal",
       backdropDismiss: true,
       backdropBreakpoint: 0,
       presentingElement: await this.modalCtrl.getTop() // Get the top-most ion-modal

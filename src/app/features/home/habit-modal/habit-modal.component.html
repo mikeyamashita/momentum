@@ -1,3 +1,4 @@
+<!-- <div class="habit-modal"> -->
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
@@ -13,21 +14,21 @@
   <div class="flex flex-col justify-between h-full pb-1">
     <ion-item class="pb-4" lines="none">
       <ion-input labelPlacement="stacked" type="text" placeholder="New Habit" [(ngModel)]="habit.name"></ion-input>
-    </ion-item>  
-    <div class="flex flex-col pb-4">      
-    <div class="pb-4 grid place-content-start">
-      <div class="flex flex-row">
-        {{ habit.time }}
-        <ion-label class="p-2 w-[120px]">Times:</ion-label>
-        <ion-datetime-button datetime="times"></ion-datetime-button>
-        <ion-popover #startdatepopover [keepContentsMounted]="true">
-          <ng-template>
-            <ion-datetime id="times" presentation="time" mode="md"></ion-datetime>
-          </ng-template>
-        </ion-popover>
+    </ion-item>
+    <div class="flex flex-col pb-4">
+      <div class="pb-4 grid place-content-start">
+        <div class="flex flex-row">
+          {{ habit.time }}
+          <ion-label class="p-2 w-[120px]">Times:</ion-label>
+          <ion-datetime-button datetime="times"></ion-datetime-button>
+          <ion-popover #startdatepopover [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime id="times" presentation="time" mode="md"></ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </div>
       </div>
     </div>
-  </div>
     @if(role === 'save'){
     <ion-button id="present-alert" class="flex justify-stretch" [strong]="true" fill="clear">Delete</ion-button>
     <ion-alert trigger="present-alert" header="Are you sure you would like to delete this habit?"
@@ -36,3 +37,4 @@
     }
   </div>
 </ion-content>
+<!-- </div> -->
