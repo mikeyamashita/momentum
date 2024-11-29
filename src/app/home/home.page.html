@@ -37,7 +37,7 @@
             <ion-button class="pl-3" fill="clear" mode="ios" (click)="openGoalModal('save', goal)">
               <ion-icon slot="icon-only" name="ellipsis-vertical-outline" color="light"></ion-icon>
             </ion-button>
-            <ion-button class="pl-3" fill="clear" mode="ios">
+            <ion-button class="pl-3" fill="clear" mode="ios" (click)="openMilestoneModal('save', goal.id!)">
               <ion-icon slot="icon-only" name="star-outline" color="light"></ion-icon>
             </ion-button>
         </div>

@@ -9,7 +9,7 @@ import {
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
-import { HabitGridService } from '../services/habitgrid.service';
+import { HabitGridService } from '../../habits/services/habitgrid.service';
 import { HabitGriddoc } from '../models/habitgriddoc';
 import { HabitGrid } from '../models/habitgrid';
 

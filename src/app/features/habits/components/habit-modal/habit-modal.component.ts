@@ -6,10 +6,10 @@ import {
   IonPopover,
   IonItem, IonLabel, IonInput, ModalController
 } from '@ionic/angular/standalone';
-import { GoaldocStore } from '../../goal/stores/goaldoc.store';
-import { Goal } from '../../goal/models/goal';
-import { Habit } from '../../goal/models/habit';
-import { Goaldoc } from '../../goal/models/goaldoc';
+import { GoaldocStore } from '../../../goal/stores/goaldoc.store';
+import { Goal } from '../../../goal/models/goal';
+import { Habit } from '../../../habits/models/habit';
+import { Goaldoc } from '../../../goal/models/goaldoc';
 
 @Component({
   selector: 'app-habit-modal',

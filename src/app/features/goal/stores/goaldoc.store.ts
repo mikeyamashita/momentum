@@ -11,7 +11,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import { GoalService } from '../services/goal.service';
 import { Goaldoc } from '../models/goaldoc';
-import { HabitGridService } from '../services/habitgrid.service';
+import { HabitGridService } from '../../habits/services/habitgrid.service';
 
 type GoalState = {
     id: number,

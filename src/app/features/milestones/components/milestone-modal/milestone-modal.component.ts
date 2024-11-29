@@ -6,10 +6,10 @@ import {
   IonPopover,
   IonItem, IonList, IonLabel, IonFab, IonModal, IonInput, ModalController
 } from '@ionic/angular/standalone';
-import { GoaldocStore } from '../../goal/stores/goaldoc.store';
-import { Goal } from '../../goal/models/goal';
-import { Milestone } from '../../goal/models/milestone';
-import { Goaldoc } from '../../goal/models/goaldoc';
+import { GoaldocStore } from '../../../goal/stores/goaldoc.store';
+import { Goal } from '../../../goal/models/goal';
+import { Milestone } from '../../models/milestone';
+import { Goaldoc } from '../../../goal/models/goaldoc';
 
 @Component({
   selector: 'app-milestone-modal',

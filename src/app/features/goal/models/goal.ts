@@ -1,5 +1,5 @@
-import { Habit } from "./habit";
-import { Milestone } from "./milestone";
+import { Habit } from "../../habits/models/habit";
+import { Milestone } from "../../milestones/models/milestone";
 
 export class Goal {
     name: string = "";

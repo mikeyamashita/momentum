@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, inject } from '@angular/core';
-import { HabitGriddocStore } from '../goal/stores/habitgriddoc.store';
+import { HabitGriddocStore } from '../../stores/habitgriddoc.store';
 import {
   IonIcon
 } from '@ionic/angular/standalone';
@@ -78,7 +78,7 @@ export class GraphComponent {
   isMilestoneAchieved(milestoneCount: number): boolean {
     if (milestoneCount! > 0)
       return true
-    else 
+    else
       return false
   }
 

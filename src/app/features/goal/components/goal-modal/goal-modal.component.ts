@@ -6,16 +6,16 @@ import {
   IonItem, IonList, IonLabel, IonInput, ModalController, IonCheckbox,
   IonItemSliding, IonItemOptions, IonItemOption
 } from '@ionic/angular/standalone';
-import { GoaldocStore } from '../../goal/stores/goaldoc.store';
-import { Goal } from '../../goal/models/goal';
-import { Goaldoc } from '../../goal/models/goaldoc';
-import { Milestone } from '../../goal/models/milestone';
-import { GoalService } from '../../goal/services/goal.service';
-import { HelperService } from 'src/app/helper.service';
-import { HabitGriddocStore } from '../../goal/stores/habitgriddoc.store';
-import { HabitGriddoc } from '../../goal/models/habitgriddoc';
-import { HabitGrid } from '../../goal/models/habitgrid';
-import { MilestoneModalComponent } from '../milestone-modal/milestone-modal.component';
+import { GoaldocStore } from '../../stores/goaldoc.store';
+import { Goal } from '../../models/goal';
+import { Goaldoc } from '../../models/goaldoc';
+import { Milestone } from '../../../milestones/models/milestone';
+import { GoalService } from '../../services/goal.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { HabitGriddocStore } from '../../../habitgrid/stores/habitgriddoc.store';
+import { HabitGriddoc } from '../../../habitgrid/models/habitgriddoc';
+import { HabitGrid } from '../../../habitgrid/models/habitgrid';
+import { MilestoneModalComponent } from '../../../milestones/components/milestone-modal/milestone-modal.component';
 
 @Component({
   selector: 'app-goal-modal',

@@ -3,12 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 
-import { HabitGrid } from '../models/habitgrid';
-import { HabitGriddoc } from '../models/habitgriddoc'
+import { HabitGrid } from '../../habitgrid/models/habitgrid';
+import { HabitGriddoc } from '../../habitgrid/models/habitgriddoc'
 
-import { ApiService } from '../../../api.service';
-import { HelperService } from 'src/app/helper.service';
-import { Goaldoc } from '../models/goaldoc';
+import { ApiService } from '../../../services/api.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { Goaldoc } from '../../goal/models/goaldoc';
 
 @Injectable({
   providedIn: 'root'

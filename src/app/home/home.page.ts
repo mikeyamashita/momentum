@@ -6,20 +6,22 @@ import {
   ModalController
 } from '@ionic/angular/standalone';
 
-import { GoaldocStore } from '../goal/stores/goaldoc.store';
-import { HabitGriddocStore } from '../goal/stores/habitgriddoc.store';
-import { GraphComponent } from '../graph/graph.component';
-import { Habit } from '../goal/models/habit';
-import { HabitGriddoc } from '../goal/models/habitgriddoc';
-import { Goaldoc } from '../goal/models/goaldoc';
-import { GoalService } from '../goal/services/goal.service';
+import { GoaldocStore } from '../features/goal/stores/goaldoc.store';
+import { HabitGriddocStore } from '../features/habitgrid/stores/habitgriddoc.store';
+import { GraphComponent } from '../features/habitgrid/components/graph/graph.component';
+import { Habit } from '../features/habits/models/habit';
+import { HabitGriddoc } from '../features/habitgrid/models/habitgriddoc';
+import { Goaldoc } from '../features/goal/models/goaldoc';
+import { GoalService } from '../features/goal/services/goal.service';
 import { FormsModule } from '@angular/forms';
-import { Goal } from '../goal/models/goal';
-import { HabitModalComponent } from './habit-modal/habit-modal.component';
-import { GoalModalComponent } from './goal-modal/goal-modal.component';
-import { HelperService } from 'src/app/helper.service';
-import { HabitGrid } from '../goal/models/habitgrid';
-import { HabitGridService } from '../goal/services/habitgrid.service';
+import { Goal } from '../features/goal/models/goal';
+import { HabitModalComponent } from '../features/habits/components/habit-modal/habit-modal.component';
+import { GoalModalComponent } from '../features/goal/components/goal-modal/goal-modal.component';
+import { HelperService } from 'src/app/services/helper.service';
+import { HabitGrid } from '../features/habitgrid/models/habitgrid';
+import { HabitGridService } from '../features/habits/services/habitgrid.service';
+import { MilestoneModalComponent } from '../features/milestones/components/milestone-modal/milestone-modal.component';
+import { Milestone } from '../features/milestones/models/milestone';
 
 @Component({
   selector: 'app-home',
@@ -162,7 +164,8 @@ export class HomePage {
         goalid: goalid,
         habitprop: habit
       },
-      cssClass: "small-modal",
+      initialBreakpoint: 0.99,
+      breakpoints: [0, 0.99, 1],
       backdropDismiss: true,
       backdropBreakpoint: 0,
       presentingElement: await this.modalCtrl.getTop() // Get the top-most ion-modal
@@ -211,6 +214,34 @@ export class HomePage {
     }
     // this.updateHabitGrid()
   }
+
+  async openMilestoneModal(roletype: string, goalid: number, milestone?: Milestone) {
+    const modal = await this.modalCtrl.create({
+      component: MilestoneModalComponent,
+      componentProps: {
+        role: roletype,
+        goalid: goalid,
+        milestoneprop: milestone
+      },
+      initialBreakpoint: 0.99,
+      breakpoints: [0, 0.99, 1],
+      backdropDismiss: true,
+      backdropBreakpoint: 0,
+      presentingElement: await this.modalCtrl.getTop() // Get the top-most ion-modal
+    });
+    modal.present();
+    const { data, role } = await modal.onWillDismiss();
+    console.log(data)
+
+    if (data) {
+      // this.goal = data.goal
+      console.log(data.goal)
+      // this.updateHabitGrid(milestone?.isComplete!, milestone?.dateCompleted!)
+      this.goaldocstore.saveGoaldoc(data)
+    }
+    // this.milestoneslide?.closeOpened()
+  }
+
 
   convertTo24Hour(time: any) {
     console.log(time)
