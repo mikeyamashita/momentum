@@ -22,6 +22,7 @@ import { HabitGrid } from '../features/habitgrid/models/habitgrid';
 import { HabitGridService } from '../features/habits/services/habitgrid.service';
 import { MilestoneModalComponent } from '../features/milestones/components/milestone-modal/milestone-modal.component';
 import { Milestone } from '../features/milestones/models/milestone';
+import { MilestoneListComponent } from '../features/milestones/components/milestone-list/milestone-list.component';
 
 @Component({
   selector: 'app-home',
@@ -164,8 +165,8 @@ export class HomePage {
         goalid: goalid,
         habitprop: habit
       },
-      initialBreakpoint: 0.99,
-      breakpoints: [0, 0.99, 1],
+      initialBreakpoint: 0.40,
+      breakpoints: [0, 0.40, 1],
       backdropDismiss: true,
       backdropBreakpoint: 0,
       presentingElement: await this.modalCtrl.getTop() // Get the top-most ion-modal
@@ -188,8 +189,8 @@ export class HomePage {
         goaldocprop: goaldoc,
         goaldate: this.day()
       },
-      initialBreakpoint: 0.99,
-      breakpoints: [0, 0.99, 1],
+      initialBreakpoint: 0.40,
+      breakpoints: [0, 0.40, 1],
       backdropDismiss: true,
       backdropBreakpoint: 0,
       presentingElement: await this.modalCtrl.getTop() // Get the top-most ion-modal
@@ -215,16 +216,15 @@ export class HomePage {
     // this.updateHabitGrid()
   }
 
-  async openMilestoneModal(roletype: string, goalid: number, milestone?: Milestone) {
+  async openMilestoneList(goaldoc?: Goaldoc) {
     const modal = await this.modalCtrl.create({
-      component: MilestoneModalComponent,
+      component: MilestoneListComponent,
       componentProps: {
-        role: roletype,
-        goalid: goalid,
-        milestoneprop: milestone
+        goaldocprop: goaldoc,
+        goaldate: this.day()
       },
-      initialBreakpoint: 0.99,
-      breakpoints: [0, 0.99, 1],
+      initialBreakpoint: 0.50,
+      breakpoints: [0, 0.50, 1],
       backdropDismiss: true,
       backdropBreakpoint: 0,
       presentingElement: await this.modalCtrl.getTop() // Get the top-most ion-modal
