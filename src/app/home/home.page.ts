@@ -3,7 +3,7 @@ import {
   IonHeader, IonToolbar, IonContent, IonButton, IonCheckbox,
   IonItemOption, IonItemOptions,
   IonItem, IonItemSliding, IonList, IonLabel, IonIcon, IonFabButton, IonFab, IonSegment, IonSegmentButton,
-  ModalController
+  ModalController, IonPopover, PopoverController
 } from '@ionic/angular/standalone';
 
 import { GoaldocStore } from '../features/goal/stores/goaldoc.store';
@@ -20,8 +20,6 @@ import { GoalModalComponent } from '../features/goal/components/goal-modal/goal-
 import { HelperService } from 'src/app/services/helper.service';
 import { HabitGrid } from '../features/habitgrid/models/habitgrid';
 import { HabitGridService } from '../features/habits/services/habitgrid.service';
-import { MilestoneModalComponent } from '../features/milestones/components/milestone-modal/milestone-modal.component';
-import { Milestone } from '../features/milestones/models/milestone';
 import { MilestoneListComponent } from '../features/milestones/components/milestone-list/milestone-list.component';
 
 @Component({
@@ -29,11 +27,11 @@ import { MilestoneListComponent } from '../features/milestones/components/milest
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonSegmentButton, IonSegment, IonFabButton, IonIcon, IonLabel, IonList, IonItem,
+  imports: [IonPopover, IonSegmentButton, IonSegment, IonFabButton, IonIcon, IonLabel, IonList, IonItem,
     IonItemSliding, IonItemOptions, IonItemOption,
     IonCheckbox, IonButton, IonHeader, IonToolbar, IonContent,
     IonFab,
-    GraphComponent, FormsModule]
+    GraphComponent, FormsModule, MilestoneListComponent]
 })
 export class HomePage {
   readonly goaldocstore = inject(GoaldocStore);
@@ -41,7 +39,6 @@ export class HomePage {
   @ViewChild('habitslide') habitslide!: IonItemSliding;
   @ViewChild('filterSegment') filterSegment!: IonSegment;
 
-  year = new Date().getFullYear()
   today: Date = new Date()
   day = signal(new Date());
   formatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
@@ -56,8 +53,8 @@ export class HomePage {
   habitslist: Array<any> = []
   times: Array<any> = []
 
-  constructor(private goalService: GoalService, private modalCtrl: ModalController, private helperService: HelperService,
-    public habitGridService: HabitGridService
+  constructor(private goalService: GoalService, private modalCtrl: ModalController, public helperService: HelperService,
+    public habitGridService: HabitGridService, public popoverController: PopoverController
   ) {
     this.getGoaldoc();
     this.habitgriddocstore.getHabitGriddoc()
@@ -69,20 +66,7 @@ export class HomePage {
   }
 
   // Methods
-  getNumberOfDaysInMonth(month: number) {
-    return new Date(this.year, month, 0).getDate();
-  }
 
-  getMonthName(date: newDate): string {
-    const thedate = new Date(date.year, date.month, date.day);
-    const month = thedate.toLocaleString('default', { month: 'long' });
-    const year = thedate.toLocaleString('default', { year: 'numeric' });
-    return month + ' ' + year
-  }
-
-  formatToDate(datestring: Date): Date {
-    return new Date(datestring)
-  }
 
 
   // Events
@@ -216,21 +200,20 @@ export class HomePage {
     // this.updateHabitGrid()
   }
 
-  async openMilestoneList(goaldoc?: Goaldoc) {
-    const modal = await this.modalCtrl.create({
+  async openMilestoneListPopover(e: Event, goaldoc?: Goaldoc) {
+    const popover = await this.popoverController.create({
       component: MilestoneListComponent,
+      cssClass: 'popover-list',
+      event: e,
       componentProps: {
         goaldocprop: goaldoc,
         goaldate: this.day()
       },
-      initialBreakpoint: 0.50,
-      breakpoints: [0, 0.50, 1],
       backdropDismiss: true,
-      backdropBreakpoint: 0,
-      presentingElement: await this.modalCtrl.getTop() // Get the top-most ion-modal
+      translucent: true
     });
-    modal.present();
-    const { data, role } = await modal.onWillDismiss();
+    popover.present();
+    const { data, role } = await popover.onWillDismiss();
     console.log(data)
 
     if (data) {
@@ -285,7 +268,7 @@ export class HomePage {
     if (this.filterSegment.value == "plan") {
       this.habitslist = new Array<any>()
       this.goaldocstore.goals().forEach(goal => {
-        if (this.day() >= this.formatToDate(goal.goal?.startdate!) && this.day() <= this.formatToDate(goal.goal?.enddate!)) {
+        if (this.day() >= this.helperService.formatToDate(goal.goal?.startdate!) && this.day() <= this.helperService.formatToDate(goal.goal?.enddate!)) {
           goal.goal?.habits.forEach((habit, index) => {
             this.habitslist.push({ goalid: goal.id, index: index, habit: habit })
           })
@@ -300,8 +283,3 @@ export class HomePage {
   }
 }
 
-class newDate {
-  year: number = new Date().getFullYear();
-  month: number = new Date().getMonth();
-  day: number = new Date().getDay()
-}

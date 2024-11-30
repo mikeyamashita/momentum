@@ -7,11 +7,12 @@
             <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
           </ion-button>
           @if(formatter.format(day()) === formatter.format(today)){
-          <div class="w-full grid place-content-center font-bold text-xl">{{ dayFormatted()}}</div>
+          <div class="w-screen grid place-content-center font-bold text-xl ml-[10px]">{{ dayFormatted()}}</div>
           } @else {
-          <div class="w-full grid place-content-center font-bold text-xl text-stone-300">{{ dayFormatted()}}</div>
+          <div class="w-screen grid place-content-center font-bold text-xl text-stone-300 ml-[10px]">{{ dayFormatted()}}
+          </div>
           }
-          <ion-button fill="clear" (click)="changeDay(1)">
+          <ion-button class="mr-[10px]" fill="clear" (click)="changeDay(1)">
             <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
           </ion-button>
         </div>
@@ -21,23 +22,23 @@
       <div class="pl-2">
         <ion-segment #filterSegment class="grid place-content-center ml-[12.5px] mb-6 mt-[-8px]" value="goals">
           <ion-segment-button value="goals" (click)="segmentClicked()">
-            <ion-label>Goals</ion-label>
+            <ion-label class="segment-label">Goals</ion-label>
           </ion-segment-button>
           <ion-segment-button value="plan" (click)="segmentClicked()">
-            <ion-label>Planner</ion-label>
+            <ion-label class="segment-label">Planner</ion-label>
           </ion-segment-button>
         </ion-segment>
         @if( filterSegment.value === 'goals'){
         <div class="w-full mt-[-8px] pb-4">
           <!-- goal row -->
           @for(goal of goaldocstore.goals(); track goal.id){
-          @if( day() >= formatToDate(goal.goal?.startdate!) && day() <= formatToDate(goal.goal?.enddate!)){ <div
-            class="flex flex-row justify-start">
+          @if( day() >= helperService.formatToDate(goal.goal?.startdate!) && day() <=
+            helperService.formatToDate(goal.goal?.enddate!)){ <div class="flex flex-row justify-start">
             <div class="font-bold text-base flex items-center">{{goal.goal?.name}}</div>
             <ion-button class="pl-3" fill="clear" mode="ios" (click)="openGoalModal('save', goal)">
               <ion-icon slot="icon-only" name="ellipsis-vertical-outline" color="light"></ion-icon>
             </ion-button>
-            <ion-button class="pl-3" fill="clear" mode="ios" (click)="openMilestoneList(goal)">
+            <ion-button class="pl-3" fill="clear" mode="ios" (click)="openMilestoneListPopover($event, goal)">
               <ion-icon slot="icon-only" name="star-outline" color="light"></ion-icon>
             </ion-button>
         </div>
@@ -101,9 +102,9 @@
     </div>
     <div class="pr-3 mt-[-10px] flex justify-end">
       @if(habitgriddocstore.habitMatrix()){
-      <app-graph [year]="year.toString()" colorLevel1="#003b3b" colorLevel2="#005050" colorLevel3="#006a6a"
-        colorLevel4="#008282" colorLevel5="#009595" colorLevel6="#00aeae" colorLevel7="#00c5c5" colorLevel8="#00d9d9"
-        colorLevel9="#00eaea" colorLevel10="#00ffff" colorMilestone="#ff4600"></app-graph>
+      <app-graph [year]="helperService.year.toString()" colorLevel1="#003b3b" colorLevel2="#005050"
+        colorLevel3="#006a6a" colorLevel4="#008282" colorLevel5="#009595" colorLevel6="#00aeae" colorLevel7="#00c5c5"
+        colorLevel8="#00d9d9" colorLevel9="#00eaea" colorLevel10="#00ffff" colorMilestone="#ff4600"></app-graph>
       }
     </div>
   </div>

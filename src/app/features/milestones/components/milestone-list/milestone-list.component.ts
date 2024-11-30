@@ -5,7 +5,7 @@ import {
   IonContent, IonButton, IonIcon,
   IonPopover,
   IonItem, IonList, IonCheckbox,
-  IonItemSliding, IonItemOptions, IonItemOption, ModalController
+  IonItemSliding, IonItemOptions, IonItemOption, ModalController, IonLabel, IonSegmentButton, IonSegment
 } from '@ionic/angular/standalone';
 
 import { GoaldocStore } from '../../../goal/stores/goaldoc.store';
@@ -24,7 +24,7 @@ import { GoalService } from 'src/app/features/goal/services/goal.service';
   templateUrl: './milestone-list.component.html',
   styleUrls: ['./milestone-list.component.scss'],
   standalone: true,
-  imports: [
+  imports: [IonSegment, IonSegmentButton, IonLabel,
     IonContent, IonButton, IonIcon,
     IonItem, IonList, IonCheckbox,
     IonItemSliding, IonItemOptions, IonItemOption

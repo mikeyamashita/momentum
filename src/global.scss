@@ -40,3 +40,31 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ios .popover-list {
+    --width: 100%;
+    margin-left: 17%;
+    margin-top: -10px;
+}
+.md .popover-list {
+    --width: 80%;
+}
+
+ion-checkbox {
+    --size: 18px;
+    --checkbox-background-checked: #4c4c4c;
+    --border-color-checked: #4c4c4c;
+    --checkmark-color: #ccc;
+    --checkbox-background: #262626;
+    --border-width: 2px;
+    --border-color: #262626;
+}
+
+ion-checkbox::part(container) {
+    border-radius: 360px;
+}
+
+.md .segment-label {
+    font-size: 0.75rem;
+    line-height: 1rem;
+}

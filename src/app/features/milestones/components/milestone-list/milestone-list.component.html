@@ -1,30 +1,38 @@
-<ion-content class="ion-padding">
-  <div class="flex flex-col justify-between h-full pb-1">
-
-    <div class="flex flex-col pb-4">
-      <ion-list class="py-4" lines="none" mode="md">
+<ion-content class="milestone-list ion-padding">
+  <div class="w-full grid place-content-center">
+    <ion-segment #filterSegment class="grid place-content-center"
+      style="--background: transparent; background: transparent;" value="milestones">
+      <ion-segment-button value="milestones">
+        <ion-label class="segment-label">Milestones</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+  <div class="flex flex-col justify-between h-full">
+    <div class="flex flex-col pb-[-16px]">
+      <ion-list style="--background: transparent; background: transparent;" lines="none" mode="md">
         @for(milestone of goaldoc.goal?.milestones; track $index; let index = $index){
         <ion-item-sliding #milestoneslide>
-          <ion-item class="text-sm text-wrap mx-[-0.5em]">
-            <ion-checkbox mode="md" (ionChange)="milestoneChecked($event, goalid!, index, milestone)"
-              [checked]="milestone.isComplete" [value]="milestone.isComplete">
-              <div>
-                <div>{{milestone.name}} </div>
-                <div>Forecast Date: {{milestone.forecastDate}} </div>
-                <div>Date Completed: {{milestone.dateCompleted}}</div>
-              </div>
+          <ion-item class="mx-[-0.5em]" style="--background: transparent; background: transparent;">
+            <ion-checkbox class="flex flex-col" style="--background: transparent; background: transparent;" mode="md"
+              (ionChange)="milestoneChecked($event, goalid!, index, milestone)" [checked]="milestone.isComplete"
+              [value]="milestone.isComplete">
+              <div class="text-lg font-bold">{{milestone.name}} </div>
+              <div class="text-sm">Forecast Date: {{milestone.forecastDate}} </div>
+              <div class="text-sm">Date Completed: {{milestone.dateCompleted}}</div>
             </ion-checkbox>
           </ion-item>
           <ion-item-options>
-            <ion-item-option color="dark" (click)="openMilestoneModal('save',goalid!, milestone!)">
+            <ion-item-option style="--background: transparent; background: transparent;" color="dark"
+              (click)="openMilestoneModal('save',goalid!, milestone!)">
               <ion-icon class="text-lg" slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
             </ion-item-option>
           </ion-item-options>
         </ion-item-sliding>
         }
-        <ion-item class="text-sm text-wrap mx-[-0.5em]">
-          <ion-button class="w-full mt-[-4px] text-2xl" fill="clear" mode="ios"
-            (click)="openMilestoneModal('add', goalid!)">
+        <ion-item class="text-sm text-wrap mt-[0.5em] h-[40px]"
+          style="--background: transparent; background: transparent;">
+          <ion-button class="w-full text-2xl" style="--background: transparent; background: transparent;" fill="clear"
+            mode="ios" (click)="openMilestoneModal('add', goalid!)">
             <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
           </ion-button>
         </ion-item>
