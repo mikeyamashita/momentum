@@ -1,30 +1,24 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
-  IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons, IonIcon,
+  IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons,
   IonAlert, IonDatetime, IonDatetimeButton, IonPopover, IonToast,
-  IonItem, IonList, IonLabel, IonInput, ModalController, IonCheckbox,
-  IonItemSliding, IonItemOptions, IonItemOption
+  IonItem, IonLabel, IonInput, ModalController,
 } from '@ionic/angular/standalone';
 import { GoaldocStore } from '../../stores/goaldoc.store';
 import { Goal } from '../../models/goal';
 import { Goaldoc } from '../../models/goaldoc';
-import { Milestone } from '../../../milestones/models/milestone';
 import { GoalService } from '../../services/goal.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { HabitGriddocStore } from '../../../habitgrid/stores/habitgriddoc.store';
-import { HabitGriddoc } from '../../../habitgrid/models/habitgriddoc';
-import { HabitGrid } from '../../../habitgrid/models/habitgrid';
-import { MilestoneModalComponent } from '../../../milestones/components/milestone-modal/milestone-modal.component';
 
 @Component({
   selector: 'app-goal-modal',
   templateUrl: './goal-modal.component.html',
   styleUrls: ['./goal-modal.component.scss'],
   standalone: true,
-  imports: [IonLabel, IonList, IonItem, IonDatetime, IonDatetimeButton, IonToast,
-    IonPopover, IonInput, IonButton, IonButtons, IonHeader, IonToolbar, IonTitle, IonContent, IonCheckbox,
-    IonItemSliding, IonIcon, IonItemSliding, IonItemOptions, IonItemOption,
+  imports: [IonLabel, IonItem, IonDatetime, IonDatetimeButton, IonToast,
+    IonPopover, IonInput, IonButton, IonButtons, IonHeader, IonToolbar, IonTitle, IonContent,
     IonAlert, FormsModule]
 })
 export class GoalModalComponent implements OnInit {
@@ -33,7 +27,6 @@ export class GoalModalComponent implements OnInit {
 
   @ViewChild('startdatepopover') startdatepopover!: IonPopover;
   @ViewChild('enddatepopover') enddatepopover!: IonPopover;
-  @ViewChild('milestoneslide') milestoneslide!: IonItemSliding;
 
   // inputs
   role: string = ''
@@ -117,11 +110,4 @@ export class GoalModalComponent implements OnInit {
     this.goal.enddate = new Date(ev.detail.value)
     this.enddatepopover.dismiss()
   }
-
-  // isComplete(milestone: Milestone) {
-  //   if (milestone.dateCompleted)
-  //     return this.helperService.format( milestone.dateCompleted!) == this.helperService.format(this.day())
-  //   else 
-  //     return false
-  // }
 }

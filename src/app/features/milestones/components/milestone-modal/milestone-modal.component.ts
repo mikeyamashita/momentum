@@ -2,9 +2,8 @@ import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons, IonAlert,
-  IonDatetime, IonDatetimeButton, IonToast,
-  IonPopover,
-  IonItem, IonList, IonLabel, IonFab, IonModal, IonInput, ModalController
+  IonDatetime, IonDatetimeButton,
+  IonPopover, IonItem, IonLabel, IonInput, ModalController
 } from '@ionic/angular/standalone';
 import { GoaldocStore } from '../../../goal/stores/goaldoc.store';
 import { Goal } from '../../../goal/models/goal';

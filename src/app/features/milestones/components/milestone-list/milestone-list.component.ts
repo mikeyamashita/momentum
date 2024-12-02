@@ -51,28 +51,12 @@ export class MilestoneListComponent implements OnInit {
   milestone: Milestone = new Milestone();
   milestoneclone: any
 
-  alertButtons = [
-    {
-      text: 'Cancel',
-      role: 'cancel',
-      handler: () => {
-        console.log('Alert canceled');
-      },
-    },
-    {
-      text: 'Yes',
-      role: 'confirm',
-      handler: () => {
-        console.log('Alert confirmed');
-      },
-    },
-  ];
-
   constructor(private modalCtrl: ModalController, public helperService: HelperService, private goalService: GoalService) {
   }
 
   ngOnInit() {
     this.goaldoc = this.goaldocprop;
+    this.goalid = this.goaldoc.id!;
   }
 
   selectForecastDate(ev: any) {
@@ -106,11 +90,11 @@ export class MilestoneListComponent implements OnInit {
       milestone.isComplete = false
     }
 
-    // let goaldoc = this.goaldocstore.goals().find(goal => goal.id == goalid)
-    this.goaldoc?.goal?.milestones.splice(index, 1, milestone)
+    let goaldoc = this.goaldocstore.goals().find(goal => goal.id == goalid)
+    goaldoc?.goal?.milestones.splice(index, 1, milestone)
     this.milestoneAchievedCount = this.getMilestoneCount()
     this.updateHabitGrid(milestone.isComplete, milestone.dateCompleted!)
-    this.goaldocstore.saveGoaldoc(this.goaldoc)
+    this.goaldocstore.saveGoaldoc(goaldoc)
   }
 
   getMilestoneCount() {

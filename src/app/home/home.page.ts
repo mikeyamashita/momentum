@@ -61,21 +61,40 @@ export class HomePage {
   }
 
   // Lifecycle
-  ionViewDidEnter() {
-
-  }
+  ionViewDidEnter() { }
 
   // Methods
-
-
-
-  // Events
   getGoaldoc() {
     this.goaldocstore.getGoals();
   }
 
   getHabitGriddoc() {
     this.habitgriddocstore.getHabitGriddoc();
+  }
+
+  groupedByTime() {
+    const groupbytime = this.habitslist?.reduce((group, habitarr) => {
+      const time: string = habitarr.habit.time;
+      if (!group[time]) {
+        group[time] = [];
+      }
+      group[time].push(habitarr);
+      this.times.push(time)
+      return group;
+    }, {});
+    return groupbytime
+  }
+
+  // Events
+  changeDay(direction: number) {
+    if (direction === 1) {
+      this.day().setDate(this.day().getDate() + 1)
+      this.dayFormatted.set((this.formatter.format(this.day())))
+    }
+    else if (direction === -1) {
+      this.day().setDate(this.day().getDate() - 1)
+      this.dayFormatted.set((this.formatter.format(this.day())))
+    }
   }
 
   habitChecked(goalid: number, index: number, habit: Habit) {
@@ -127,17 +146,6 @@ export class HomePage {
       newhabitgrid.milestones = 0
       newhabitgriddoc.habitGrid = newhabitgrid
       this.habitgriddocstore.addHabitGriddoc(newhabitgriddoc) //adds date if it doesnt exist
-    }
-  }
-
-  changeDay(direction: number) {
-    if (direction === 1) {
-      this.day().setDate(this.day().getDate() + 1)
-      this.dayFormatted.set((this.formatter.format(this.day())))
-    }
-    else if (direction === -1) {
-      this.day().setDate(this.day().getDate() - 1)
-      this.dayFormatted.set((this.formatter.format(this.day())))
     }
   }
 
@@ -215,6 +223,7 @@ export class HomePage {
     popover.present();
     const { data, role } = await popover.onWillDismiss();
     console.log(data)
+    console.log(role)
 
     if (data) {
       // this.goal = data.goal
@@ -223,40 +232,6 @@ export class HomePage {
       this.goaldocstore.saveGoaldoc(data)
     }
     // this.milestoneslide?.closeOpened()
-  }
-
-
-  convertTo24Hour(time: any) {
-    console.log(time)
-    if (time) {
-      let [hour, minutePeriod] = time.split(":");
-      let minute = minutePeriod.slice(0, 2);
-      let period = minutePeriod.slice(3).toUpperCase();
-
-      hour = parseInt(hour, 10);
-      minute = parseInt(minute, 10);
-
-      // Convert hour to 24-hour format
-      if (period === "PM" && hour !== 12) hour += 12;
-      if (period === "AM" && hour === 12) hour = 0;
-
-      return hour * 60 + minute; // Total minutes since midnight
-    } else {
-      return null
-    }
-  };
-
-  groupedByTime() {
-    const groupbytime = this.habitslist?.reduce((group, habitarr) => {
-      const time: string = habitarr.habit.time;
-      if (!group[time]) {
-        group[time] = [];
-      }
-      group[time].push(habitarr);
-      this.times.push(time)
-      return group;
-    }, {});
-    return groupbytime
   }
 
   segmentClicked() {
@@ -274,7 +249,7 @@ export class HomePage {
           })
         }
       })
-      this.habitslist.sort((a, b) => this.convertTo24Hour(a.habit?.time) - this.convertTo24Hour(b.habit?.time))
+      this.habitslist.sort((a, b) => this.helperService.convertTo24Hour(a.habit?.time) - this.helperService.convertTo24Hour(b.habit?.time))
       // console.log(this.habitslist)
       this.planner = this.groupedByTime()
       console.log(this.planner)

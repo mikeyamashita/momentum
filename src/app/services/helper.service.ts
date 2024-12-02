@@ -33,6 +33,25 @@ export class HelperService {
   formatToDate(datestring: Date): Date {
     return new Date(datestring)
   }
+
+  convertTo24Hour(time: any) {
+    if (time) {
+      let [hour, minutePeriod] = time.split(":");
+      let minute = minutePeriod.slice(0, 2);
+      let period = minutePeriod.slice(3).toUpperCase();
+
+      hour = parseInt(hour, 10);
+      minute = parseInt(minute, 10);
+
+      // Convert hour to 24-hour format
+      if (period === "PM" && hour !== 12) hour += 12;
+      if (period === "AM" && hour === 12) hour = 0;
+
+      return hour * 60 + minute; // Total minutes since midnight
+    } else {
+      return null
+    }
+  };
 }
 
 class newDate {

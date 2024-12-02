@@ -14,7 +14,7 @@
         <ion-item-sliding #milestoneslide>
           <ion-item class="mx-[-0.5em]" style="--background: transparent; background: transparent;">
             <ion-checkbox class="flex flex-col" style="--background: transparent; background: transparent;" mode="md"
-              (ionChange)="milestoneChecked($event, goalid!, index, milestone)" [checked]="milestone.isComplete"
+              (ionChange)="milestoneChecked($event, goaldoc.id!, index, milestone!)" [checked]="milestone.isComplete"
               [value]="milestone.isComplete">
               <div class="text-lg font-bold">{{milestone.name}} </div>
               <div class="text-sm">Forecast Date: {{milestone.forecastDate}} </div>
@@ -23,7 +23,7 @@
           </ion-item>
           <ion-item-options>
             <ion-item-option style="--background: transparent; background: transparent;" color="dark"
-              (click)="openMilestoneModal('save',goalid!, milestone!)">
+              (click)="openMilestoneModal('save',goaldoc.id!, milestone!)">
               <ion-icon class="text-lg" slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
             </ion-item-option>
           </ion-item-options>
