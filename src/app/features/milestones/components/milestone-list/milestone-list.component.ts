@@ -59,6 +59,22 @@ export class MilestoneListComponent implements OnInit {
     this.goalid = this.goaldoc.id!;
   }
 
+  // Methods
+  getMilestoneCount() {
+    this.milestoneAchievedCount = 0 //reset count
+    this.goaldocstore.goals().forEach(goal => {
+      // console.log('milestone:', goal.goal?.milestones)
+      goal.goal?.milestones.forEach(milestone => {
+        if (milestone.dateCompleted) {
+          if (this.helperService.format(new Date(milestone.dateCompleted!)) === this.helperService.format(this.goaldate) && milestone.isComplete === true)
+            this.milestoneAchievedCount++
+        }
+      })
+    })
+    return this.milestoneAchievedCount
+  }
+
+  // Events
   selectForecastDate(ev: any) {
     console.log(ev.detail.value)
     this.milestone.forecastDate = new Date(ev.detail.value)
@@ -97,21 +113,6 @@ export class MilestoneListComponent implements OnInit {
     this.goaldocstore.saveGoaldoc(goaldoc)
   }
 
-  getMilestoneCount() {
-    this.milestoneAchievedCount = 0 //reset count
-    this.goaldocstore.goals().forEach(goal => {
-      // console.log('milestone:', goal.goal?.milestones)
-      goal.goal?.milestones.forEach(milestone => {
-        if (milestone.dateCompleted) {
-          if (this.helperService.format(new Date(milestone.dateCompleted!)) === this.helperService.format(this.goaldate) && milestone.isComplete === true)
-            this.milestoneAchievedCount++
-        }
-      })
-      console.log(this.milestoneAchievedCount)
-    })
-    return this.milestoneAchievedCount
-  }
-
   async openMilestoneModal(roletype: string, goalid: number, milestone?: Milestone) {
     const modal = await this.modalCtrl.create({
       component: MilestoneModalComponent,
@@ -128,11 +129,10 @@ export class MilestoneListComponent implements OnInit {
     });
     modal.present();
     const { data, role } = await modal.onWillDismiss();
-    console.log(data)
 
     if (data) {
       this.goal = data.goal
-      console.log(data.goal)
+      this.goaldoc = data
       // this.updateHabitGrid(milestone?.isComplete!, milestone?.dateCompleted!)
       this.goaldocstore.saveGoaldoc(data)
     }
@@ -171,5 +171,4 @@ export class MilestoneListComponent implements OnInit {
       this.habitgriddocstore.addHabitGriddoc(newhabitgriddoc) //adds date if it doesnt exist
     }
   }
-
 }

@@ -235,11 +235,6 @@ export class HomePage {
   }
 
   segmentClicked() {
-    // if (this.filterSegment.value == "goals") {
-    //   this.habitslist = []
-    //   this.planner = []
-    //   this.times = []
-    // } else 
     if (this.filterSegment.value == "plan") {
       this.habitslist = new Array<any>()
       this.goaldocstore.goals().forEach(goal => {

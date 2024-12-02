@@ -41,15 +41,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.ios .popover-list {
-    --width: 100%;
-    margin-left: 17%;
-    margin-top: -10px;
-}
-.md .popover-list {
-    --width: 80%;
-}
-
 ion-checkbox {
     --size: 18px;
     --checkbox-background-checked: #4c4c4c;
@@ -62,6 +53,14 @@ ion-checkbox {
 
 ion-checkbox::part(container) {
     border-radius: 360px;
+}
+
+.ios .popover-list {
+    --width: 85%;
+    margin-top: -10px;
+}
+.md .popover-list {
+    --width: 80%;
 }
 
 .md .segment-label {
