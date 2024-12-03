@@ -19,8 +19,8 @@ import { HabitModalComponent } from '../features/habits/components/habit-modal/h
 import { GoalModalComponent } from '../features/goal/components/goal-modal/goal-modal.component';
 import { HelperService } from 'src/app/services/helper.service';
 import { HabitGrid } from '../features/habitgrid/models/habitgrid';
-import { HabitGridService } from '../features/habits/services/habitgrid.service';
 import { MilestoneListComponent } from '../features/milestones/components/milestone-list/milestone-list.component';
+import { HabitGridService } from '../features/habitgrid/services/habitgrid.service';
 
 @Component({
   selector: 'app-home',
@@ -48,7 +48,6 @@ export class HomePage {
   newGoal: Goal = new Goal()
   newGoaldoc: Goaldoc = new Goaldoc()
   name: string = ''
-  matchdata: any = []
   planner: Array<any> = []
   habitslist: Array<any> = []
   times: Array<any> = []
@@ -97,7 +96,7 @@ export class HomePage {
     }
   }
 
-  habitChecked(goalid: number, index: number, habit: Habit) {
+  async habitChecked(goalid: number, index: number, habit: Habit) {
     if (habit.datesCompleted?.find(date => date == this.helperService.format(this.day()))) {
       habit.datesCompleted?.splice(habit.datesCompleted.findIndex((item) => item == this.helperService.format(this.day())), 1)
     } else {
@@ -107,11 +106,10 @@ export class HomePage {
 
     if (this.filterSegment.value == "plan") {
       goaldoc?.goal?.habits.splice(index, 1, habit)
-      // goaldoc?.goal?.habits.push(habit)
     }
 
     this.updateHabitGrid()
-    this.goaldocstore.saveGoaldoc(goaldoc)
+    await this.goaldocstore.saveGoaldoc(goaldoc)
   }
 
   isComplete(habit: Habit) {

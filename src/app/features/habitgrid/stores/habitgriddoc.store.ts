@@ -9,9 +9,9 @@ import {
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
-import { HabitGridService } from '../../habits/services/habitgrid.service';
 import { HabitGriddoc } from '../models/habitgriddoc';
 import { HabitGrid } from '../models/habitgrid';
+import { HabitGridService } from '../services/habitgrid.service';
 
 type HabitGridState = {
     id: number,
@@ -50,10 +50,8 @@ export const HabitGriddocStore = signalStore(
                     return habitgridService.getHabitGriddoc().pipe(
                         tapResponse({
                             next: (habitgriddoc: Array<HabitGriddoc>) => {
-                                // console.log(habitgriddoc)
                                 habitgriddoc.sort((a, b) => new Date(a.habitGrid?.date!).setHours(0, 0, 0, 0) - new Date(b.habitGrid?.date!).setHours(0, 0, 0, 0))
                                 let habitMatrix = habitgridService.buildHabitMatrix(habitgriddoc)
-                                // patchState(store, { habitgriddoc })
                                 patchState(store, { habitMatrix })
                             },
                             error: console.error,
@@ -82,7 +80,6 @@ export const HabitGriddocStore = signalStore(
                             next: (habitgriddoc: Array<HabitGriddoc>) => {
                                 habitgriddoc.sort((a, b) => new Date(a.habitGrid?.date!).setHours(0, 0, 0, 0) - new Date(b.habitGrid?.date!).setHours(0, 0, 0, 0))
                                 let habitMatrix = habitgridService.buildHabitMatrix(habitgriddoc)
-                                // patchState(store, { habitgriddoc })
                                 patchState(store, { habitMatrix })
                             },
                             error: console.error,
@@ -99,8 +96,6 @@ export const HabitGriddocStore = signalStore(
                     return habitgridService.putHabitGriddoc(habitgriddoc).pipe(
                         tapResponse({
                             next: (res: HabitGriddoc) => {
-                                let habitMatrix = habitgridService.buildHabitMatrix(store.habitgriddoc())
-                                patchState(store, { habitMatrix })
                             },
                             error: console.error,
                             finalize: () => patchState(store, { isLoading: false }),
@@ -113,14 +108,26 @@ export const HabitGriddocStore = signalStore(
                             next: (habitgriddoc: Array<HabitGriddoc>) => {
                                 habitgriddoc.sort((a, b) => new Date(a.habitGrid?.date!).setHours(0, 0, 0, 0) - new Date(b.habitGrid?.date!).setHours(0, 0, 0, 0))
                                 let habitMatrix = habitgridService.buildHabitMatrix(habitgriddoc)
-                                // patchState(store, { habitgriddoc })
                                 patchState(store, { habitMatrix })
                             },
                             error: console.error,
                             finalize: () => patchState(store, { isLoading: false }),
                         })
                     );
-                })
+                }),
+                // concatMap((goaldoc: Goaldoc) => {
+                // return goalService.postGoaldoc().pipe(
+                //     tapResponse({
+                //         next: (goaldoc: Array<Goaldoc>) => {
+                //             habitgriddoc.sort((a, b) => new Date(a.habitGrid?.date!).setHours(0, 0, 0, 0) - new Date(b.habitGrid?.date!).setHours(0, 0, 0, 0))
+                //             let habitMatrix = habitgridService.buildHabitMatrix(habitgriddoc)
+                //             patchState(store, { habitMatrix })
+                //         },
+                //         error: console.error,
+                //         finalize: () => patchState(store, { isLoading: false }),
+                //     })
+                // );
+                // })
             )
         ),
         deleteHabitGriddoc: rxMethod<number>(

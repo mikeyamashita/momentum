@@ -34,6 +34,7 @@ export class HabitGridService {
     if (this.matchdata.length < numberOfDays) {
       this.handleMissingDates(currentyear)
     }
+    console.log(this.matchdata)
     return this.matchdata
   }
 
@@ -107,7 +108,7 @@ export class HabitGridService {
     return this.http.put<HabitGriddoc>(this.apiService.server() + '/api/habitgrid/' + habitgriddoc.id, habitgriddoc, this.apiService.httpOptions)
       .pipe(
         tapResponse({
-          next: (res) => { },
+          next: (habitgriddoc: HabitGriddoc) => { },
           error: catchError(this.apiService.handleError),
           finalize: () => {
           }
