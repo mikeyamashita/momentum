@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { HabitGriddocStore } from '../../stores/habitgriddoc.store';
 import {
   IonIcon

@@ -1,4 +1,4 @@
-import { Component, inject, signal, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, ViewChild } from '@angular/core';
 import {
   IonHeader, IonToolbar, IonContent, IonButton, IonCheckbox,
   IonItemOption, IonItemOptions,
@@ -21,7 +21,6 @@ import { HelperService } from 'src/app/services/helper.service';
 import { HabitGrid } from '../features/habitgrid/models/habitgrid';
 import { MilestoneListComponent } from '../features/milestones/components/milestone-list/milestone-list.component';
 import { HabitGridService } from '../features/habitgrid/services/habitgrid.service';
-
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',

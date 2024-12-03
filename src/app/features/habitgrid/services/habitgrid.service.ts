@@ -34,7 +34,6 @@ export class HabitGridService {
     if (this.matchdata.length < numberOfDays) {
       this.handleMissingDates(currentyear)
     }
-    console.log(this.matchdata)
     return this.matchdata
   }
 
