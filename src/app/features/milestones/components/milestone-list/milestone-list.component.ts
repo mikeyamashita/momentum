@@ -76,7 +76,6 @@ export class MilestoneListComponent implements OnInit {
 
   // Events
   selectForecastDate(ev: any) {
-    console.log(ev.detail.value)
     this.milestone.forecastDate = new Date(ev.detail.value)
     this.forecastdatepopover.dismiss()
   }
@@ -121,8 +120,8 @@ export class MilestoneListComponent implements OnInit {
         goalid: goalid,
         milestoneprop: milestone
       },
-      initialBreakpoint: 0.40,
-      breakpoints: [0, 0.40, 1],
+      initialBreakpoint: 0.5,
+      breakpoints: [0, 0.5, .5],
       backdropDismiss: true,
       backdropBreakpoint: 0,
       presentingElement: await this.modalCtrl.getTop() // Get the top-most ion-modal

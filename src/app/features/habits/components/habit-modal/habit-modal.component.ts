@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons, IonAlert,
@@ -10,6 +10,7 @@ import { GoaldocStore } from '../../../goal/stores/goaldoc.store';
 import { Goal } from '../../../goal/models/goal';
 import { Habit } from '../../../habits/models/habit';
 import { Goaldoc } from '../../../goal/models/goaldoc';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'app-habit-modal',
@@ -25,6 +26,8 @@ import { Goaldoc } from '../../../goal/models/goaldoc';
 export class HabitModalComponent implements OnInit {
   readonly goaldocstore = inject(GoaldocStore);
 
+  @ViewChild('habittimepopover') habittimepopover!: IonPopover;
+
   // inputs
   role: string = ''
   goalid: number = 0;
@@ -35,6 +38,7 @@ export class HabitModalComponent implements OnInit {
   goal: Goal = new Goal();
   habit: Habit = new Habit();
   habitclone: any
+  habittimetest: any;
 
   alertButtons = [
     {
@@ -53,7 +57,7 @@ export class HabitModalComponent implements OnInit {
     },
   ];
 
-  constructor(private modalCtrl: ModalController) {
+  constructor(private modalCtrl: ModalController, public helperService: HelperService) {
   }
 
   ngOnInit() {
@@ -64,6 +68,29 @@ export class HabitModalComponent implements OnInit {
         this.habitclone = JSON.stringify(this.habitprop) // non mutable clone for findIndex
       }
     }
+
+    // this.habittimetest = this.helperService.formatDateTime(this.habit.time)!
+    // console.log(this.habit.time)
+    // console.log(this.habittimetest)
+  }
+
+  // formatTimeString(time:string){
+  //   let datetime: Date = new Date()
+  //   datetime.setTime(time)
+  // }
+
+  // Events
+  selectTime(ev: any) {
+    let datetime = new Date(ev.detail.value)
+    const timezoneOffset = datetime.getTimezoneOffset();
+    const offsetHours = String(Math.floor(Math.abs(timezoneOffset) / 60)).padStart(2, '0');
+    const offsetMinutes = String(Math.abs(timezoneOffset) % 60).padStart(2, '0');
+    const sign = timezoneOffset > 0 ? '-' : '+';
+    const formattedOffset = `${sign}${offsetHours}:${offsetMinutes}`;
+    console.log(formattedOffset)
+
+    this.habit.time = new Date(ev.detail.value)
+    this.habittimepopover.dismiss()
   }
 
   cancelHabitModal() {
@@ -71,7 +98,6 @@ export class HabitModalComponent implements OnInit {
   }
 
   saveHabit() {
-    this.habit.time = '2:00pm'
     if (this.role === 'add') {
       this.goaldocstore.goal().goal?.habits?.push(this.habit)
     } else {

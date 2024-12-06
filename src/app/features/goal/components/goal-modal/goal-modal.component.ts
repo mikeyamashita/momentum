@@ -8,7 +8,6 @@ import {
 import { GoaldocStore } from '../../stores/goaldoc.store';
 import { Goal } from '../../models/goal';
 import { Goaldoc } from '../../models/goaldoc';
-import { GoalService } from '../../services/goal.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { HabitGriddocStore } from '../../../habitgrid/stores/habitgriddoc.store';
 
@@ -57,7 +56,7 @@ export class GoalModalComponent implements OnInit {
     },
   ];
 
-  constructor(private modalCtrl: ModalController, public helperService: HelperService, private goalService: GoalService) {
+  constructor(private modalCtrl: ModalController, public helperService: HelperService) {
   }
 
   ngOnInit() {
@@ -69,7 +68,6 @@ export class GoalModalComponent implements OnInit {
   }
 
   validate(role: string) {
-    console.log(role)
     if (this.goal.startdate && this.goal.enddate) {
       if (role == 'add') {
         this.addGoal()
@@ -101,7 +99,6 @@ export class GoalModalComponent implements OnInit {
   }
 
   selectStartDate(ev: any) {
-    console.log(ev.detail.value)
     this.goal.startdate = new Date(ev.detail.value)
     this.startdatepopover.dismiss()
   }

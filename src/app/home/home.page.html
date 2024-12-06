@@ -80,7 +80,7 @@
         <!-- habit row -->
         <div>
           @for(time of times; track time){
-          <div class="font-bold text-base flex items-center py-[14px]">{{time}}</div>
+          <div class="font-bold text-base flex items-center py-[14px]">{{helperService.formatDateTime(time)}}</div>
           <ion-list style="margin-right:-25px" class="pt-[14px] pb-[8px]" lines="none" mode="md">
             @for(plan of planner[time]; track $index){
             <ion-item class="text-sm text-wrap mx-[-0.5em]">

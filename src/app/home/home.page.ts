@@ -154,8 +154,8 @@ export class HomePage {
         goalid: goalid,
         habitprop: habit
       },
-      initialBreakpoint: 0.40,
-      breakpoints: [0, 0.40, 1],
+      initialBreakpoint: 0.5,
+      breakpoints: [0, 0.5, .5],
       backdropDismiss: true,
       backdropBreakpoint: 0,
       presentingElement: await this.modalCtrl.getTop() // Get the top-most ion-modal
@@ -164,6 +164,7 @@ export class HomePage {
     const { data, role } = await modal.onWillDismiss();
     // this.habitGridService.buildHabitMatrix(this.habitgriddocstore.habitgriddoc())
     if (data) {
+      console.log(data)
       this.updateHabitGrid()
       this.goaldocstore.saveGoaldoc(data)
     }
@@ -178,15 +179,14 @@ export class HomePage {
         goaldocprop: goaldoc,
         goaldate: this.day()
       },
-      initialBreakpoint: 0.40,
-      breakpoints: [0, 0.40, 1],
+      initialBreakpoint: 0.5,
+      breakpoints: [0, 0.5, .5],
       backdropDismiss: true,
       backdropBreakpoint: 0,
       presentingElement: await this.modalCtrl.getTop() // Get the top-most ion-modal
     });
     modal.present();
     const { data, role } = await modal.onWillDismiss();
-    console.log(data)
     this.newGoal.name = data?.name
     this.newGoal.description = data?.description
     this.newGoal.startdate = data?.startdate
@@ -223,12 +223,9 @@ export class HomePage {
     console.log(role)
 
     if (data) {
-      // this.goal = data.goal
-      console.log(data.goal)
       // this.updateHabitGrid(milestone?.isComplete!, milestone?.dateCompleted!)
       this.goaldocstore.saveGoaldoc(data)
     }
-    // this.milestoneslide?.closeOpened()
   }
 
   segmentClicked() {
