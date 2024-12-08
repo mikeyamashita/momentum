@@ -69,37 +69,21 @@ export class HabitModalComponent implements OnInit {
         this.habitclone = JSON.stringify(this.habitprop) // non mutable clone for findIndex
       }
     }
-
-    // this.habittimetest = this.helperService.formatDateTime(this.habit.time)!
-    // console.log(this.habit.time)
-    // console.log(this.habittimetest)
   }
 
-  // formatTimeString(time:string){
-  //   let datetime: Date = new Date()
-  //   datetime.setTime(time)
-  // }
-
-  formatTimeZone(datetime: Date) {
+  getZonedTime(datetime: Date) {
     // Get the time zone set on the user's device
     const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    console.log(datetime)
     const zonedTime = DateTime.fromISO(datetime.toString(), { zone: userTimeZone });
-    console.log(zonedTime.toString())
-    return zonedTime.toString()
+    console.log(zonedTime.toString().split('T')[1]);
+    return zonedTime.toString().split('T')[1]; //return only time and timezone
   }
 
   // Events
   selectTime(ev: any) {
-    let datetime = ev.detail.value
-
-    // console.log(datetime)
-
-
-
-
-    this.habit.time = this.formatTimeZone(datetime);
-    this.habittimepopover.dismiss()
+    let datetime = ev.detail.value;
+    this.habit.time = this.getZonedTime(datetime);
+    this.habittimepopover.dismiss();
   }
 
   cancelHabitModal() {

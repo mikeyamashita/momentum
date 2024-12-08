@@ -239,7 +239,6 @@ export class HomePage {
         }
       })
       this.habitslist.sort((a, b) => this.helperService.convertTo24Hour(a.habit?.time) - this.helperService.convertTo24Hour(b.habit?.time))
-      // console.log(this.habitslist)
       this.planner = this.groupedByTime()
       console.log(this.planner)
       this.times = [...new Set(this.times)]

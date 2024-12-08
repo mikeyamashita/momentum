@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { h } from 'ionicons/dist/types/stencil-public-runtime';
+import { timer } from 'ionicons/icons';
 
 @Injectable({
   providedIn: 'root'
@@ -26,33 +28,19 @@ export class HelperService {
   }
 
   formatDateTime(time: any) {
-    let datetime: Date = new Date()
     if (time) {
-      let [hour, minutePeriod] = time.split(":");
-      let minute = minutePeriod.slice(0, 2);
-      let period = minutePeriod.slice(3, 2).toUpperCase();
-      console.log(period)
-      hour = parseInt(hour, 10);
-      minute = parseInt(minute, 10);
-
-      // Convert hour to 24-hour format
-      if (period === "PM" && hour !== 12) hour += 12;
-      if (period === "AM" && hour === 12) hour = 0;
-      datetime.setHours(hour)
-      datetime.setMinutes(minute)
-
-      const timezoneOffset = datetime.getTimezoneOffset();
-      const offsetHours = String(Math.floor(Math.abs(timezoneOffset) / 60)).padStart(2, '0');
-      const offsetMinutes = String(Math.abs(timezoneOffset) % 60).padStart(2, '0');
-      const sign = timezoneOffset > 0 ? '-' : '+';
-      const formattedOffset = `${sign}${offsetHours}:${offsetMinutes}`;
-
-      console.log(datetime)
-      return datetime.toISOString().split('T')[1].split('.')[0].slice(0, 5)
-      // console.log(datetime.toISOString().split('.')[0])
-    } else {
+      let [hourPeriod, minutePeriod] = time.split(":");
+      let hour = hourPeriod.slice(0, 2);
+      let minute = (minutePeriod.slice(0, 2));
+      let timeWithPeriod;
+      if (Number(hour) > 12) {
+        timeWithPeriod = Number(hour) - 12 + ':' + minute + "PM"
+      } else {
+        timeWithPeriod = hour + ':' + minute + "AM"
+      }
+      return timeWithPeriod
+    } else
       return null
-    }
   }
 
   getNumberOfDaysInMonth(month: number) {
@@ -88,6 +76,7 @@ export class HelperService {
       return null
     }
   };
+
 }
 
 class newDate {
