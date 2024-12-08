@@ -11,6 +11,7 @@ import { Goal } from '../../../goal/models/goal';
 import { Habit } from '../../../habits/models/habit';
 import { Goaldoc } from '../../../goal/models/goaldoc';
 import { HelperService } from 'src/app/services/helper.service';
+import { DateTime } from 'luxon';
 
 @Component({
   selector: 'app-habit-modal',
@@ -79,17 +80,25 @@ export class HabitModalComponent implements OnInit {
   //   datetime.setTime(time)
   // }
 
+  formatTimeZone(datetime: Date) {
+    // Get the time zone set on the user's device
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log(datetime)
+    const zonedTime = DateTime.fromISO(datetime.toString(), { zone: userTimeZone });
+    console.log(zonedTime.toString())
+    return zonedTime.toString()
+  }
+
   // Events
   selectTime(ev: any) {
-    let datetime = new Date(ev.detail.value)
-    const timezoneOffset = datetime.getTimezoneOffset();
-    const offsetHours = String(Math.floor(Math.abs(timezoneOffset) / 60)).padStart(2, '0');
-    const offsetMinutes = String(Math.abs(timezoneOffset) % 60).padStart(2, '0');
-    const sign = timezoneOffset > 0 ? '-' : '+';
-    const formattedOffset = `${sign}${offsetHours}:${offsetMinutes}`;
-    console.log(formattedOffset)
+    let datetime = ev.detail.value
 
-    this.habit.time = new Date(ev.detail.value)
+    // console.log(datetime)
+
+
+
+
+    this.habit.time = this.formatTimeZone(datetime);
     this.habittimepopover.dismiss()
   }
 
