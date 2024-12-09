@@ -39,7 +39,6 @@ export class HabitModalComponent implements OnInit {
   goal: Goal = new Goal();
   habit: Habit = new Habit();
   habitclone: any
-  habittimetest: any;
 
   alertButtons = [
     {
@@ -59,6 +58,7 @@ export class HabitModalComponent implements OnInit {
   ];
 
   constructor(private modalCtrl: ModalController, public helperService: HelperService) {
+
   }
 
   ngOnInit() {
@@ -68,10 +68,12 @@ export class HabitModalComponent implements OnInit {
         this.habit = this.habitprop
         this.habitclone = JSON.stringify(this.habitprop) // non mutable clone for findIndex
       }
+    } else if (this.role === 'add') {
+      this.habit.time = this.getZonedTime(new Date().toISOString())
     }
   }
 
-  getZonedTime(datetime: Date) {
+  getZonedTime(datetime: any) {
     // Get the time zone set on the user's device
     const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const zonedTime = DateTime.fromISO(datetime.toString(), { zone: userTimeZone });
@@ -82,6 +84,7 @@ export class HabitModalComponent implements OnInit {
   // Events
   selectTime(ev: any) {
     let datetime = ev.detail.value;
+    console.log(datetime)
     this.habit.time = this.getZonedTime(datetime);
     this.habittimepopover.dismiss();
   }
