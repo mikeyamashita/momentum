@@ -128,24 +128,24 @@ export class GoalService {
   }
 
   deleteGoaldoc(id: number): Observable<unknown> {
-    return this.http.delete(this.apiService.server() + '/api/goal/' + id, this.apiService.httpOptions)
-      .pipe(
-        tapResponse({
-          next: () => { },
-          error: catchError(this.apiService.handleError),
-          finalize: () => {
-          }
-        }),
-      );
+    // return this.http.delete(this.apiService.server() + '/api/goal/' + id, this.apiService.httpOptions)
+    //   .pipe(
+    //     tapResponse({
+    //       next: () => { },
+    //       error: catchError(this.apiService.handleError),
+    //       finalize: () => {
+    //       }
+    //     }),
+    //   );
 
-    // const deleteGoal = new Observable((observer: { next: () => void; complete: () => void; }) => {
-    //   let goaldocs: Array<any> = JSON.parse(localStorage.getItem('goaldocs')!)
-    //   let findindex = goaldocs.findIndex((findgoaldoc: Goaldoc) => findgoaldoc.id === id)
-    //   goaldocs.splice(findindex, 1)
-    //   localStorage.setItem("goaldocs", JSON.stringify(goaldocs))
-    //   observer.next()
-    //   observer.complete()
-    // })
-    // return deleteGoal
+    const deleteGoal = new Observable((observer: { next: () => void; complete: () => void; }) => {
+      let goaldocs: Array<any> = JSON.parse(localStorage.getItem('goaldocs')!)
+      let findindex = goaldocs.findIndex((findgoaldoc: Goaldoc) => findgoaldoc.id === id)
+      goaldocs.splice(findindex, 1)
+      localStorage.setItem("goaldocs", JSON.stringify(goaldocs))
+      observer.next()
+      observer.complete()
+    })
+    return deleteGoal
   }
 }

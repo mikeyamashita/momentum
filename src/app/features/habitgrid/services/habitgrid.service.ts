@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError } from 'rxjs';
+import { Observable, catchError, concatMap, lastValueFrom } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 
 import { HabitGrid } from '../../habitgrid/models/habitgrid';
@@ -34,6 +34,7 @@ export class HabitGridService {
     if (this.matchdata.length < numberOfDays) {
       this.handleMissingDates(currentyear)
     }
+    console.log(this.matchdata)
     return this.matchdata
   }
 
@@ -63,11 +64,12 @@ export class HabitGridService {
       );
 
     // const getHabitGriddoc = new Observable((observer: { next: (arg0: Array<HabitGriddoc>) => void; complete: () => void; }) => {
+    //   let habitgriddocs: Array<HabitGriddoc>
     //   if (!localStorage.getItem('habitgriddocs')) {
-    //     localStorage.setItem('habitgriddocs', '[]');
-    //     this.rebuildHabitMatrix(new Date().getFullYear())
+    //     habitgriddocs = this.buildNewHabitMatrix(new Date().getFullYear())
+    //   } else {
+    //     habitgriddocs = JSON.parse(localStorage.getItem('habitgriddocs')!);
     //   }
-    //   let habitgriddocs: Array<any> = JSON.parse(localStorage.getItem('habitgriddocs')!);
     //   observer.next(habitgriddocs);
     //   observer.complete()
     // })
@@ -97,6 +99,7 @@ export class HabitGridService {
     //   habitgriddoc.id = maxId + 1001
     //   habitgriddocs.push(habitgriddoc)
     //   localStorage.setItem("habitgriddocs", JSON.stringify(habitgriddocs))
+
     //   observer.next(habitgriddoc)
     //   observer.complete()
     // })
@@ -137,34 +140,59 @@ export class HabitGridService {
       );
 
 
-    // const deleteHabitGriddoc = new Observable((observer: { next: () => void; complete: () => void; }) => {
-    //   let habitgriddocs: Array<any> = JSON.parse(localStorage.getItem('habitgriddocs')!)
-    //   let findindex = habitgriddocs.findIndex((findhabitgriddoc: HabitGriddoc) => findhabitgriddoc.id === id)
-    //   habitgriddocs.splice(findindex, 1)
-    //   localStorage.setItem("habitgriddocs", JSON.stringify(habitgriddocs))
-    //   observer.next()
-    //   observer.complete()
-    // })
-    // return deleteHabitGriddoc
+    //   const deleteHabitGriddoc = new Observable((observer: { next: () => void; complete: () => void; }) => {
+    //     let habitgriddocs: Array<any> = JSON.parse(localStorage.getItem('habitgriddocs')!)
+    //     let findindex = habitgriddocs.findIndex((findhabitgriddoc: HabitGriddoc) => findhabitgriddoc.id === id)
+    //     habitgriddocs.splice(findindex, 1)
+    //     localStorage.setItem("habitgriddocs", JSON.stringify(habitgriddocs))
+    //     observer.next()
+    //     observer.complete()
+    //   })
+    //   return deleteHabitGriddoc
   }
 
-  rebuildHabitMatrix(goals: Array<Goaldoc>, year: number) {
+  buildNewHabitGridDoc(year: number): Array<HabitGriddoc> {
     let start = new Date("01/01/" + year);
     let end = new Date("12/31/" + year);
 
+    let habitGridDocs = Array<HabitGriddoc>();
     let loop = new Date(start);
     while (loop < end) {
       var newDate = loop.setDate(loop.getDate() + 1);
       loop = new Date(newDate);
-      let habitGrid: HabitGrid = new HabitGrid()
-      habitGrid.date = this.helperService.format(loop)
-      let progress = this.rebuildProgressCount(goals, loop)
-      habitGrid.progress = progress
-      let habitGridDoc: HabitGriddoc = new HabitGriddoc()
-      habitGridDoc.habitGrid = habitGrid
-
-      this.postHabitGriddoc(habitGridDoc).subscribe(() => { })
+      let habitGrid: HabitGrid = new HabitGrid();
+      habitGrid.date = this.helperService.format(loop);
+      let habitGridDoc: HabitGriddoc = new HabitGriddoc();
+      habitGridDoc.habitGrid = habitGrid;
+      habitGridDocs.push(habitGridDoc);
     }
+    // localStorage.setItem('habitgriddocs', JSON.stringify(habitGridDocs));
+
+    console.log(habitGridDocs);
+    return habitGridDocs;
+  }
+
+  rebuildHabitMatrix(goals: Array<Goaldoc>, year: number): Promise<boolean> {
+    return new Promise(async (resolve, reject) => {
+      let start = new Date("01/01/" + year);
+      let end = new Date("12/31/" + year);
+
+      let loop = new Date(start);
+      while (loop < end) {
+        var newDate = loop.setDate(loop.getDate() + 1);
+        loop = new Date(newDate);
+        let habitGrid: HabitGrid = new HabitGrid()
+        habitGrid.date = this.helperService.format(loop)
+        let progress = this.rebuildProgressCount(goals, loop)
+        habitGrid.progress = progress
+        let habitGridDoc: HabitGriddoc = new HabitGriddoc()
+        habitGridDoc.habitGrid = habitGrid
+
+        const $source = this.postHabitGriddoc(habitGridDoc);
+        await lastValueFrom($source);
+      }
+      resolve(true)
+    })
   }
 
   rebuildProgressCount(goaldoc: Array<Goaldoc>, date: Date): number {

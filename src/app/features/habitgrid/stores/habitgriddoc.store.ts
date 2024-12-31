@@ -146,7 +146,59 @@ export const HabitGriddocStore = signalStore(
                     );
                 })
             )
-        )
+        ),
+        //     rebuildHabitMatrix: rxMethod<HabitGriddoc>(
+        //         pipe(
+        //             tap(() => patchState(store, { isLoading: true })),
+        //             concatMap(() => {
+        //                 return habitgridService.rebuildHabitMatrix([], new Date().getFullYear())).pipe(
+        //                     tapResponse({192
+        //                         next: (habitgriddoc: Array<HabitGriddoc>) => {
+        //                             habitgriddoc.sort((a, b) => new Date(a.habitGrid?.date!).setHours(0, 0, 0, 0) - new Date(b.habitGrid?.date!).setHours(0, 0, 0, 0))
+        //                             let habitMatrix = habitgridService.buildHabitMatrix(habitgriddoc)
+        //                             patchState(store, { habitMatrix })
+        //                         },
+        //                         error: console.error,
+        //                         finalize: () => patchState(store, { isLoading: false }),
+        //                     })
+        //                 );
+        // }),
+        //     concatMap(() => {
+        //         return habitgridService.getHabitGriddoc().pipe(
+        //             tapResponse({
+        //                 next: (habitgriddoc: Array<HabitGriddoc>) => {
+        //                     habitgriddoc.sort((a, b) => new Date(a.habitGrid?.date!).setHours(0, 0, 0, 0) - new Date(b.habitGrid?.date!).setHours(0, 0, 0, 0))
+        //                     let habitMatrix = habitgridService.buildHabitMatrix(habitgriddoc)
+        //                     patchState(store, { habitMatrix })
+        //                 },
+        //                 error: console.error,
+        //                 finalize: () => patchState(store, { isLoading: false }),
+        //             })
+        //         );
+        //     })
+        // )
+        // )
+
+
+        // (goals: Array<Goaldoc>, year: number) {
+        //     let start = new Date("01/01/" + year);
+        //     let end = new Date("12/31/" + year);
+
+        //     let loop = new Date(start);
+        //     while (loop < end) {
+        //       var newDate = loop.setDate(loop.getDate() + 1);
+        //       loop = new Date(newDate);
+        //       let habitGrid: HabitGrid = new HabitGrid()
+        //       habitGrid.date = this.helperService.format(loop)
+        //       let progress = this.rebuildProgressCount(goals, loop)
+        //       habitGrid.progress = progress
+        //       let habitGridDoc: HabitGriddoc = new HabitGriddoc()
+        //       habitGridDoc.habitGrid = habitGrid
+
+        //       const $source = this.postHabitGriddoc(habitGridDoc);
+        //       await lastValueFrom($source);
+        //     }
+        //   }
 
     }))
 );

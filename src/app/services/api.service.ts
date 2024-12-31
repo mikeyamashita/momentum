@@ -14,10 +14,7 @@ export class ApiService {
 
   public setEnvironment() {
     if (isDevMode())
-      this.server.set('http://localhost:5067') //dev local
-    // this.server.set('http://192.168.50.173:5067') //dev external
-    else if (this.isStaging())
-      this.server.set('https://localhost:8001') //staging docker
+      this.server.set('http://192.168.50.179:8001') //staging docker
     else
       this.server.set('https://portfolio-webapi-hkh9cjbkepbha3gu.eastus-01.azurewebsites.net') //prod azure
   }

@@ -55,19 +55,28 @@ export class HomePage {
     public habitGridService: HabitGridService, public popoverController: PopoverController
   ) {
     this.getGoaldoc();
-    this.habitgriddocstore.getHabitGriddoc()
+    if (!localStorage.getItem("Init")) { //create habitgrid on first load
+
+      this.habitGridService.rebuildHabitMatrix([], new Date().getFullYear()).then(
+        res => {
+          console.log(res)
+          if (res)
+            this.habitgriddocstore.getHabitGriddoc();
+        }
+      )
+      localStorage.setItem("Init", "true")
+    } else {
+      this.habitgriddocstore.getHabitGriddoc();
+    }
   }
 
   // Lifecycle
-  ionViewDidEnter() { }
+  ionViewDidEnter() {
+  }
 
   // Methods
   getGoaldoc() {
     this.goaldocstore.getGoals();
-  }
-
-  getHabitGriddoc() {
-    this.habitgriddocstore.getHabitGriddoc();
   }
 
   groupedByTime() {

@@ -66,7 +66,6 @@ export const GoaldocStore = signalStore(
                     return goalService.getGoals().pipe(
                         tapResponse({
                             next: (goals: Array<Goaldoc>) => {
-                                // habitService.rebuildHabitMatrix(goals, 2024)
                                 patchState(store, { goals })
                             },
                             error: console.error,

@@ -16,7 +16,7 @@
       <div>Dec</div>
     </div>
     <div class="grid grid-cols-7 gap-px">
-      <div class="col-span-7 grid place-content-center h-[14px]">{{year}}</div>
+      <div class="col-span-7 grid place-content-center h-[14px]">{{helperService.year.toString()}}</div>
       <div class="weekdays grid grid-cols-7 col-span-7">
         <div class="w-[12px] h-[12px] grid place-content-center">S</div>
         <div class="w-[12px] h-[12px] grid place-content-center">M</div>
@@ -26,7 +26,7 @@
         <div class="w-[12px] h-[12px] grid place-content-center">F</div>
         <div class="w-[12px] h-[12px] grid place-content-center">S</div>
       </div>
-      @for(square of habitgriddocstore.habitMatrix(); track square[2]){
+      @for(square of habitgriddocstore.habitMatrix(); track $index){
       <div [id]="square[0]" data-placement="top" class="days" [style.background-color]="getColor(square[1])">
         <!-- {{square[2]}} -->
         @if(isMilestoneAchieved(square[3]) === true) {
