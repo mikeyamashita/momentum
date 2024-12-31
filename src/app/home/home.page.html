@@ -6,10 +6,12 @@
           <ion-button fill="clear" (click)="changeDay(-1)">
             <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
           </ion-button>
-          @if(formatter.format(day()) === formatter.format(today)){
-          <div class="w-screen grid place-content-center font-bold text-xl ml-[10px]">{{ dayFormatted()}}</div>
+          @if(dateService.formatter.format(dateService.day()) === dateService.formatter.format(today)){
+          <div class="w-screen grid place-content-center font-bold text-xl ml-[10px]">{{ dateService.dayFormatted()}}
+          </div>
           } @else {
-          <div class="w-screen grid place-content-center font-bold text-xl text-stone-300 ml-[10px]">{{ dayFormatted()}}
+          <div class="w-screen grid place-content-center font-bold text-xl text-stone-300 ml-[10px]">{{
+            dateService.dayFormatted()}}
           </div>
           }
           <ion-button class="mr-[10px]" fill="clear" (click)="changeDay(1)">
@@ -32,7 +34,7 @@
         <div class="w-full mt-[-8px] pb-4">
           <!-- goal row -->
           @for(goal of goaldocstore.goals(); track $index){
-          @if( day() >= dateService.formatToDate(goal.goal?.startdate!) && day() <=
+          @if( dateService.day() >= dateService.formatToDate(goal.goal?.startdate!) && dateService.day() <=
             dateService.formatToDate(goal.goal?.enddate!)){ <div class="flex flex-row justify-start">
             <div class="font-bold text-base flex items-center">{{goal.goal?.name}}</div>
             <ion-button class="pl-3" fill="clear" mode="ios" (click)="openGoalModal('save', goal)">

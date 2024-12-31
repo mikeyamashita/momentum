@@ -39,9 +39,9 @@ export class HomePage {
   @ViewChild('filterSegment') filterSegment!: IonSegment;
 
   today: Date = new Date()
-  day = signal(new Date());
-  formatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-  dayFormatted = signal(this.formatter.format(this.day()));
+  // day = signal(new Date());
+  // formatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  // dayFormatted = signal(this.formatter.format(this.day()));
   habitCount: any = signal(0);
   habitGriddoc: HabitGriddoc = new HabitGriddoc()
   newGoal: Goal = new Goal()
@@ -95,20 +95,20 @@ export class HomePage {
   // Events
   changeDay(direction: number) {
     if (direction === 1) {
-      this.day().setDate(this.day().getDate() + 1)
-      this.dayFormatted.set((this.formatter.format(this.day())))
+      this.dateService.day().setDate(this.dateService.day().getDate() + 1)
+      this.dateService.dayFormatted.set((this.dateService.formatter.format(this.dateService.day())))
     }
     else if (direction === -1) {
-      this.day().setDate(this.day().getDate() - 1)
-      this.dayFormatted.set((this.formatter.format(this.day())))
+      this.dateService.day().setDate(this.dateService.day().getDate() - 1)
+      this.dateService.dayFormatted.set((this.dateService.formatter.format(this.dateService.day())))
     }
   }
 
   async habitChecked(goalid: number, index: number, habit: Habit) {
-    if (habit.datesCompleted?.find(date => date == this.dateService.format(this.day()))) {
-      habit.datesCompleted?.splice(habit.datesCompleted.findIndex((item) => item == this.dateService.format(this.day())), 1)
+    if (habit.datesCompleted?.find(date => date == this.dateService.format(this.dateService.day()))) {
+      habit.datesCompleted?.splice(habit.datesCompleted.findIndex((item) => item == this.dateService.format(this.dateService.day())), 1)
     } else {
-      habit.datesCompleted?.push(this.dateService.format(this.day()))
+      habit.datesCompleted?.push(this.dateService.format(this.dateService.day()))
     }
     let goaldoc = this.goaldocstore.goals().find(goal => goal.id == goalid)
 
@@ -121,17 +121,17 @@ export class HomePage {
   }
 
   isComplete(habit: Habit) {
-    return habit.datesCompleted?.some((item) => item == this.dateService.format(this.day()))
+    return habit.datesCompleted?.some((item) => item == this.dateService.format(this.dateService.day()))
   }
 
   updateHabitGrid() {
-    let progress = this.goalService.getProgressCount(this.goaldocstore.goals(), this.day())
-    let findDateInMatrix = this.habitgriddocstore.habitMatrix().find(matrix => matrix[0] === this.dateService.format(this.day()))
+    let progress = this.goalService.getProgressCount(this.goaldocstore.goals(), this.dateService.day())
+    let findDateInMatrix = this.habitgriddocstore.habitMatrix().find(matrix => matrix[0] === this.dateService.format(this.dateService.day()))
 
     if (findDateInMatrix) {
       // get habitgrid by current day
       this.habitgriddocstore.habitMatrix().forEach((habitmatrix) => {
-        if (habitmatrix[0] === this.dateService.format(this.day())) {
+        if (habitmatrix[0] === this.dateService.format(this.dateService.day())) {
           // update progress
           let newhabitgriddoc: HabitGriddoc = new HabitGriddoc()
           let newhabitgrid: HabitGrid = new HabitGrid()
@@ -147,7 +147,7 @@ export class HomePage {
       // console.log('not found')
       let newhabitgriddoc: HabitGriddoc = new HabitGriddoc()
       let newhabitgrid: HabitGrid = new HabitGrid()
-      newhabitgrid.date = this.dateService.format(this.day())
+      newhabitgrid.date = this.dateService.format(this.dateService.day())
       newhabitgrid.progress = progress
       newhabitgrid.milestones = 0
       newhabitgriddoc.habitGrid = newhabitgrid
@@ -186,7 +186,7 @@ export class HomePage {
       componentProps: {
         role: roletype,
         goaldocprop: goaldoc,
-        goaldate: this.day()
+        goaldate: this.dateService.day()
       },
       initialBreakpoint: 0.5,
       breakpoints: [0, 0.5, .5],
@@ -221,7 +221,7 @@ export class HomePage {
       event: e,
       componentProps: {
         goaldocprop: goaldoc,
-        goaldate: this.day()
+        goaldate: this.dateService.day()
       },
       backdropDismiss: true,
       translucent: true
@@ -241,7 +241,7 @@ export class HomePage {
     if (this.filterSegment.value == "plan") {
       this.habitslist = new Array<any>()
       this.goaldocstore.goals().forEach(goal => {
-        if (this.day() >= this.dateService.formatToDate(goal.goal?.startdate!) && this.day() <= this.dateService.formatToDate(goal.goal?.enddate!)) {
+        if (this.dateService.day() >= this.dateService.formatToDate(goal.goal?.startdate!) && this.dateService.day() <= this.dateService.formatToDate(goal.goal?.enddate!)) {
           goal.goal?.habits.forEach((habit, index) => {
             this.habitslist.push({ goalid: goal.id, index: index, habit: habit })
           })
