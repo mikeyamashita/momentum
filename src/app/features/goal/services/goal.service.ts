@@ -8,7 +8,7 @@ import { tapResponse } from '@ngrx/operators';
 import { HabitGriddocStore } from '../../habitgrid/stores/habitgriddoc.store';
 import { HabitGrid } from '../../habitgrid/models/habitgrid';
 import { HabitGriddoc } from '../../habitgrid/models/habitgriddoc';
-import { HelperService } from 'src/app/services/helper.service';
+import { DateService } from 'src/app/services/date.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class GoalService {
 
   readonly habitgriddocstore = inject(HabitGriddocStore);
 
-  constructor(private http: HttpClient, private apiService: ApiService, private helperService: HelperService) {
+  constructor(private http: HttpClient, private apiService: ApiService, private dateService: DateService) {
     this.apiService.setEnvironment()
   }
 
@@ -27,7 +27,7 @@ export class GoalService {
 
     goaldoc?.forEach(goaldoc => {
       goaldoc.goal?.habits?.forEach(habit => {
-        if (habit.datesCompleted?.some((item) => item == this.helperService.format(date)))
+        if (habit.datesCompleted?.some((item) => item == this.dateService.format(date)))
           count++
         // console.log(goaldoc)
         if (date >= new Date(goaldoc.goal?.startdate!) && date <= new Date(goaldoc.goal?.enddate!))
@@ -36,7 +36,7 @@ export class GoalService {
     })
 
     let habitGrid: HabitGrid = new HabitGrid()
-    habitGrid.date = this.helperService.format(date)
+    habitGrid.date = this.dateService.format(date)
     habitGrid.progress = Math.round(count / numHabits * 100)
     let habitGridDoc: HabitGriddoc = new HabitGriddoc()
     habitGridDoc.habitGrid = habitGrid

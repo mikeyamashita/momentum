@@ -7,7 +7,7 @@ import { HabitGrid } from '../../habitgrid/models/habitgrid';
 import { HabitGriddoc } from '../../habitgrid/models/habitgriddoc'
 
 import { ApiService } from '../../../services/api.service';
-import { HelperService } from 'src/app/services/helper.service';
+import { DateService } from 'src/app/services/date.service';
 import { Goaldoc } from '../../goal/models/goaldoc';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class HabitGridService {
 
   matchdata: any = []
 
-  constructor(private http: HttpClient, private apiService: ApiService, private helperService: HelperService) {
+  constructor(private http: HttpClient, private apiService: ApiService, private dateService: DateService) {
     this.apiService.setEnvironment()
   }
 
@@ -46,7 +46,7 @@ export class HabitGridService {
 
     while (loop < end) {
       if (this.matchdata[i]) {
-        if (this.helperService.format(loop) !== this.matchdata[i][0]) {
+        if (this.dateService.format(loop) !== this.matchdata[i][0]) {
           this.matchdata.splice(i, 0, [])// replace missing dates with empty array 
         }
       }
@@ -161,7 +161,7 @@ export class HabitGridService {
       var newDate = loop.setDate(loop.getDate() + 1);
       loop = new Date(newDate);
       let habitGrid: HabitGrid = new HabitGrid();
-      habitGrid.date = this.helperService.format(loop);
+      habitGrid.date = this.dateService.format(loop);
       let habitGridDoc: HabitGriddoc = new HabitGriddoc();
       habitGridDoc.habitGrid = habitGrid;
       habitGridDocs.push(habitGridDoc);
@@ -182,7 +182,7 @@ export class HabitGridService {
         var newDate = loop.setDate(loop.getDate() + 1);
         loop = new Date(newDate);
         let habitGrid: HabitGrid = new HabitGrid()
-        habitGrid.date = this.helperService.format(loop)
+        habitGrid.date = this.dateService.format(loop)
         let progress = this.rebuildProgressCount(goals, loop)
         habitGrid.progress = progress
         let habitGridDoc: HabitGriddoc = new HabitGriddoc()
@@ -201,7 +201,7 @@ export class HabitGridService {
 
     goaldoc?.forEach(goaldoc => {
       goaldoc.goal?.habits?.forEach(habit => {
-        if (habit.datesCompleted?.some((item) => item == this.helperService.format(date)))
+        if (habit.datesCompleted?.some((item) => item == this.dateService.format(date)))
           count++
         if (date >= new Date(goaldoc.goal?.startdate!) && date <= new Date(goaldoc.goal?.enddate!))
           numHabits++

@@ -10,7 +10,7 @@ import { GoaldocStore } from '../../../goal/stores/goaldoc.store';
 import { Goal } from '../../../goal/models/goal';
 import { Habit } from '../../../habits/models/habit';
 import { Goaldoc } from '../../../goal/models/goaldoc';
-import { HelperService } from 'src/app/services/helper.service';
+import { DateService } from 'src/app/services/date.service';
 import { DateTime } from 'luxon';
 
 @Component({
@@ -57,7 +57,7 @@ export class HabitModalComponent implements OnInit {
     },
   ];
 
-  constructor(private modalCtrl: ModalController, public helperService: HelperService) {
+  constructor(private modalCtrl: ModalController, public dateService: DateService) {
 
   }
 

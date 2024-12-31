@@ -3,7 +3,7 @@ import { HabitGriddocStore } from '../../stores/habitgriddoc.store';
 import {
   IonIcon
 } from '@ionic/angular/standalone';
-import { HelperService } from 'src/app/services/helper.service';
+import { DateService } from 'src/app/services/date.service';
 
 @Component({
   selector: 'app-graph',
@@ -42,7 +42,7 @@ export class GraphComponent {
   colorMilestone: string | undefined;
 
 
-  constructor(public helperService: HelperService,) {
+  constructor(public dateService: DateService,) {
   }
 
   // Lifecycle

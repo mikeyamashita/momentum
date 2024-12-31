@@ -16,7 +16,7 @@ import { MilestoneModalComponent } from '../milestone-modal/milestone-modal.comp
 import { HabitGriddoc } from 'src/app/features/habitgrid/models/habitgriddoc';
 import { HabitGrid } from 'src/app/features/habitgrid/models/habitgrid';
 import { HabitGriddocStore } from 'src/app/features/habitgrid/stores/habitgriddoc.store';
-import { HelperService } from 'src/app/services/helper.service';
+import { DateService } from 'src/app/services/date.service';
 import { GoalService } from 'src/app/features/goal/services/goal.service';
 
 @Component({
@@ -51,7 +51,7 @@ export class MilestoneListComponent implements OnInit {
   milestone: Milestone = new Milestone();
   milestoneclone: any
 
-  constructor(private modalCtrl: ModalController, public helperService: HelperService, private goalService: GoalService) {
+  constructor(private modalCtrl: ModalController, public dateService: DateService, private goalService: GoalService) {
   }
 
   ngOnInit() {
@@ -66,7 +66,7 @@ export class MilestoneListComponent implements OnInit {
       // console.log('milestone:', goal.goal?.milestones)
       goal.goal?.milestones.forEach(milestone => {
         if (milestone.dateCompleted) {
-          if (this.helperService.format(new Date(milestone.dateCompleted!)) === this.helperService.format(this.goaldate) && milestone.isComplete === true)
+          if (this.dateService.format(new Date(milestone.dateCompleted!)) === this.dateService.format(this.goaldate) && milestone.isComplete === true)
             this.milestoneAchievedCount++
         }
       })
@@ -89,7 +89,7 @@ export class MilestoneListComponent implements OnInit {
         console.warn("uncheck achieved milestone?")
         // update habitgrid for other date
         this.habitgriddocstore.habitMatrix().forEach(matchdata => {
-          if (matchdata[0] === this.helperService.format(new Date(milestone.dateCompleted!))) {
+          if (matchdata[0] === this.dateService.format(new Date(milestone.dateCompleted!))) {
             let newhabitgriddoc: HabitGriddoc = new HabitGriddoc()
             let newhabitgrid: HabitGrid = new HabitGrid()
             newhabitgriddoc.id = matchdata[2]
@@ -142,12 +142,12 @@ export class MilestoneListComponent implements OnInit {
     let progress: number = 0
 
     progress = this.goalService.getProgressCount(this.goaldocstore.goals(), this.goaldate)
-    let findDateInMatrix = this.habitgriddocstore.habitMatrix().find(matrix => matrix[0] === this.helperService.format(this.goaldate))
+    let findDateInMatrix = this.habitgriddocstore.habitMatrix().find(matrix => matrix[0] === this.dateService.format(this.goaldate))
 
     if (findDateInMatrix) {
       // get habitgrid by current day
       this.habitgriddocstore.habitMatrix().forEach((habitmatrix) => {
-        if (habitmatrix[0] === this.helperService.format(this.goaldate)) {
+        if (habitmatrix[0] === this.dateService.format(this.goaldate)) {
           // update progress
           let newhabitgriddoc: HabitGriddoc = new HabitGriddoc()
           let newhabitgrid: HabitGrid = new HabitGrid()
@@ -163,7 +163,7 @@ export class MilestoneListComponent implements OnInit {
       // console.log('date not found, creating new one')
       let newhabitgriddoc: HabitGriddoc = new HabitGriddoc()
       let newhabitgrid: HabitGrid = new HabitGrid()
-      newhabitgrid.date = this.helperService.format(dateCompleted)
+      newhabitgrid.date = this.dateService.format(dateCompleted)
       newhabitgrid.progress = progress
       newhabitgrid.milestones = this.milestoneAchievedCount
       newhabitgriddoc.habitGrid = newhabitgrid

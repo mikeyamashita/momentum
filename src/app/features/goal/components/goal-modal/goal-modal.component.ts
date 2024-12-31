@@ -8,7 +8,7 @@ import {
 import { GoaldocStore } from '../../stores/goaldoc.store';
 import { Goal } from '../../models/goal';
 import { Goaldoc } from '../../models/goaldoc';
-import { HelperService } from 'src/app/services/helper.service';
+import { DateService } from 'src/app/services/date.service';
 import { HabitGriddocStore } from '../../../habitgrid/stores/habitgriddoc.store';
 
 @Component({
@@ -56,7 +56,7 @@ export class GoalModalComponent implements OnInit {
     },
   ];
 
-  constructor(private modalCtrl: ModalController, public helperService: HelperService) {
+  constructor(private modalCtrl: ModalController, public dateService: DateService) {
   }
 
   ngOnInit() {

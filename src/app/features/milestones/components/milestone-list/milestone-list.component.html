@@ -18,10 +18,10 @@
               [value]="milestone.isComplete">
               <div class="text-lg font-bold">{{milestone.name}} </div>
               <div class="text-sm">Forecast Date:
-                {{milestone.forecastDate?helperService.formatDateString(milestone.forecastDate!.toString()):""}}
+                {{milestone.forecastDate?dateService.formatDateString(milestone.forecastDate!.toString()):""}}
               </div>
               <div class="text-sm">Date Completed:
-                {{milestone.dateCompleted?helperService.formatDateString(milestone.dateCompleted!.toString()):""}}</div>
+                {{milestone.dateCompleted?dateService.formatDateString(milestone.dateCompleted!.toString()):""}}</div>
             </ion-checkbox>
           </ion-item>
           <ion-item-options>

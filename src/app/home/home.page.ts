@@ -17,7 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { Goal } from '../features/goal/models/goal';
 import { HabitModalComponent } from '../features/habits/components/habit-modal/habit-modal.component';
 import { GoalModalComponent } from '../features/goal/components/goal-modal/goal-modal.component';
-import { HelperService } from 'src/app/services/helper.service';
+import { DateService } from 'src/app/services/date.service';
 import { HabitGrid } from '../features/habitgrid/models/habitgrid';
 import { MilestoneListComponent } from '../features/milestones/components/milestone-list/milestone-list.component';
 import { HabitGridService } from '../features/habitgrid/services/habitgrid.service';
@@ -51,7 +51,7 @@ export class HomePage {
   habitslist: Array<any> = []
   times: Array<any> = []
 
-  constructor(private goalService: GoalService, private modalCtrl: ModalController, public helperService: HelperService,
+  constructor(private goalService: GoalService, private modalCtrl: ModalController, public dateService: DateService,
     public habitGridService: HabitGridService, public popoverController: PopoverController
   ) {
     this.getGoaldoc();
@@ -105,10 +105,10 @@ export class HomePage {
   }
 
   async habitChecked(goalid: number, index: number, habit: Habit) {
-    if (habit.datesCompleted?.find(date => date == this.helperService.format(this.day()))) {
-      habit.datesCompleted?.splice(habit.datesCompleted.findIndex((item) => item == this.helperService.format(this.day())), 1)
+    if (habit.datesCompleted?.find(date => date == this.dateService.format(this.day()))) {
+      habit.datesCompleted?.splice(habit.datesCompleted.findIndex((item) => item == this.dateService.format(this.day())), 1)
     } else {
-      habit.datesCompleted?.push(this.helperService.format(this.day()))
+      habit.datesCompleted?.push(this.dateService.format(this.day()))
     }
     let goaldoc = this.goaldocstore.goals().find(goal => goal.id == goalid)
 
@@ -121,17 +121,17 @@ export class HomePage {
   }
 
   isComplete(habit: Habit) {
-    return habit.datesCompleted?.some((item) => item == this.helperService.format(this.day()))
+    return habit.datesCompleted?.some((item) => item == this.dateService.format(this.day()))
   }
 
   updateHabitGrid() {
     let progress = this.goalService.getProgressCount(this.goaldocstore.goals(), this.day())
-    let findDateInMatrix = this.habitgriddocstore.habitMatrix().find(matrix => matrix[0] === this.helperService.format(this.day()))
+    let findDateInMatrix = this.habitgriddocstore.habitMatrix().find(matrix => matrix[0] === this.dateService.format(this.day()))
 
     if (findDateInMatrix) {
       // get habitgrid by current day
       this.habitgriddocstore.habitMatrix().forEach((habitmatrix) => {
-        if (habitmatrix[0] === this.helperService.format(this.day())) {
+        if (habitmatrix[0] === this.dateService.format(this.day())) {
           // update progress
           let newhabitgriddoc: HabitGriddoc = new HabitGriddoc()
           let newhabitgrid: HabitGrid = new HabitGrid()
@@ -147,7 +147,7 @@ export class HomePage {
       // console.log('not found')
       let newhabitgriddoc: HabitGriddoc = new HabitGriddoc()
       let newhabitgrid: HabitGrid = new HabitGrid()
-      newhabitgrid.date = this.helperService.format(this.day())
+      newhabitgrid.date = this.dateService.format(this.day())
       newhabitgrid.progress = progress
       newhabitgrid.milestones = 0
       newhabitgriddoc.habitGrid = newhabitgrid
@@ -241,13 +241,13 @@ export class HomePage {
     if (this.filterSegment.value == "plan") {
       this.habitslist = new Array<any>()
       this.goaldocstore.goals().forEach(goal => {
-        if (this.day() >= this.helperService.formatToDate(goal.goal?.startdate!) && this.day() <= this.helperService.formatToDate(goal.goal?.enddate!)) {
+        if (this.day() >= this.dateService.formatToDate(goal.goal?.startdate!) && this.day() <= this.dateService.formatToDate(goal.goal?.enddate!)) {
           goal.goal?.habits.forEach((habit, index) => {
             this.habitslist.push({ goalid: goal.id, index: index, habit: habit })
           })
         }
       })
-      this.habitslist.sort((a, b) => this.helperService.convertTo24Hour(a.habit?.time) - this.helperService.convertTo24Hour(b.habit?.time))
+      this.habitslist.sort((a, b) => this.dateService.convertTo24Hour(a.habit?.time) - this.dateService.convertTo24Hour(b.habit?.time))
       this.planner = this.groupedByTime()
       console.log(this.planner)
       this.times = [...new Set(this.times)]

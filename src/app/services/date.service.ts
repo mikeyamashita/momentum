@@ -1,13 +1,15 @@
-import { Injectable } from '@angular/core';
-import { h } from 'ionicons/dist/types/stencil-public-runtime';
-import { timer } from 'ionicons/icons';
+import { Injectable, signal } from '@angular/core'
 
 @Injectable({
   providedIn: 'root'
 })
-export class HelperService {
+export class DateService {
 
   year = new Date().getFullYear()
+
+  day = signal(new Date());
+  formatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  dayFormatted = signal(this.formatter.format(this.day()));
 
   constructor() { }
 

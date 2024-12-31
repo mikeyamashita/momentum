@@ -32,8 +32,8 @@
         <div class="w-full mt-[-8px] pb-4">
           <!-- goal row -->
           @for(goal of goaldocstore.goals(); track $index){
-          @if( day() >= helperService.formatToDate(goal.goal?.startdate!) && day() <=
-            helperService.formatToDate(goal.goal?.enddate!)){ <div class="flex flex-row justify-start">
+          @if( day() >= dateService.formatToDate(goal.goal?.startdate!) && day() <=
+            dateService.formatToDate(goal.goal?.enddate!)){ <div class="flex flex-row justify-start">
             <div class="font-bold text-base flex items-center">{{goal.goal?.name}}</div>
             <ion-button class="pl-3" fill="clear" mode="ios" (click)="openGoalModal('save', goal)">
               <ion-icon slot="icon-only" name="ellipsis-vertical-outline" color="light"></ion-icon>
@@ -80,7 +80,7 @@
         <!-- habit row -->
         <div>
           @for(time of times; track time){
-          <div class="font-bold text-base flex items-center py-[14px]">{{helperService.formatDateTime(time)}}</div>
+          <div class="font-bold text-base flex items-center py-[14px]">{{dateService.formatDateTime(time)}}</div>
           <ion-list style="margin-right:-25px" class="pt-[14px] pb-[8px]" lines="none" mode="md">
             @for(plan of planner[time]; track $index){
             <ion-item class="text-sm text-wrap mx-[-0.5em]">
@@ -96,9 +96,9 @@
     </div>
     <div class="pr-3 mt-[-10px] flex justify-end">
       @if(habitgriddocstore.habitMatrix()){
-      <app-graph [year]="helperService.year.toString()" colorLevel1="#003b3b" colorLevel2="#005050"
-        colorLevel3="#006a6a" colorLevel4="#008282" colorLevel5="#009595" colorLevel6="#00aeae" colorLevel7="#00c5c5"
-        colorLevel8="#00d9d9" colorLevel9="#00eaea" colorLevel10="#00ffff" colorMilestone="#ff4600"></app-graph>
+      <app-graph [year]="dateService.year.toString()" colorLevel1="#003b3b" colorLevel2="#005050" colorLevel3="#006a6a"
+        colorLevel4="#008282" colorLevel5="#009595" colorLevel6="#00aeae" colorLevel7="#00c5c5" colorLevel8="#00d9d9"
+        colorLevel9="#00eaea" colorLevel10="#00ffff" colorMilestone="#ff4600"></app-graph>
       }
     </div>
   </div>
