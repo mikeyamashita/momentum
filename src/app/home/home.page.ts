@@ -39,9 +39,6 @@ export class HomePage {
   @ViewChild('filterSegment') filterSegment!: IonSegment;
 
   today: Date = new Date()
-  // day = signal(new Date());
-  // formatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-  // dayFormatted = signal(this.formatter.format(this.day()));
   habitCount: any = signal(0);
   habitGriddoc: HabitGriddoc = new HabitGriddoc()
   newGoal: Goal = new Goal()
@@ -68,6 +65,7 @@ export class HomePage {
     } else {
       this.habitgriddocstore.getHabitGriddoc();
     }
+
   }
 
   // Lifecycle
@@ -102,6 +100,9 @@ export class HomePage {
       this.dateService.day().setDate(this.dateService.day().getDate() - 1)
       this.dateService.dayFormatted.set((this.dateService.formatter.format(this.dateService.day())))
     }
+    // console.log(this.habitgriddocstore.habitMatrix().filter(square => {
+    //   return new Date(square[0]).getFullYear() === 2025
+    // }))
   }
 
   async habitChecked(goalid: number, index: number, habit: Habit) {

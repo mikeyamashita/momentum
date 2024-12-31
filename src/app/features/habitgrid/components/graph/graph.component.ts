@@ -42,7 +42,7 @@ export class GraphComponent {
   colorMilestone: string | undefined;
 
 
-  constructor(public dateService: DateService,) {
+  constructor(public dateService: DateService) {
   }
 
   // Lifecycle

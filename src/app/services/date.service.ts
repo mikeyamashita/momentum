@@ -29,6 +29,10 @@ export class DateService {
     return this.format(data)
   }
 
+  getYearFromDateString(datestring: string) {
+    return new Date(datestring).getFullYear()
+  }
+
   formatDateTime(time: any) {
     if (time) {
       let [hourPeriod, minutePeriod] = time.split(":");

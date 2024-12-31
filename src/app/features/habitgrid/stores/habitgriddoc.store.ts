@@ -12,6 +12,7 @@ import { tapResponse } from '@ngrx/operators';
 import { HabitGriddoc } from '../models/habitgriddoc';
 import { HabitGrid } from '../models/habitgrid';
 import { HabitGridService } from '../services/habitgrid.service';
+import { DateService } from 'src/app/services/date.service';
 
 type HabitGridState = {
     id: number,
@@ -34,9 +35,10 @@ const initialState: HabitGridState = {
 export const HabitGriddocStore = signalStore(
     { providedIn: 'root' },
     withState(initialState),
-    withComputed(({ habitgrid }) => ({
+    withComputed(({ habitgrid, habitMatrix }) => ({
         habitgridsCount: computed(() => habitgrid().length),
-        habitgridsList: computed(() => habitgrid())
+        habitgridsList: computed(() => habitgrid()),
+
     })),
     withMethods((store, habitgridService = inject(HabitGridService)) => ({
         setHabitGriddocId(habitgridid: number): void {
