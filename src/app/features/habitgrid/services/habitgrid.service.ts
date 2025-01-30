@@ -31,10 +31,9 @@ export class HabitGridService {
     const isLeapYear = (year: number) => new Date(year, 1, 29).getMonth() === 1;
     let numberOfDays = isLeapYear(currentyear) ? 366 : 365
 
-    if (this.matchdata.length < numberOfDays) {
+    if (this.matchDataCount(currentyear) < numberOfDays) {
       this.handleMissingDates(currentyear)
     }
-    console.log(this.matchdata)
     return this.matchdata
   }
 
@@ -47,7 +46,7 @@ export class HabitGridService {
     while (loop < end) {
       if (this.matchdata[i]) {
         if (this.dateService.format(loop) !== this.matchdata[i][0]) {
-          this.matchdata.splice(i, 0, [])// replace missing dates with empty array 
+          this.matchdata.splice(i, 0, [this.dateService.format(loop), 0, 0, 0])// replace missing dates with empty array 
         }
       }
 
@@ -55,6 +54,17 @@ export class HabitGridService {
       loop = new Date(newDate);
       i++
     }
+    console.log(this.matchdata)
+  }
+
+  matchDataCount(year: number): number {
+    let count: number = 1;
+    this.matchdata.forEach((data: Array<any>) => {
+      let date = new Date(data[0]);
+      if (year == date.getFullYear())
+        count++;
+    })
+    return count
   }
 
   getHabitGriddoc(): Observable<Array<HabitGriddoc>> {
@@ -151,31 +161,31 @@ export class HabitGridService {
     //   return deleteHabitGriddoc
   }
 
-  buildNewHabitGridDoc(year: number): Array<HabitGriddoc> {
-    let start = new Date("01/01/" + year);
-    let end = new Date("12/31/" + year);
+  // buildNewHabitGridDoc(year: number): Array<HabitGriddoc> {
+  //   let start = new Date("01/01/" + year);
+  //   let end = new Date("12/31/" + year);
 
-    let habitGridDocs = Array<HabitGriddoc>();
-    let loop = new Date(start);
-    while (loop < end) {
-      var newDate = loop.setDate(loop.getDate() + 1);
-      loop = new Date(newDate);
-      let habitGrid: HabitGrid = new HabitGrid();
-      habitGrid.date = this.dateService.format(loop);
-      let habitGridDoc: HabitGriddoc = new HabitGriddoc();
-      habitGridDoc.habitGrid = habitGrid;
-      habitGridDocs.push(habitGridDoc);
-    }
-    // localStorage.setItem('habitgriddocs', JSON.stringify(habitGridDocs));
+  //   let habitGridDocs = Array<HabitGriddoc>();
+  //   let loop = new Date(start);
+  //   while (loop < end) {
+  //     var newDate = loop.setDate(loop.getDate() + 1);
+  //     loop = new Date(newDate);
+  //     let habitGrid: HabitGrid = new HabitGrid();
+  //     habitGrid.date = this.dateService.format(loop);
+  //     let habitGridDoc: HabitGriddoc = new HabitGriddoc();
+  //     habitGridDoc.habitGrid = habitGrid;
+  //     habitGridDocs.push(habitGridDoc);
+  //   }
+  //   // localStorage.setItem('habitgriddocs', JSON.stringify(habitGridDocs));
 
-    console.log(habitGridDocs);
-    return habitGridDocs;
-  }
+  //   return habitGridDocs;
+  // }
 
-  rebuildHabitMatrix(goals: Array<Goaldoc>, year: number): Promise<boolean> {
-    return new Promise(async (resolve, reject) => {
+  newHabitMatrix(year: number): Observable<any> {
+    return new Observable((subscriber) => {
       let start = new Date("01/01/" + year);
       let end = new Date("12/31/" + year);
+      let array = new Array<HabitGriddoc>();
 
       let loop = new Date(start);
       while (loop < end) {
@@ -183,34 +193,61 @@ export class HabitGridService {
         loop = new Date(newDate);
         let habitGrid: HabitGrid = new HabitGrid()
         habitGrid.date = this.dateService.format(loop)
-        let progress = this.rebuildProgressCount(goals, loop)
-        habitGrid.progress = progress
+        habitGrid.progress = 0
         let habitGridDoc: HabitGriddoc = new HabitGriddoc()
         habitGridDoc.habitGrid = habitGrid
-
-        const $source = this.postHabitGriddoc(habitGridDoc);
-        await lastValueFrom($source);
+        array.push(habitGridDoc)
+        this.postHabitGriddoc(habitGridDoc).subscribe({
+          next: () => {
+            subscriber.next()
+          },
+          complete: () => {
+            subscriber.complete();
+          }
+        })
       }
-      resolve(true)
     })
   }
 
-  rebuildProgressCount(goaldoc: Array<Goaldoc>, date: Date): number {
-    let count = 0
-    let numHabits = 0
+  // rebuildHabitMatrix(goals: Array<Goaldoc>, year: number): Promise<boolean> {
+  //   return new Promise(async (resolve, reject) => {
+  //     let start = new Date("01/01/" + year);
+  //     let end = new Date("12/31/" + year);
 
-    goaldoc?.forEach(goaldoc => {
-      goaldoc.goal?.habits?.forEach(habit => {
-        if (habit.datesCompleted?.some((item) => item == this.dateService.format(date)))
-          count++
-        if (date >= new Date(goaldoc.goal?.startdate!) && date <= new Date(goaldoc.goal?.enddate!))
-          numHabits++
-      })
-    })
+  //     let loop = new Date(start);
+  //     while (loop < end) {
+  //       var newDate = loop.setDate(loop.getDate() + 1);
+  //       loop = new Date(newDate);
+  //       let habitGrid: HabitGrid = new HabitGrid()
+  //       habitGrid.date = this.dateService.format(loop)
+  //       let progress = this.rebuildProgressCount(goals, loop)
+  //       habitGrid.progress = progress
+  //       let habitGridDoc: HabitGriddoc = new HabitGriddoc()
+  //       habitGridDoc.habitGrid = habitGrid
 
-    if (numHabits > 1)
-      return Math.round(count / numHabits * 100)
-    else
-      return 0
-  }
+  //       const $source = this.postHabitGriddoc(habitGridDoc);
+  //       await lastValueFrom($source);
+  //     }
+  //     resolve(true)
+  //   })
+  // }
+
+  // rebuildProgressCount(goaldoc: Array<Goaldoc>, date: Date): number {
+  //   let count = 0
+  //   let numHabits = 0
+
+  //   goaldoc?.forEach(goaldoc => {
+  //     goaldoc.goal?.habits?.forEach(habit => {
+  //       if (habit.datesCompleted?.some((item) => item == this.dateService.format(date)))
+  //         count++
+  //       if (date >= new Date(goaldoc.goal?.startdate!) && date <= new Date(goaldoc.goal?.enddate!))
+  //         numHabits++
+  //     })
+  //   })
+
+  //   if (numHabits > 1)
+  //     return Math.round(count / numHabits * 100)
+  //   else
+  //     return 0
+  // }
 }

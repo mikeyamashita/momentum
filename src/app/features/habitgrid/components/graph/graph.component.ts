@@ -4,6 +4,7 @@ import {
   IonIcon
 } from '@ionic/angular/standalone';
 import { DateService } from 'src/app/services/date.service';
+import { startWith } from 'rxjs';
 
 @Component({
   selector: 'app-graph',

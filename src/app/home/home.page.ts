@@ -52,15 +52,15 @@ export class HomePage {
     public habitGridService: HabitGridService, public popoverController: PopoverController
   ) {
     this.getGoaldoc();
-    if (!localStorage.getItem("Init")) { //create habitgrid on first load
 
-      this.habitGridService.rebuildHabitMatrix([], new Date().getFullYear()).then(
-        res => {
-          console.log(res)
-          if (res)
-            this.habitgriddocstore.getHabitGriddoc();
-        }
-      )
+    if (!localStorage.getItem("Init")) { //create habitgrid on inital load
+      // this.habitGridService.rebuildHabitMatrix([], new Date().getFullYear()).then(
+      //   res => {
+      //     if (res)
+      //       this.habitgriddocstore.getHabitGriddoc();
+      //   }
+      // )
+      this.habitgriddocstore.newHabitMatrix(this.dateService.year)
       localStorage.setItem("Init", "true")
     } else {
       this.habitgriddocstore.getHabitGriddoc();
@@ -90,8 +90,18 @@ export class HomePage {
     return groupbytime
   }
 
+  createNewYearMatchData(changedYear: number) {
+    const isLeapYear = (year: number) => new Date(year, 1, 29).getMonth() === 1;
+    let numberOfDays = isLeapYear(changedYear) ? 366 : 365
+    if (this.habitGridService.matchDataCount(changedYear) < numberOfDays) {
+      this.habitgriddocstore.newHabitMatrix(changedYear)
+    }
+  }
+
+
   // Events
   changeDay(direction: number) {
+    let previousYear = this.dateService.day().getFullYear()
     if (direction === 1) {
       this.dateService.day().setDate(this.dateService.day().getDate() + 1)
       this.dateService.dayFormatted.set((this.dateService.formatter.format(this.dateService.day())))
@@ -100,9 +110,12 @@ export class HomePage {
       this.dateService.day().setDate(this.dateService.day().getDate() - 1)
       this.dateService.dayFormatted.set((this.dateService.formatter.format(this.dateService.day())))
     }
-    // console.log(this.habitgriddocstore.habitMatrix().filter(square => {
-    //   return new Date(square[0]).getFullYear() === 2025
-    // }))
+    let changedYear = this.dateService.day().getFullYear()
+
+    // console.log(previousYear)
+    // console.log(changedYear)
+    if (previousYear != changedYear)
+      this.createNewYearMatchData(changedYear)
   }
 
   async habitChecked(goalid: number, index: number, habit: Habit) {
@@ -145,14 +158,14 @@ export class HomePage {
         }
       })
     } else {
-      // console.log('not found')
+      // adds date if it doesnt exist
       let newhabitgriddoc: HabitGriddoc = new HabitGriddoc()
       let newhabitgrid: HabitGrid = new HabitGrid()
       newhabitgrid.date = this.dateService.format(this.dateService.day())
       newhabitgrid.progress = progress
       newhabitgrid.milestones = 0
       newhabitgriddoc.habitGrid = newhabitgrid
-      this.habitgriddocstore.addHabitGriddoc(newhabitgriddoc) //adds date if it doesnt exist
+      this.habitgriddocstore.addHabitGriddoc(newhabitgriddoc)
     }
   }
 

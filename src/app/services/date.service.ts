@@ -6,7 +6,6 @@ import { Injectable, signal } from '@angular/core'
 export class DateService {
 
   year = new Date().getFullYear()
-
   day = signal(new Date());
   formatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   dayFormatted = signal(this.formatter.format(this.day()));
