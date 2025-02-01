@@ -22,15 +22,15 @@
     </ion-header>
     <div class="grid grid-cols-2 px-2 pt-5">
       <div class="pl-2">
-        <ion-segment #filterSegment class="grid place-content-center ml-[12.5px] mb-6 mt-[-8px]" value="goals">
+        <!-- <ion-segment #filterSegment class="grid place-content-center ml-[12.5px] mb-6 mt-[-8px]" value="goals">
           <ion-segment-button value="goals" (click)="segmentClicked()">
             <ion-label class="segment-label">Goals</ion-label>
           </ion-segment-button>
           <ion-segment-button value="plan" (click)="segmentClicked()">
             <ion-label class="segment-label">Planner</ion-label>
           </ion-segment-button>
-        </ion-segment>
-        @if( filterSegment.value === 'goals'){
+        </ion-segment> -->
+        <!-- @if( filterSegment.value === 'goals'){ -->
         <div class="w-full mt-[-8px] pb-4">
           <!-- goal row -->
           @for(goal of goaldocstore.goals(); track $index){
@@ -76,8 +76,8 @@
           </ion-fab-button>
         </ion-fab>
       </div>
-      }
-      @else if (filterSegment.value === 'plan') {
+      <!-- }
+      @else if (filterSegment.value === 'plan') { -->
       <div class="w-full mt-[-8px] pb-4">
         <!-- habit row -->
         <div>
@@ -94,7 +94,7 @@
           }
         </div>
       </div>
-      }
+      <!-- } -->
     </div>
     <div class="pr-3 mt-[-10px] flex justify-end">
       @if(habitgriddocstore.habitMatrix()){

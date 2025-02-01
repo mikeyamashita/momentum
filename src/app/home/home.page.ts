@@ -126,9 +126,9 @@ export class HomePage {
     }
     let goaldoc = this.goaldocstore.goals().find(goal => goal.id == goalid)
 
-    if (this.filterSegment.value == "plan") {
-      goaldoc?.goal?.habits.splice(index, 1, habit)
-    }
+    // if (this.filterSegment.value == "plan") {
+    //   goaldoc?.goal?.habits.splice(index, 1, habit)
+    // }
 
     this.updateHabitGrid()
     await this.goaldocstore.saveGoaldoc(goaldoc)
