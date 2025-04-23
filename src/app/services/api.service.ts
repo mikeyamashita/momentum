@@ -16,7 +16,9 @@ export class ApiService {
     if (isDevMode())
       this.server.set('https://192.168.50.179:7247') //staging docker
     else
-      this.server.set('https://momentum-api-axhfdmgbf2bjhjcu.canadacentral-01.azurewebsites.net') //prod azure
+      this.server.set('https://137.186.195.140:7247') //prod azure
+
+      //this.server.set('https://momentum-api-axhfdmgbf2bjhjcu.canadacentral-01.azurewebsites.net') //prod azure
   }
 
   httpOptions = {
