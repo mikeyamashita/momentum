@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "momentumpwa"
-  }
+    "default": "momentum-b63b6",
+    "test": "momentum-b63b6"
+  },
+  "targets": {},
+  "etags": {}
 }
